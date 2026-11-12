@@ -1,0 +1,24 @@
+{
+  "fecha": "2026-11-09",
+  "archivo": "EntregablesPI-Ing-Software-revisado.pdf",
+  "resultado": "PASO",
+  "paginas": 63,
+  "indice_reconstruido_pagina": 3,
+  "marcadores": 11,
+  "enlaces_indice": 39,
+  "capitulo_v": 35,
+  "anexos": 38,
+  "manual_usuario": [
+    42,
+    49
+  ],
+  "manual_tecnico": [
+    50,
+    58
+  ],
+  "texto_completo_agregado_verificado_normalizando_espacios_y_folios": true,
+  "pdf_extraccion_sin_errores": true,
+  "original_35_paginas_intacto": true,
+  "respaldo_anterior": "privado en .local/documentos",
+  "sha256_pdf": "962b4045544ab78032209f463bb6eac0ca193d9faec83a605124797e3ebb213f"
+}

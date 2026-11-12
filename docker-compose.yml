@@ -1,0 +1,131 @@
+name: siga
+services:
+  db:
+    image: postgres:18.6-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-siga}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Ejecuta npm run setup}
+      POSTGRES_DB: ${POSTGRES_DB:-siga_dev}
+    ports: ['127.0.0.1:${POSTGRES_PORT:-5432}:5432']
+    volumes: ['siga_db:/var/lib/postgresql']
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB']
+      interval: 5s
+      timeout: 3s
+      retries: 10
+  migrate:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+      target: migrate
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-siga}:${POSTGRES_PASSWORD:?Ejecuta npm run setup}@db:5432/${POSTGRES_DB:-siga_dev}
+    depends_on:
+      db: { condition: service_healthy }
+    restart: 'no'
+  db-permissions:
+    image: postgres:18.6-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-siga}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Ejecuta npm run setup}
+      POSTGRES_DB: ${POSTGRES_DB:-siga_dev}
+      POSTGRES_APP_USER: ${POSTGRES_APP_USER:-siga_app}
+      POSTGRES_APP_PASSWORD: ${POSTGRES_APP_PASSWORD:?Ejecuta npm run setup}
+    command:
+      - sh
+      - -ec
+      - |
+        PGPASSWORD="$${POSTGRES_PASSWORD}" psql --no-psqlrc --set=ON_ERROR_STOP=1 \
+          --host=db --username="$${POSTGRES_USER}" --dbname="$${POSTGRES_DB}" \
+          --set=owner_user="$${POSTGRES_USER}" --set=app_user="$${POSTGRES_APP_USER}" <<'SQL'
+        \getenv app_password POSTGRES_APP_PASSWORD
+        \getenv database_name POSTGRES_DB
+        SELECT format('CREATE ROLE %I LOGIN PASSWORD %L', :'app_user', :'app_password')
+        WHERE NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = :'app_user') \gexec
+        SELECT format(
+          'ALTER ROLE %I WITH LOGIN PASSWORD %L NOSUPERUSER NOCREATEDB NOCREATEROLE NOREPLICATION NOBYPASSRLS',
+          :'app_user', :'app_password'
+        ) \gexec
+        GRANT CONNECT ON DATABASE :"database_name" TO :"app_user";
+        GRANT USAGE ON SCHEMA public TO :"app_user";
+        GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO :"app_user";
+        GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO :"app_user";
+        GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA public TO :"app_user";
+        ALTER DEFAULT PRIVILEGES FOR ROLE :"owner_user" IN SCHEMA public
+          GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO :"app_user";
+        ALTER DEFAULT PRIVILEGES FOR ROLE :"owner_user" IN SCHEMA public
+          GRANT USAGE, SELECT ON SEQUENCES TO :"app_user";
+        REVOKE UPDATE, DELETE ON TABLE public."Auditoria" FROM :"app_user";
+        SELECT NOT rolsuper AND NOT rolcreatedb AND NOT rolcreaterole
+          AND NOT rolreplication AND NOT rolbypassrls
+          AND NOT has_schema_privilege(rolname, 'public', 'CREATE') AS app_role_restricted
+        FROM pg_roles WHERE rolname = :'app_user' \gset
+        \if :app_role_restricted
+        \echo 'El rol de aplicación está restringido.'
+        \else
+        \echo 'El rol de aplicación excede los privilegios permitidos.'
+        \quit 1
+        \endif
+        SQL
+    depends_on:
+      migrate: { condition: service_completed_successfully }
+    restart: 'no'
+  certificados-permisos:
+    image: node:24.19.0-bookworm-slim
+    user: '0:0'
+    command:
+      [
+        'sh',
+        '-c',
+        'mkdir -p /data/certificados && chown -R 1000:1000 /data/certificados && chmod 700 /data/certificados',
+      ]
+    volumes: ['siga_certificados:/data/certificados']
+    restart: 'no'
+  api:
+    image: siga-api:${SIGA_VERSION:-0.1.0}
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+      args:
+        SIGA_VERSION: ${SIGA_VERSION:-0.1.0}
+    environment:
+      NODE_ENV: production
+      API_HOST: 0.0.0.0
+      PORT: 3000
+      WEB_ORIGIN: http://localhost:${WEB_PORT:-8080}
+      DATABASE_URL: postgresql://${POSTGRES_APP_USER:-siga_app}:${POSTGRES_APP_PASSWORD:?Ejecuta npm run setup}@db:5432/${POSTGRES_DB:-siga_dev}
+      JWT_SECRET: ${JWT_SECRET:?Ejecuta npm run setup}
+      JWT_TTL_SECONDS: 1800
+      EXIGIR_PRERREQUISITOS: ${EXIGIR_PRERREQUISITOS:-true}
+      CERTIFICATES_DIR: /data/certificados
+      COOKIE_SECURE: 'false'
+    volumes: ['siga_certificados:/data/certificados']
+    depends_on:
+      db: { condition: service_healthy }
+      migrate: { condition: service_completed_successfully }
+      db-permissions: { condition: service_completed_successfully }
+      certificados-permisos: { condition: service_completed_successfully }
+    healthcheck:
+      test:
+        [
+          'CMD',
+          'node',
+          '-e',
+          "fetch('http://127.0.0.1:3000/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  web:
+    image: siga-web:${SIGA_VERSION:-0.1.0}
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+      args:
+        SIGA_VERSION: ${SIGA_VERSION:-0.1.0}
+    ports: ['127.0.0.1:${WEB_PORT:-8080}:80']
+    depends_on:
+      api: { condition: service_healthy }
+volumes:
+  siga_db:
+  siga_certificados:

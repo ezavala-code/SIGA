@@ -1,0 +1,106 @@
+{
+  "procedencia": "carga-smoke-candidato.json",
+  "metodo": "Objetos JSON completos, uno por línea; se conserva el archivo original mezclado como registro histórico.",
+  "resultados": [
+    {
+      "dataset": {
+        "estudiantes": 1000,
+        "grupos": 50
+      },
+      "operacion": "reporte",
+      "usuarios": 20,
+      "patron": "tandas de 20 usuarios con pausas",
+      "intervaloSegundos": 1,
+      "modo": "comprobacion corta sin validez de aceptacion",
+      "solicitudes": 40,
+      "duracionSegundos": 2,
+      "solicitudesPorSegundo": 20,
+      "erroresInesperados": 0,
+      "detalleErrores": {},
+      "erroresPorcentaje": 0,
+      "p95Ms": 155.84,
+      "maximoMs": 158.3,
+      "aprobado": null
+    },
+    {
+      "dataset": {
+        "estudiantes": 1000,
+        "grupos": 50
+      },
+      "operacion": "oferta",
+      "usuarios": 20,
+      "patron": "tandas de 20 usuarios con pausas",
+      "intervaloSegundos": 1,
+      "modo": "comprobacion corta sin validez de aceptacion",
+      "solicitudes": 40,
+      "duracionSegundos": 2,
+      "solicitudesPorSegundo": 19.99,
+      "erroresInesperados": 0,
+      "detalleErrores": {},
+      "erroresPorcentaje": 0,
+      "p95Ms": 302.96,
+      "maximoMs": 303.58,
+      "aprobado": null
+    },
+    {
+      "dataset": {
+        "estudiantes": 1000,
+        "grupos": 50
+      },
+      "operacion": "matricula",
+      "usuarios": 20,
+      "patron": "tandas de 20 usuarios con pausas",
+      "intervaloSegundos": 1,
+      "modo": "comprobacion corta sin validez de aceptacion",
+      "solicitudes": 40,
+      "duracionSegundos": 2,
+      "solicitudesPorSegundo": 20,
+      "erroresInesperados": 0,
+      "detalleErrores": {},
+      "erroresPorcentaje": 0,
+      "p95Ms": 552.39,
+      "maximoMs": 585,
+      "aprobado": null
+    },
+    {
+      "dataset": {
+        "estudiantes": 1000,
+        "grupos": 50
+      },
+      "operacion": "pdf",
+      "usuarios": 20,
+      "patron": "tandas de 20 usuarios con pausas",
+      "intervaloSegundos": 1,
+      "modo": "comprobacion corta sin validez de aceptacion",
+      "solicitudes": 40,
+      "duracionSegundos": 2,
+      "solicitudesPorSegundo": 20.02,
+      "erroresInesperados": 0,
+      "detalleErrores": {},
+      "erroresPorcentaje": 0,
+      "p95Ms": 687.83,
+      "maximoMs": 693.04,
+      "aprobado": null
+    },
+    {
+      "dataset": {
+        "estudiantes": 1000,
+        "grupos": 50
+      },
+      "operacion": "pdf_unicode",
+      "usuarios": 20,
+      "patron": "tandas de 20 usuarios con pausas",
+      "intervaloSegundos": 1,
+      "modo": "comprobacion corta sin validez de aceptacion",
+      "solicitudes": 40,
+      "duracionSegundos": 2,
+      "solicitudesPorSegundo": 20,
+      "erroresInesperados": 0,
+      "detalleErrores": {},
+      "erroresPorcentaje": 0,
+      "p95Ms": 656.7,
+      "maximoMs": 658.38,
+      "aprobado": null
+    }
+  ]
+}

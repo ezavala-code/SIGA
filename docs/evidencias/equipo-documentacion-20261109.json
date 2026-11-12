@@ -1,0 +1,11 @@
+{
+  "fecha": "2026-11-09",
+  "tipo": "entorno visible de elaboracion, no inventario patrimonial",
+  "sistema": "Linux",
+  "arquitectura": "x86_64",
+  "cpu_modelo_visible": "AMD Ryzen 3 3300U with Radeon Vega Mobile Gfx",
+  "cpu_logicas_visibles": 4,
+  "memoria_visible_GiB": 9.63,
+  "hardware_fisico_cliente": "no proporcionado",
+  "inventario_patrimonial": "no proporcionado"
+}

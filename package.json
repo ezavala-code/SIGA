@@ -1,0 +1,72 @@
+{
+  "name": "siga",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Sistema Integral de Gestión Académica para distintos programas y planes de estudio",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "engines": {
+    "node": "24.19.x",
+    "npm": "12.2.x"
+  },
+  "packageManager": "npm@12.2.0",
+  "scripts": {
+    "setup": "node scripts/setup.mjs",
+    "dev": "concurrently -k -n api,web \"npm run dev -w @siga/api\" \"npm run dev -w @siga/web\"",
+    "build": "npm run build --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "lint": "eslint . --max-warnings=0",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test:unit": "npm run test:unit -w @siga/api && npm run test:unit -w @siga/web",
+    "test:integration": "npm run test:integration -w @siga/api",
+    "test:coverage": "node scripts/test-integration.mjs --coverage",
+    "test:load": "npm run build -w @siga/api && node scripts/test-load.mjs",
+    "test:e2e": "node scripts/test-e2e-isolated.mjs",
+    "docker:deploy": "node scripts/deploy-docker.mjs",
+    "docker:backup": "node scripts/backup-docker.mjs",
+    "docker:restore:verify": "node scripts/verify-docker-restore.mjs",
+    "docker:rollback": "node scripts/rollback-docker.mjs",
+    "db:up": "docker compose up -d --wait db",
+    "db:test:up": "docker compose -f docker-compose.test.yml up -d --wait",
+    "db:generate": "npm run db:generate -w @siga/api",
+    "db:validate": "npm run db:validate -w @siga/api",
+    "db:migrate": "node scripts/database.mjs deploy",
+    "db:status": "node scripts/database.mjs status",
+    "db:test:migrate": "node scripts/database.mjs deploy test",
+    "db:seed": "npm run build -w @siga/api && node scripts/database.mjs seed",
+    "db:archive:demo:check": "npm run build -w @siga/api && node scripts/archive-demo-data.mjs native --dry-run",
+    "db:archive:demo": "npm run build -w @siga/api && node scripts/archive-demo-data.mjs native",
+    "db:archive:demo:docker:check": "npm run build -w @siga/api && node scripts/archive-demo-data.mjs docker --dry-run",
+    "db:archive:demo:docker": "npm run build -w @siga/api && node scripts/archive-demo-data.mjs docker",
+    "auth:bootstrap:admin": "npm run auth:bootstrap:admin -w @siga/api",
+    "docker:repair": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/repair-docker-wsl.ps1",
+    "docker:admin:bootstrap": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/bootstrap-docker.ps1",
+    "auth:bootstrap:local-test-profiles": "npm run auth:bootstrap:local-test-profiles -w @siga/api",
+    "docker:users:bootstrap": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/bootstrap-docker-users.ps1",
+    "profiles:open": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/open-local-profiles.ps1",
+    "db:local:start": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/postgres-local.ps1 -Action start",
+    "db:local:stop": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/postgres-local.ps1 -Action stop",
+    "db:local:status": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/postgres-local.ps1 -Action status",
+    "check": "npm run lint && npm run typecheck && npm run test:unit && npm run build",
+    "pretest:e2e": "npm run build -w @siga/api"
+  },
+  "overrides": {
+    "deepmerge-ts": "8.0.2",
+    "mysql2": "3.24.5"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "@playwright/test": "1.64.0",
+    "concurrently": "10.0.6",
+    "eslint": "10.12.0",
+    "eslint-plugin-react-hooks": "7.1.1",
+    "eslint-plugin-react-refresh": "0.5.7",
+    "globals": "17.13.0",
+    "prettier": "3.9.9",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.71.1"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "resultado": "PASO",
+  "nodeVersion": "v24.19.0",
+  "npmVersion": "12.2.0",
+  "envPermisosOctal": "600",
+  "adminAccesoPermisosOctal": "600",
+  "perfilesPermisosOctal": "600",
+  "usuariosActivosPorRol": [
+    {
+      "rol": "ADMINISTRADOR",
+      "total": 1
+    },
+    {
+      "rol": "DOCENTE",
+      "total": 1
+    },
+    {
+      "rol": "ESTUDIANTE",
+      "total": 1
+    }
+  ],
+  "programasSembrados": [
+    "ICO-F19"
+  ],
+  "migracionesAplicadas": 4,
+  "semillaIdempotente": true
+}

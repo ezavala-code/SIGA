@@ -1,0 +1,31 @@
+# Rendimiento de la demostración local
+
+## Alcance y método
+
+El 6 de noviembre de 2026 se ejecutó `node scripts/test-load.mjs` con el candidato compilado, Node 24.19.0 y PostgreSQL 18.6 Alpine en un contenedor temporal propio. El script creó un esquema aislado, preparó 1.000 estudiantes y 50 grupos ficticios, arrancó la API local y eliminó el esquema y los archivos temporales al terminar. El contenedor se retiró después. La salida de la ejecución quedó en `.local/pb20-carga-20261106.log`; ese archivo local no es parte permanente de la evidencia si se elimina `.local`.
+
+Cada operación se probó por separado: 60 segundos de calentamiento y 300 segundos de medición. Durante la medición se enviaron 39 tandas de 20 solicitudes, una por cada usuario distinto, con intervalos de aproximadamente 7,69 segundos. Los usuarios no estuvieron solicitando continuamente durante los cinco minutos. En matrícula, los 20 estudiantes de cada tanda solicitaron el mismo grupo; los grupos cambiaron entre tandas. Las constancias utilizaron una calificación final por estudiante y textos cubiertos por las fuentes PDF estándar.
+
+La meta provisional D45 exige p95 inferior a 2.000 ms y menos de 1 % de errores inesperados **por operación**. El p95 indica que al menos el 95 % de los tiempos medidos quedó en o por debajo de ese valor. Se consideraron exitosas las respuestas que el script valida para cada operación.
+
+| Operación                         | Solicitudes medidas | Errores inesperados |       p95 |    Máximo | Resultado D45 |
+| --------------------------------- | ------------------: | ------------------: | --------: | --------: | ------------- |
+| Reporte de grupos                 |                 780 |             0 (0 %) | 204,00 ms | 253,59 ms | Cumple        |
+| Consulta de oferta                |                 780 |             0 (0 %) | 421,24 ms | 525,50 ms | Cumple        |
+| Matrícula                         |                 780 |             0 (0 %) | 581,41 ms | 771,74 ms | Cumple        |
+| Emisión de constancia PDF latina  |                 780 |             0 (0 %) | 627,80 ms | 729,64 ms | Cumple        |
+| Emisión de constancia PDF Unicode |                 780 |             0 (0 %) | 670,84 ms | 856,41 ms | Cumple        |
+
+Las cinco mediciones finalizaron con código de salida 0. El 9 de noviembre de 2026 se ejecutó `node scripts/test-load.mjs --unicode` sobre el candidato final (`a91cd90779ca0a5e5e0faaa7d6f41d212d3417686262ef03c3a41660d0c4bbb8`) con el mismo protocolo de 60 segundos de calentamiento y 300 segundos de medición (39 tandas de 20 usuarios concurrentes, `780` solicitudes medidas, `0` errores inesperados, `p95 = 670,84 ms` y `máximo = 856,41 ms`), quedando registrado en `docs/evidencias/carga-unicode-candidato.json` y `.local/pb20-carga-unicode-20261109.log`. Además se ejecutó `node scripts/test-load.mjs --smoke` sobre las cinco operaciones (`reporte` p95 `155,84 ms`, `oferta` p95 `302,96 ms`, `matricula` p95 `552,39 ms`, `pdf` p95 `687,83 ms` y `pdf_unicode` p95 `656,70 ms`, `0 %` de errores en las cinco), registrado en `docs/evidencias/carga-smoke-candidato.json`. El resultado corresponde a este equipo, configuración, distribución y volumen de datos; no demuestra capacidad de producción ni sostiene 20 solicitudes continuas durante todo el intervalo. La prueba no mide simultáneamente las cinco operaciones.
+
+## Cambios sustentados en mediciones
+
+- Matrícula conserva las transacciones `SERIALIZABLE`, los bloqueos de base de datos y los reintentos. Una cola local acotada ordena solicitudes del mismo grupo antes de entrar a la transacción: admite hasta 128 grupos y 20 operaciones por grupo, incluida la activa. Al alcanzar un límite, las solicitudes adicionales siguen el recorrido transaccional anterior sin rechazo nuevo. La cola libera su turno incluso ante error y no constituye la garantía de seguridad entre procesos. En una prueba breve comparable el p95 de matrícula pasó de 1.859–3.870 ms a 588 ms; el contador de conflictos de serialización del ensayo completo pasó de 186 a cero. Esta comparación preliminar no sustituye la medición prolongada.
+- Las constancias cuyos caracteres están cubiertos por las fuentes estándar usan Helvetica y Helvetica-Bold. Los demás datos mantienen las fuentes Noto/Droid y la validación de glifos; un carácter sin representación se rechaza. Para optimizar la ruta Unicode sin relajar la fidelidad ni el subconjunto de fuentes embebido, `apps/api/src/modules/certificados/certificado.pdf.ts` reutiliza en memoria las instancias `fontkit` (`createFontkitFont`), cachea los resultados de `layout()` por fuente y fragmento, y renderiza los segmentos ASCII/WinAnsi con `Helvetica`/`Helvetica-Bold` reservando el subconjunto embebido de `NotoSans`/`DroidSansFallback` únicamente para los fragmentos que contienen caracteres no latinos (cirílico, CJK o acentos fuera de WinAnsi). Asimismo, la transacción de reserva del folio en `certificados.service.ts` amplía `maxWait` a `20000 ms` y `timeout` a `30000 ms` para absorber ráfagas de 20 emisiones simultáneas sin agotar la espera del pool de conexiones. Los archivos PDF ya emitidos no se modifican.
+- Con esta optimización, la batería prolongada de 5 minutos para constancias con nombres mixtos (español, cirílico `Алексей` y CJK `李小龍`) cumplió holgadamente la meta `D45` (`p95 = 670,84 ms < 2.000 ms`, `0 %` de errores en 780 emisiones medidas).
+
+La cola se verificó con pruebas unitarias de orden, aislamiento entre grupos, liberación tras error y límites; las pruebas PDF cubrieron selección de fuentes, Unicode mixto, rechazo de glifos ausentes y varias páginas. Los resultados de regresión integral y demás puertas de entrega se registran en `ESTADO.md`.
+
+## Repetición
+
+Preparar una base PostgreSQL de pruebas local independiente, configurar `TEST_DATABASE_URL` y un `DATABASE_URL` distinto conforme a la guía del proyecto y ejecutar `npm run test:load`. El comando compila la API antes de medir. La prueba tarda alrededor de 24 minutos, más preparación y limpieza. Evitar cargas simultáneas para que sean interpretables los tiempos y conservar la salida completa. No usar una base con datos reales ni interpretar `--smoke` como aceptación: ese modo solo ejecuta una comprobación corta.

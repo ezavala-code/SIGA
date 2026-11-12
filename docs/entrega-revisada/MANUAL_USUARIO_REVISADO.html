@@ -1,0 +1,765 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <title>MANUAL_USUARIO_REVISADO</title>
+    <style>
+      @page {
+        size: A4;
+        margin: 1.8cm;
+      }
+      body {
+        font-family: 'Liberation Sans', sans-serif;
+        font-size: 10pt;
+        line-height: 1.25;
+        color: #17263a;
+      }
+      h1 {
+        font-size: 19pt;
+        color: #173858;
+        page-break-before: always;
+      }
+      h1:first-child {
+        page-break-before: avoid;
+      }
+      h2 {
+        font-size: 14pt;
+        color: #173858;
+      }
+      h3 {
+        font-size: 11pt;
+        color: #24516c;
+      }
+      h1,
+      h2,
+      h3,
+      h4 {
+        page-break-after: avoid;
+      }
+      p,
+      li {
+        orphans: 2;
+        widows: 2;
+      }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+        font-size: 8.5pt;
+        margin: 8pt 0;
+      }
+      th,
+      td {
+        border: 1px solid #b9c5cf;
+        padding: 5pt;
+        vertical-align: top;
+        word-wrap: break-word;
+      }
+      th {
+        background: #e9eff4;
+        color: #173858;
+      }
+      tr {
+        page-break-inside: avoid;
+      }
+      pre {
+        border: 1px solid #cbd4dc;
+        background: #f3f6f8;
+        padding: 7pt;
+        white-space: pre-wrap;
+        font-size: 8pt;
+      }
+      code {
+        font-family: 'Liberation Mono', monospace;
+        font-size: 8pt;
+      }
+      a {
+        color: #145477;
+      }
+      blockquote {
+        border-left: 3px solid #49718a;
+        margin-left: 0;
+        padding-left: 12pt;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Manual de usuario revisado del SIGA</h1>
+    <p>
+      Fecha: 9 de noviembre de 2026. Alcance: demostración académica local con datos sintéticos.
+      Fuente editable para complementar el manual DOCX y los anexos del informe. Describe funciones
+      y etiquetas contrastadas con el código; no acredita por sí mismo capacitación ni aceptación
+      humana.
+    </p>
+    <h2>1. Antes de comenzar</h2>
+    <p>
+      SIGA reúne catálogos, estudiantes, docentes, grupos, inscripción, notas, avance y constancias.
+      Cada persona utiliza una cuenta de un solo rol. La cuenta permite acceder a ciertas funciones;
+      cambiar una dirección del navegador no amplía los permisos.
+    </p>
+    <p>
+      Para Docker local abre <code>http://localhost:8080</code>. En desarrollo nativo el portal
+      suele estar en <code>http://localhost:5173</code>. Utiliza la dirección indicada por soporte
+      para tu entorno. No mezcles credenciales de instalaciones diferentes.
+    </p>
+    <p>
+      Las decisiones D41–D46 están autorizadas provisionalmente
+      <strong>para esta demostración</strong>: dos programas sintéticos, notas de 0 a 10, mínima
+      aprobatoria 6, dos decimales, promedio ponderado por créditos considerando todos los intentos
+      calificados, constancia con al menos una nota final y ventanas de inscripción en Ciudad de
+      México. También fijan metas demostrativas de rendimiento y recuperación. No son un reglamento
+      institucional definitivo.
+    </p>
+    <p>
+      El PDF emitido es una constancia de estudios del prototipo. Incluye materias aprobadas y
+      reprobadas con nota final; no acredita conclusión del programa, título ni validez oficial. El
+      sistema no incluye notas parciales, pago, correo automático ni cancelación de matrícula en
+      autoservicio.
+    </p>
+    <h2>2. Acceso, navegación y cierre de sesión</h2>
+    <ol>
+      <li>Abre el portal y entra en «Acceso».</li>
+      <li>Escribe «Correo electrónico» y «Contraseña» de la cuenta asignada.</li>
+      <li>
+        Envía el formulario y espera la respuesta. Si falla, revisa el mensaje; no repitas
+        contraseñas de otras personas.
+      </li>
+      <li>
+        Comprueba que tu perfil sea estudiante, docente o administración antes de guardar
+        información.
+      </li>
+      <li>
+        Usa el menú lateral para abrir las funciones. «Contraer menú» y «Expandir menú» cambian el
+        espacio disponible. Si una sección está plegada, abre su encabezado.
+      </li>
+      <li>
+        Para terminar selecciona «Cerrar sesión», especialmente en equipos compartidos. Cerrar una
+        pestaña no sustituye este paso.
+      </li>
+    </ol>
+    <p>
+      La sesión dura 30 minutos y puede ser revocada. Al cerrar sesión o cambiar de persona se
+      limpian los datos privados y borradores de la sesión del portal. No uses los borradores como
+      respaldo permanente.
+    </p>
+    <table>
+      <thead>
+        <tr>
+          <th>Perfil</th>
+          <th>Opciones del menú</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Estudiante</td>
+          <td>
+            «Mapa curricular de mi plan», «Calificaciones y avance», «Matrícula e historial»,
+            «Constancias de estudios», «Datos de acceso».
+          </td>
+        </tr>
+        <tr>
+          <td>Docente</td>
+          <td>«Grupos, calificaciones y CSV», «Datos de acceso».</td>
+        </tr>
+        <tr>
+          <td>Administración</td>
+          <td>
+            «Catálogos y planes», «Estudiantes y docentes», «Periodos y grupos», «Reportes y
+            auditoría», «Datos de acceso».
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <p>
+      «Datos de acceso» permite consultar el espacio de cuenta; no debe interpretarse como un
+      formulario de cambio autónomo de contraseña.
+    </p>
+    <h2>3. Uso con teclado, búsqueda y páginas</h2>
+    <ol>
+      <li>
+        Pulsa <code>Tab</code> para avanzar y <code>Mayús+Tab</code> para retroceder. El contorno
+        visible indica el control seleccionado.
+      </li>
+      <li>
+        Activa enlaces con <code>Enter</code> y botones con <code>Enter</code> o barra espaciadora.
+        Usa flechas para las opciones de un selector nativo.
+      </li>
+      <li>
+        En las pestañas de catálogos, personas u oferta utiliza el control enfocado y las teclas
+        admitidas por esa pestaña; comprueba qué panel quedó abierto antes de escribir.
+      </li>
+      <li>
+        En los listados usa la búsqueda disponible y después «Anterior» o «Siguiente». Una página
+        vacía no demuestra que no existan registros en otras páginas.
+      </li>
+      <li>
+        Algunos selectores incluyen búsqueda y páginas propias: busca por clave o nombre antes de
+        elegir. La selección actual puede conservarse aunque no figure en la página de opciones
+        mostrada.
+      </li>
+      <li>
+        Para ampliar la interfaz usa el zoom del navegador y vuelve al 100 % con su menú cuando
+        termines. Si algún control queda oculto, informa pantalla, navegador y nivel de zoom. Este
+        manual no declara probado un nivel de zoom real por el hecho de describirlo.
+      </li>
+    </ol>
+    <p>
+      No elimines contenido ni guardes un formulario solo para comprobar el teclado. Las operaciones
+      de escritura tienen efectos reales dentro de la base ficticia.
+    </p>
+    <h2>4. Estudiante: mapa curricular</h2>
+    <ol>
+      <li>Abre «Mapa curricular de mi plan».</li>
+      <li>Revisa el programa y la versión del plan asignado.</li>
+      <li>Consulta asignaturas, créditos y relaciones de prerrequisitos disponibles.</li>
+      <li>
+        Si aparece «Mapa curricular no disponible», pide a administración revisar el plan asociado;
+        no supongas que otra carrera usa el mismo catálogo.
+      </li>
+    </ol>
+    <p>
+      El mapa es una referencia. La posibilidad efectiva de inscripción depende también del periodo,
+      ventana, actividad, intentos anteriores y cupo.
+    </p>
+    <h2>5. Estudiante: inscripción y consulta de matrícula</h2>
+    <ol>
+      <li>Abre «Matrícula e historial». El título de la pantalla es «Mi matrícula».</li>
+      <li>
+        En «Grupos disponibles» revisa asignatura, periodo, grupo, créditos, docente y lugares.
+      </li>
+      <li>
+        Si no aparecen opciones, pulsa «Actualizar oferta» y comprueba las páginas. Solicita
+        revisión del plan o periodo si sigue sin haber oferta.
+      </li>
+      <li>
+        Lee cualquier motivo junto a un grupo cuyo botón esté deshabilitado. No todos los grupos
+        visibles son elegibles.
+      </li>
+      <li>
+        En el grupo correcto pulsa «Inscribirme» una sola vez y espera el resultado de
+        «Registrando…».
+      </li>
+      <li>
+        Revisa «Mis inscripciones»: debe aparecer el registro confirmado. Comprueba materia, grupo y
+        periodo.
+      </li>
+      <li>
+        Si se informa conflicto o falta de cupo, actualiza la oferta. Otro estudiante puede haber
+        ocupado el último lugar después de que cargaste la pantalla.
+      </li>
+    </ol>
+    <p>
+      El servidor comprueba estudiante y oferta activos, pertenencia al plan, ventana abierta,
+      prerrequisitos, duplicidad y cupo. Que el botón estuviera habilitado no reserva un lugar. No
+      hay botón de baja de inscripción por autoservicio; consulta el procedimiento autorizado con
+      administración.
+    </p>
+    <h2>6. Estudiante: notas y avance</h2>
+    <ol>
+      <li>Abre «Calificaciones y avance».</li>
+      <li>Revisa el promedio general y los créditos/avance que informa la pantalla.</li>
+      <li>En «Por periodo» identifica el periodo antes de comparar promedios.</li>
+      <li>En «Asignaturas cursadas» busca y pagina el historial de intentos.</li>
+      <li>
+        Distingue una nota pendiente de una nota cero: pendiente significa que no se capturó nota
+        final; cero es una nota y sí interviene en el cálculo.
+      </li>
+      <li>
+        Si detectas una nota incorrecta, comunica al docente materia, grupo y periodo. El estudiante
+        no puede modificarla.
+      </li>
+    </ol>
+    <p>
+      Con la regla provisional TODOS, cada intento con nota final aporta su nota y créditos al
+      promedio ponderado. Una asignatura aprobada cuenta una sola vez en los créditos de avance.
+      Ejemplo: 8 con 6 créditos y 9 con 4 producen <code>(8×6 + 9×4) / 10 = 8.40</code>; una nota
+      pendiente no añade cero ni créditos al denominador.
+    </p>
+    <h2>7. Estudiante: emitir, descargar y verificar constancia</h2>
+    <ol>
+      <li>Abre «Constancias de estudios» y lee la advertencia de alcance.</li>
+      <li>Confirma que tienes al menos una nota final registrada.</li>
+      <li>Pulsa «Emitir constancia de estudios». Espera mientras aparece «Generando PDF…».</li>
+      <li>
+        Revisa el aviso «Constancia emitida. Código: …» y localiza el documento en «Mi historial de
+        emisión».
+      </li>
+      <li>Si hay muchos documentos usa «Buscar constancia por código o estado» y la paginación.</li>
+      <li>
+        Pulsa «Descargar PDF». Comprueba que corresponda a tu programa e historial; guárdalo en una
+        ubicación privada.
+      </li>
+      <li>Abre «Verificación pública» o escanea el QR del PDF.</li>
+      <li>
+        Comprueba código y estado. La consulta muestra datos mínimos; no publica tu correo ni
+        expediente completo.
+      </li>
+    </ol>
+    <p>
+      Una constancia refleja la instantánea emitida. Corregir una nota después no cambia
+      automáticamente un PDF anterior. La comprobación pública del código no demuestra, por sí sola,
+      que un archivo externo presentado no haya sido alterado.
+    </p>
+    <h3>Recuperar una solicitud interrumpida</h3>
+    <ol>
+      <li>
+        Si el historial muestra «Pendiente» o «Fallido», primero consulta nuevamente la lista para
+        conocer su estado actual.
+      </li>
+      <li>Usa «Recuperar solicitud» sobre esa fila y espera «Recuperando…».</li>
+      <li>Comprueba que la solicitud termine emitida y entonces descarga su PDF.</li>
+      <li>
+        Si persiste el error, informa el código a soporte. No borres archivos ni generes
+        repetidamente solicitudes nuevas para esconder el problema.
+      </li>
+    </ol>
+    <h3>Reemitir una constancia revocada</h3>
+    <ol>
+      <li>Localiza una constancia «Revocado» en tu historial y lee el motivo.</li>
+      <li>Si aparece «Reemitir», pulsa el botón y espera.</li>
+      <li>Comprueba el nuevo documento y la referencia «Reemplazada por …» del anterior.</li>
+      <li>
+        Descarga y verifica el código nuevo. El anterior conserva su estado histórico; no se vuelve
+        vigente.
+      </li>
+    </ol>
+    <p>
+      El botón solo aparece para una constancia revocada sin reemplazo. Una constancia revocada
+      puede conservar descarga para consulta histórica: poder descargarla no significa que esté
+      vigente.
+    </p>
+    <h2>8. Docente: grupos y captura de nota final</h2>
+    <ol>
+      <li>Abre «Grupos, calificaciones y CSV». La pantalla se titula «Mis grupos».</li>
+      <li>Usa «Buscar grupo, asignatura o periodo» y pagina si hace falta.</li>
+      <li>Confirma clave, asignatura, periodo y ocupación del grupo.</li>
+      <li>Pulsa «Calificar» para abrir «Captura de calificaciones».</li>
+      <li>
+        Lee la política mostrada: escala, mínima y precisión. Para esta demo se usan 0–10, mínima 6
+        y hasta dos decimales.
+      </li>
+      <li>Usa «Buscar estudiante» y verifica nombre y matrícula de la fila.</li>
+      <li>Escribe la «Nota final» y pulsa «Guardar nota» en esa misma fila.</li>
+      <li>Espera «Guardando…» y comprueba el resultado antes de continuar con otro alumno.</li>
+    </ol>
+    <p>
+      La captura es de nota final directa, no de evaluaciones parciales. El docente solo trabaja con
+      grupos asignados. Administración no recibe automáticamente permiso docente por tener un rol
+      administrativo.
+    </p>
+    <h3>Corregir una nota y resolver versiones</h3>
+    <ol>
+      <li>Localiza la fila ya calificada y revisa el valor actual.</li>
+      <li>Cambia «Nota final». Aparece «Motivo de corrección».</li>
+      <li>
+        Explica el motivo con claridad, sin contraseñas ni datos ajenos al caso, y pulsa «Corregir».
+      </li>
+      <li>
+        Si otra operación actualizó la misma nota, el sistema conserva tu borrador y muestra que la
+        calificación cambió.
+      </li>
+      <li>
+        Compara el valor actual con tu intención. Para abandonar tu edición pulsa «Descartar
+        borrador».
+      </li>
+      <li>
+        Solo si corresponde aplicar tu edición, pulsa «Revisé el valor actual», revisa nuevamente
+        nota y motivo y guarda la corrección.
+      </li>
+      <li>
+        Confirma el resultado. La corrección se registra en auditoría; no sobrescribas a ciegas un
+        valor nuevo.
+      </li>
+    </ol>
+    <p>
+      Cada fila mantiene su borrador y motivo de forma independiente. Un error al guardar una fila
+      no autoriza a asumir que otras se guardaron. Si el portal advierte cambios sin guardar al
+      salir, cancela la salida para revisar o acepta conscientemente descartarlos. No cierres sesión
+      esperando recuperar esos borradores con otra cuenta.
+    </p>
+    <h3>Exportar el historial docente</h3>
+    <ol>
+      <li>Desde la captura del grupo pulsa «Exportar historial CSV».</li>
+      <li>Comprueba el grupo autorizado antes de abrir o compartir el archivo.</li>
+      <li>
+        Conserva el CSV de forma privada. Si tu hoja de cálculo pregunta por separadores o
+        codificación, utiliza la importación de texto y revisa acentos y columnas.
+      </li>
+      <li>El CSV es una consulta; editarlo no actualiza las notas del sistema.</li>
+    </ol>
+    <h2>9. Administración: orden recomendado de preparación</h2>
+    <p>
+      Prepara primero programas y asignaturas, después el plan, estudiantes/docentes, periodos y
+      grupos. Así los selectores tendrán referencias válidas. Busca antes de crear para evitar
+      duplicados y usa solo identidades ficticias.
+    </p>
+    <h3>Crear y mantener programas o asignaturas</h3>
+    <ol>
+      <li>Abre «Catálogos y planes» y selecciona la pestaña «Programas» o «Asignaturas».</li>
+      <li>Busca por clave o nombre para comprobar que no exista.</li>
+      <li>En «Nuevo programa» o «Nueva asignatura» captura «Clave» y «Nombre».</li>
+      <li>
+        Usa una clave sin espacios, comenzando por letra o número; se admiten letras, números,
+        punto, guion y guion bajo.
+      </li>
+      <li>
+        Pulsa «Guardar programa» o «Guardar asignatura» y confirma que aparezca en el listado.
+      </li>
+      <li>Para cambiar el nombre edita el campo de la fila y pulsa «Guardar nombre».</li>
+      <li>
+        Para retirar del uso activo pulsa «Dar de baja». Para consultar retirados utiliza la opción
+        de incluir registros inactivos disponible en el listado.
+      </li>
+      <li>
+        Si corresponde restituirlo, pulsa «Reactivar». La baja lógica conserva relaciones e
+        historial.
+      </li>
+    </ol>
+    <h3>Crear plan, asignaturas y prerrequisitos</h3>
+    <ol>
+      <li>En «Catálogos y planes» abre «Planes».</li>
+      <li>
+        En «Crear plan» busca el programa, elige «Programa activo» e indica «Versión» y «Nombre del
+        plan».
+      </li>
+      <li>Guarda el plan con el botón del formulario y selecciónalo en «Planes registrados».</li>
+      <li>
+        Busca una materia en «Buscar asignatura por clave o nombre», selecciónala en «Agregar
+        asignatura activa» y pulsa «Agregar».
+      </li>
+      <li>
+        Repite hasta reunir las materias. Para cada una captura «Créditos» y «Semestre sugerido».
+      </li>
+      <li>
+        En «Prerrequisitos (puedes elegir varios)» selecciona materias que deban aprobarse antes. El
+        selector es múltiple: usa las teclas modificadoras y flechas del navegador/sistema
+        operativo, comprobando qué opciones quedaron seleccionadas.
+      </li>
+      <li>
+        No establezcas una materia como requisito de sí misma ni un ciclo A→B→A. El servidor rechaza
+        relaciones inválidas.
+      </li>
+      <li>
+        «Quitar del borrador» retira una materia de la edición actual. Revisa también los
+        prerrequisitos que dependían de ella.
+      </li>
+      <li>Pulsa «Guardar contenido del plan» y comprueba el contenido persistido.</li>
+      <li>
+        Si aparece que el plan ya tiene estudiantes u oferta y está protegido, utiliza «Crear nueva
+        versión», revisa la copia y guarda ahí los cambios. No intentes transformar el historial de
+        la versión en uso.
+      </li>
+    </ol>
+    <p>
+      Crear una nueva versión no debe confundirse con transferir automáticamente estudiantes o
+      grupos existentes. Para retirar o devolver un plan al uso activo utiliza «Dar de baja» o
+      «Reactivar» según corresponda.
+    </p>
+    <h3>Alta y edición de estudiantes</h3>
+    <ol>
+      <li>Abre «Estudiantes y docentes» y la pestaña «Estudiantes».</li>
+      <li>Busca por nombre, matrícula o correo.</li>
+      <li>
+        Inicia un registro nuevo y completa «Nombre completo», «Correo», «Matrícula», «Plan de
+        estudio» y «Fecha de ingreso».
+      </li>
+      <li>Busca y selecciona el plan correcto, incluida su versión.</li>
+      <li>Pulsa «Guardar estudiante» y revisa el resultado.</li>
+      <li>
+        Para corregir datos abre la edición de la persona y guarda los cambios. El correo y la
+        matrícula deben ser únicos.
+      </li>
+      <li>
+        Para una baja lógica revisa «Estado académico», selecciona el estado que corresponda y
+        guarda. «Inactivo» no significa borrar el expediente; «Egresado» tampoco debe asignarse sin
+        justificación.
+      </li>
+      <li>
+        Comprueba por separado el estado de acceso mostrado. Reactivar el estado académico no
+        reactiva automáticamente la cuenta.
+      </li>
+    </ol>
+    <h3>Alta y edición de docentes</h3>
+    <ol>
+      <li>En «Estudiantes y docentes» abre «Docentes» y busca por nombre, empleado o correo.</li>
+      <li>
+        Inicia un registro nuevo y completa «Nombre completo», «Correo», «Número de empleado» y
+        «Departamento».
+      </li>
+      <li>Pulsa «Guardar docente» y comprueba la fila.</li>
+      <li>
+        Para actualizar datos abre su edición. En la edición revisa el estado activo y guarda cuando
+        corresponda una baja o reactivación.
+      </li>
+      <li>
+        Comprueba el estado de acceso. Las bajas revocan sesiones y conservan historial; no borres
+        grupos para dar de baja a una persona.
+      </li>
+    </ol>
+    <h3>Entrega o restablecimiento de acceso: intervención de soporte</h3>
+    <p>
+      Las altas de personas crean cuentas inactivas y esta pantalla no muestra contraseñas. El
+      operador autorizado debe provisionar el acceso por separado. El flujo CLI disponible para una
+      persona estudiante/docente activa es
+      <strong>exclusivo de entorno POSIX de desarrollo local con base <code>siga_dev</code></strong
+      >, sin <code>NODE_ENV=production</code> ni parámetros adicionales en la URL de base.
+    </p>
+    <p>
+      Desde la raíz, el operador usa, sustituyendo el correo de ejemplo por el de la persona
+      existente:
+    </p>
+    <pre><code class="language-bash">npm run auth:provision:local -w @siga/api -- estudiante.demo@siga.local
+</code></pre>
+    <p>
+      Este comando compila la API, activa/restablece el acceso y revoca sesiones anteriores.
+      Conserva la credencial en un archivo privado bajo <code>.local</code> con permisos
+      <code>0600</code>; el directorio debe ser propio y privado <code>0700</code>. El correo del
+      ejemplo es sintético y no se garantiza que exista.
+    </p>
+    <p>
+      No es un comando para crear administradores ni un procedimiento universal de
+      Docker/Windows/producción. Si el entorno no cumple estas condiciones, soporte debe revisar el
+      manual técnico; no relajes las comprobaciones. Entrega la credencial de forma privada y no la
+      adjuntes al informe, capturas ni bitácora. Si el comando falla, no distribuyas una credencial
+      que no haya quedado confirmada.
+    </p>
+    <h3>Configurar periodos</h3>
+    <ol>
+      <li>Abre «Periodos y grupos» y la pestaña «Periodos».</li>
+      <li>Inicia un periodo o usa la edición del existente.</li>
+      <li>Completa «Clave», «Nombre», «Inicio del periodo» y «Fin del periodo».</li>
+      <li>
+        Completa «Inicio de inscripción (hora de Ciudad de México)» y «Fin de inscripción (hora de
+        Ciudad de México)» con el intervalo previsto.
+      </li>
+      <li>Selecciona «Estado»: «Planificado», «Abierto» o «Cerrado».</li>
+      <li>
+        Elige «Política académica». La marca «propuesta» sigue distinguiendo una política no
+        ratificada institucionalmente; D41–D46 sí autorizan su uso provisional de demostración.
+      </li>
+      <li>Pulsa «Guardar periodo» y comprueba fechas, estado y política.</li>
+      <li>
+        Recuerda que un periodo «Abierto» fuera de su ventana de inscripción no permite
+        matricularse. No cambies fechas de la demo compartida para practicar: pide una copia
+        aislada.
+      </li>
+    </ol>
+    <h3>Crear, editar y retirar grupos</h3>
+    <ol>
+      <li>En «Periodos y grupos» abre «Grupos» e inicia uno nuevo.</li>
+      <li>Completa «Clave del grupo» y selecciona «Plan de estudio».</li>
+      <li>
+        Elige «Asignatura del plan», «Periodo» y «Docente activo». Busca y pagina sus opciones si es
+        necesario.
+      </li>
+      <li>Captura «Cupo» como entero positivo.</li>
+      <li>Usa el botón de guardado y comprueba docente, materia, periodo y ocupación del grupo.</li>
+      <li>
+        Para actualizar usa «Editar». Si ya tiene historial, respeta la identidad académica
+        protegida del grupo.
+      </li>
+      <li>
+        No reduzcas el cupo por debajo de la ocupación activa. Un rechazo protege las inscripciones
+        existentes.
+      </li>
+      <li>
+        Para retirarlo de la oferta utiliza «Desactivar»; «Reactivar» lo devuelve al estado activo
+        cuando el servidor lo permite. No elimina las inscripciones históricas.
+      </li>
+    </ol>
+    <h2>10. Administración: reportes, CSV y auditoría</h2>
+    <ol>
+      <li>Abre «Reportes y auditoría». El título es «Reportes e historial».</li>
+      <li>
+        Utiliza «Buscar en certificados, grupos y bitácora». La búsqueda actualiza las tres
+        secciones y devuelve sus páginas al inicio.
+      </li>
+      <li>
+        En «Grupos e historial académico» identifica periodo, clave, programa, asignatura, docente y
+        ocupación.
+      </li>
+      <li>
+        Pulsa «Exportar CSV» en la fila del grupo requerido. Revisa el alcance del grupo antes de
+        compartir.
+      </li>
+      <li>
+        Pagina cada sección de forma independiente: grupos, constancias y bitácora pueden tener
+        totales diferentes.
+      </li>
+      <li>
+        En «Bitácora de cambios» revisa actor, acción, recurso, fecha y datos registrados. No la
+        trates como un formulario editable ni agregues secretos a los motivos.
+      </li>
+      <li>
+        «Imprimir reportes» abre la función de impresión del navegador. Revisa las páginas y la
+        información incluida antes de imprimir o guardar PDF.
+      </li>
+    </ol>
+    <p>
+      La búsqueda de la pantalla localiza filas; no debe confundirse con una exportación global de
+      todos los grupos ni con la modificación del historial.
+    </p>
+    <h3>Revocar una constancia</h3>
+    <ol>
+      <li>En «Reportes e historial» localiza la sección «Constancias».</li>
+      <li>Busca el código y verifica titular, estado y documento antes de intervenir.</li>
+      <li>En una fila con acción disponible escribe «Motivo para revocar».</li>
+      <li>
+        Pulsa «Revocar» y espera el resultado. No lo uses para una mera prueba sobre un documento
+        que deba seguir vigente.
+      </li>
+      <li>Comprueba el estado «Revocado» y su reflejo en la verificación pública.</li>
+      <li>
+        Comunica al titular el motivo y, si procede, que solicite «Reemitir» desde su historial
+        estudiantil. La interfaz administrativa no debe describirse como si ofreciera un botón de
+        reemisión propio.
+      </li>
+    </ol>
+    <p>
+      La revocación conserva la evidencia histórica. Descargar el archivo anterior no revierte la
+      revocación. El administrador puede consultar/descargar los documentos autorizados; la emisión
+      propia y las acciones de recuperación/reemisión descritas en este manual están en la pantalla
+      del estudiante.
+    </p>
+    <h2>11. Verificación pública sin cuenta</h2>
+    <ol>
+      <li>Abre el enlace del QR o la ruta pública del código entregado.</li>
+      <li>Revisa «Consulta de constancia» y comprueba que el código sea el esperado.</li>
+      <li>Lee el estado: vigente, revocado o no encontrado según la respuesta.</li>
+      <li>
+        Si no se encuentra, comprueba la dirección y comunica la incidencia al emisor. No publiques
+        correos ni expediente para pedir ayuda.
+      </li>
+    </ol>
+    <p>
+      La consulta pública es de lectura y datos mínimos. No permite descargar expedientes ajenos ni
+      modificar el estado del documento.
+    </p>
+    <h2>12. Problemas frecuentes y respuesta segura</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Situación</th>
+          <th>Qué hacer</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Credenciales rechazadas</td>
+          <td>
+            Comprueba entorno, correo, contraseña y acceso activo. Solicita a soporte
+            restablecimiento cuando corresponda.
+          </td>
+        </tr>
+        <tr>
+          <td>Sesión vencida o revocada</td>
+          <td>
+            Vuelve a iniciar sesión y consulta el estado antes de repetir un guardado. No reutilices
+            cookies.
+          </td>
+        </tr>
+        <tr>
+          <td>Acción no autorizada</td>
+          <td>
+            Verifica el rol y la asignación. No pruebes direcciones de recursos ajenos para evitar
+            la restricción.
+          </td>
+        </tr>
+        <tr>
+          <td>Registro duplicado</td>
+          <td>
+            Busca el correo, matrícula, clave o empleado ya existente. Corrige el dato; no agregues
+            duplicados con variantes arbitrarias.
+          </td>
+        </tr>
+        <tr>
+          <td>Lista u opción no encontrada</td>
+          <td>
+            Limpia filtros, revisa páginas y estado activo/inactivo. Comprueba programa, plan y
+            versión.
+          </td>
+        </tr>
+        <tr>
+          <td>Inscripción rechazada</td>
+          <td>
+            Lee el motivo, actualiza oferta y revisa ventana, cupo, plan y prerrequisitos con
+            administración.
+          </td>
+        </tr>
+        <tr>
+          <td>Nota fuera de rango o precisión</td>
+          <td>
+            Usa la política visible. En demo: 0–10 y hasta dos decimales. No confundas vacío con
+            cero.
+          </td>
+        </tr>
+        <tr>
+          <td>Conflicto al corregir una nota</td>
+          <td>
+            Compara el valor nuevo, conserva o descarta el borrador y confirma conscientemente antes
+            de corregir.
+          </td>
+        </tr>
+        <tr>
+          <td>Guardado con conexión interrumpida</td>
+          <td>
+            Consulta el registro antes de repetir. La ausencia de aviso en pantalla no demuestra que
+            el servidor no haya guardado.
+          </td>
+        </tr>
+        <tr>
+          <td>Constancia pendiente/fallida</td>
+          <td>
+            Consulta historial y usa «Recuperar solicitud» cuando aparezca; escala a soporte si
+            persiste.
+          </td>
+        </tr>
+        <tr>
+          <td>PDF no descarga o integridad rechazada</td>
+          <td>
+            Confirma titular/rol, estado y código. Informa a soporte; no reemplaces archivos del
+            volumen manualmente.
+          </td>
+        </tr>
+        <tr>
+          <td>Portal no disponible</td>
+          <td>
+            Solicita revisión de salud y servicios. No borres volúmenes, base ni certificados para
+            intentar arreglarlo.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <p>
+      Al reportar un problema registra fecha aproximada, rol, pantalla, acción, código del mensaje y
+      resultado esperado. Incluye identificadores mínimos ficticios y una captura solo si no
+      contiene contraseña, token, cookie o expediente completo.
+    </p>
+    <h2>13. Límites y verificación de este manual</h2>
+    <p>
+      Se contrastaron etiquetas y condiciones visibles en <code>App.tsx</code>,
+      <code>CatalogManagement.tsx</code>, <code>PersonManagement.tsx</code>,
+      <code>OfertaManagement.tsx</code>, <code>StudentMatriculas.tsx</code>,
+      <code>StudentCalificaciones.tsx</code>, <code>TeacherCalificaciones.tsx</code> y
+      <code>CertificadosManagement.tsx</code>. El comando de provisión se comprobó contra
+      <code>apps/api/package.json</code> y <code>provisionar-acceso-local.ts</code>.
+    </p>
+    <p>
+      Esta revisión es documental y estática: no se atribuyen capturas, recorridos de un
+      participante ni nuevas pruebas ejecutadas. El material debe revisarse mediante un piloto real
+      por los tres roles; asistencia, calificaciones y firmas se consignarán después de realizarlo.
+      Los manuales y formatos listos no acreditan capacitación impartida.
+    </p>
+    <p>
+      La operación técnica se complementa con
+      <a href="../entrega-revisada/MANUAL_TECNICO_REVISADO.docx">el manual técnico DOCX revisado</a
+      >,
+      <a href="../OPERACION_RESPALDO_RESTAURACION.md"
+        >el procedimiento de respaldo y restauración</a
+      >
+      y <a href="../OPERACION_CONCILIACION_CONSTANCIAS.md">la conciliación de constancias</a>. El
+      <a href="../evidencias/CIERRE_LOCAL.md">dossier de cierre</a> reúne la evidencia declarada del
+      candidato y las aceptaciones humanas pendientes; sus reservas deben leerse junto con la
+      auditoría actual.
+    </p>
+  </body>
+</html>

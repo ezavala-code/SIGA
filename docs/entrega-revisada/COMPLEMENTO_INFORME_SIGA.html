@@ -1,0 +1,2251 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <title>COMPLEMENTO_INFORME_SIGA</title>
+    <style>
+      @page {
+        size: A4;
+        margin: 1.8cm;
+      }
+      body {
+        font-family: 'Liberation Sans', sans-serif;
+        font-size: 10pt;
+        line-height: 1.25;
+        color: #17263a;
+      }
+      h1 {
+        font-size: 19pt;
+        color: #173858;
+        page-break-before: always;
+      }
+      h1:first-child {
+        page-break-before: avoid;
+      }
+      h2 {
+        font-size: 14pt;
+        color: #173858;
+      }
+      h3 {
+        font-size: 11pt;
+        color: #24516c;
+      }
+      h1,
+      h2,
+      h3,
+      h4 {
+        page-break-after: avoid;
+      }
+      p,
+      li {
+        orphans: 2;
+        widows: 2;
+      }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+        font-size: 8.5pt;
+        margin: 8pt 0;
+      }
+      th,
+      td {
+        border: 1px solid #b9c5cf;
+        padding: 5pt;
+        vertical-align: top;
+        word-wrap: break-word;
+      }
+      th {
+        background: #e9eff4;
+        color: #173858;
+      }
+      tr {
+        page-break-inside: avoid;
+      }
+      pre {
+        border: 1px solid #cbd4dc;
+        background: #f3f6f8;
+        padding: 7pt;
+        white-space: pre-wrap;
+        font-size: 8pt;
+      }
+      code {
+        font-family: 'Liberation Mono', monospace;
+        font-size: 8pt;
+      }
+      a {
+        color: #145477;
+      }
+      blockquote {
+        border-left: 3px solid #49718a;
+        margin-left: 0;
+        padding-left: 12pt;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>SIGA · Complemento revisado del informe académico</h1>
+    <h2>Control de edición y lectura</h2>
+    <p>
+      <strong
+        >Versión documental 3.0 · 9 de noviembre de 2026 · aplicación 0.1.0 · demostración local con
+        datos ficticios.</strong
+      >
+    </p>
+    <p>
+      Este complemento desarrolla las conclusiones, anexos y manuales que faltaban en
+      <a href="../../EntregablesPI-Ing-Software-completado.pdf"
+        >EntregablesPI-Ing-Software-completado.pdf</a
+      >. Es una actualización documental sustentada en auditoría. No es un acta de aceptación ni una
+      afirmación de operación institucional.
+    </p>
+    <p>
+      El PDF integrado conserva las 35 páginas originales y añade este complemento a partir de la
+      página física 36. El índice y las afirmaciones de las páginas originales se conservan como
+      versión previa; para el estado vigente prevalecen la fe de actualización y las reservas de
+      este complemento. El archivo DOCX de este complemento es editable. No se reconstruyó de forma
+      automática el diseño de los capítulos I–IV.
+    </p>
+    <p>
+      La
+      <a href="../AUDITORIA_IMPLEMENTACION_Y_ENTREGA_20261109.md">auditoría técnica detallada</a>
+      identifica brechas AC-01–17, cubre PB-01–30 y R-01–18 y separa implementación, prueba y
+      aceptación. Los resultados históricos se atribuyen a sus registros, no a esta nueva redacción.
+    </p>
+    <h2>Índice del complemento</h2>
+    <ol>
+      <li>Fe de actualización de los capítulos anteriores.</li>
+      <li>Capítulo V: conclusiones y recomendaciones.</li>
+      <li>Anexo A: requisitos, casos y reservas de aceptación.</li>
+      <li>Anexo B: arquitectura e integración de subsistemas.</li>
+      <li>Anexo C: evidencias y control de versión.</li>
+      <li>Anexo D: manual de usuario revisado.</li>
+      <li>Anexo E: manual técnico revisado.</li>
+      <li>Anexo F: capacitación y evaluación.</li>
+      <li>Anexo G: decisiones y exclusiones.</li>
+      <li>Anexo H: trabajo restante y orden de cierre.</li>
+      <li>Anexo I: registro de aceptación pendiente.</li>
+    </ol>
+    <h2>Fe de actualización de los capítulos anteriores</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Página del PDF original</th>
+          <th>Actualización vigente</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>3</td>
+          <td>
+            El capítulo V que figuraba pendiente se desarrolla a continuación. Los anexos D/E
+            integran manuales revisados con límites y reservas explícitos.
+          </td>
+        </tr>
+        <tr>
+          <td>18</td>
+          <td>
+            Tecnologías reales: React/Vite, NestJS, Prisma/PostgreSQL, TypeScript, contratos
+            compartidos, cookie HttpOnly y CSRF. No dar por usadas todas las alternativas
+            propuestas.
+          </td>
+        </tr>
+        <tr>
+          <td>20–21</td>
+          <td>
+            RF-13 correo permanece opcional/fuera del cierre local. HTTPS público, disponibilidad
+            institucional y catálogo oficial se separan de la demo aprobada. Portabilidad se
+            acredita por plataformas probadas.
+          </td>
+        </tr>
+        <tr>
+          <td>22–23</td>
+          <td>
+            Consultar modelo y mapa API revisados en anexos B/E; los ejemplos iniciales son de
+            diseño, no contrato definitivo.
+          </td>
+        </tr>
+        <tr>
+          <td>25</td>
+          <td>
+            Ya existen manuales 2.0, ampliados aquí a versión documental 3.0; su entrega no
+            demuestra capacitación efectuada.
+          </td>
+        </tr>
+        <tr>
+          <td>26–28</td>
+          <td>
+            Sí hay código ejecutable, migraciones, scripts y evidencia local. Consultar auditoría y
+            anexos; no aplicar la frase histórica de inexistencia de repositorio.
+          </td>
+        </tr>
+        <tr>
+          <td>29–32</td>
+          <td>
+            Hay pruebas y registros; su correspondencia con cada CP se muestra sin presumir
+            aprobación de todos los subcasos.
+          </td>
+        </tr>
+        <tr>
+          <td>32</td>
+          <td>
+            Sí se adjuntan fuentes y registros en repositorio. El cierre técnico mantiene reservas
+            AC; no afirmar 100 % por conteo de tests.
+          </td>
+        </tr>
+        <tr>
+          <td>33–34</td>
+          <td>
+            Fechas de capacitación originales son propuestas históricas. Materiales listos,
+            ejecución/evaluación humana pendiente; no asignar asistencias retroactivamente.
+          </td>
+        </tr>
+        <tr>
+          <td>35</td>
+          <td>
+            Se conserva bibliografía original. Las fuentes primarias del complemento son archivos y
+            resultados locales identificados. No se añadieron citas bibliográficas no consultadas.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h1>Capítulo V. Conclusiones y recomendaciones</h1>
+    <h2>5.1 Resultado frente al objetivo general</h2>
+    <p>
+      El desarrollo de SIGA produjo una aplicación web que integra administración académica,
+      inscripción, calificaciones, seguimiento y constancias para distintos programas y planes. La
+      revisión del código y las pruebas permite reconocer una implementación sustancial de los
+      procesos previstos. El sistema dispone de separación por roles y recursos, modelo relacional,
+      historial y mecanismos de auditoría.
+    </p>
+    <p>
+      La conclusión debe limitarse a la demostración académica local. Existen decisiones
+      provisionales de datos y reglas autorizadas para ese entorno; no se dispone por ello de
+      aprobación institucional, catálogo curricular oficial completo ni condiciones de operación
+      productiva. Tampoco puede afirmarse cierre integral mientras subsistan las reservas técnicas y
+      la aceptación humana descritas en este complemento.
+    </p>
+    <h2>5.2 Resultado frente a los objetivos específicos</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Objetivo de trabajo</th>
+          <th>Resultado sustentado</th>
+          <th>Condición pendiente</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Centralizar registros y estructura académica</td>
+          <td>
+            Programas, planes versionados, materias, personas, periodos y grupos en modelo
+            relacionado; bajas conservan historia.
+          </td>
+          <td>Demostración integral por ambos programas y matriz exhaustiva de listas.</td>
+        </tr>
+        <tr>
+          <td>Controlar inscripción</td>
+          <td>
+            Elegibilidad por plan, ventana, prerrequisitos, cupo y unicidad; servidor revalida con
+            transacciones y bloqueos.
+          </td>
+          <td>Mantener regresión del candidato final y trazabilidad de cada caso.</td>
+        </tr>
+        <tr>
+          <td>Registrar y consultar notas</td>
+          <td>
+            Docente asignado, nota final directa, versiones, motivo de corrección y auditoría;
+            cálculo Decimal.
+          </td>
+          <td>Reconciliar cobertura/contratos y evidencias del cierre.</td>
+        </tr>
+        <tr>
+          <td>Informar avance e historial</td>
+          <td>Promedios por créditos, intentos conservados y créditos aprobados únicos.</td>
+          <td>Reglas continúan provisionales para demo, sin aprobación institucional.</td>
+        </tr>
+        <tr>
+          <td>Emitir documentos verificables</td>
+          <td>
+            Snapshot/PDF/hash/QR, verificador público mínimo y flujos de revocación, reemplazo y
+            recuperación.
+          </td>
+          <td>Enlazar evidencia de commit durable, timeout y recorrido completo por programa.</td>
+        </tr>
+        <tr>
+          <td>Facilitar uso y continuidad</td>
+          <td>
+            Interfaces por rol, paginación, borradores, respaldo y restauración con pruebas
+            registradas.
+          </td>
+          <td>Zoom real, fortalecimiento E2E, RPO corregido, custodia y validación humana.</td>
+        </tr>
+      </tbody>
+    </table>
+    <h2>5.3 Integración de subsistemas y TGS</h2>
+    <p>
+      La aplicación de la Teoría General de Sistemas se observa en el flujo de entradas, procesos,
+      salidas y retroalimentación entre módulos. La administración proporciona planes, oferta y
+      políticas; matrícula transforma esa oferta en inscripciones válidas; calificaciones produce
+      resultados; historial y avance convierten esos resultados en información; constancias genera
+      una salida verificable y reportes/auditoría permiten revisar lo sucedido.
+    </p>
+    <p>
+      Una corrección actualiza historial y elegibilidad, conservando el snapshot del PDF previo. Las
+      restricciones de base y la autorización del servidor mantienen la coherencia ante operaciones
+      simultáneas.
+    </p>
+    <h2>5.4 Resultados de calidad observados</h2>
+    <p>
+      En esta auditoría se ejecutó <code>npm run check</code> con resultado satisfactorio: lint,
+      tipos, 6 suites con 38 pruebas de API, 13 archivos con 40 pruebas web y builds. Esto demuestra
+      que ese conjunto de verificaciones pasó en el entorno revisado; no equivale a una validación
+      completa de todos los requisitos.
+    </p>
+    <p>
+      Los registros anteriores informan 131 pruebas de cobertura y 34 E2E aprobadas, carga Unicode
+      de 780 solicitudes sin errores inesperados con p95 de 670,84 ms y recuperación local con RTO
+      de 9,47 s. Se conservan como evidencia registrada, con reservas: falta reconciliar archivos
+      exigibles de cobertura, parte de los escenarios E2E requiere fortalecer su alcance, la carga
+      es por tandas y el RPO publicado usa una fórmula que debe corregirse. No se ratifica a partir
+      de esos números un “100 %” técnico sin reservas.
+    </p>
+    <h2>5.5 Limitaciones y aprendizaje</h2>
+    <p>
+      El proyecto muestra la importancia de distinguir funcionalidad implementada, prueba ejecutada
+      y aceptación real. Una matriz marcada como aprobada puede contener subcasos sin acreditar; un
+      manifiesto puede quedar desactualizado tras editar un documento; una métrica puede tener
+      nombre correcto y fórmula insuficiente. La trazabilidad requiere revisar tanto el programa
+      como la validez del instrumento de comprobación.
+    </p>
+    <p>
+      La entrega sigue limitada a datos ficticios, una instancia local y reglas provisionales. Las
+      mediciones no prueban capacidad de producción ni recuperación de un equipo físico perdido. El
+      piloto, la capacitación y las evidencias metodológicas necesitan personas reales o una
+      resolución académica auténtica. La asistencia de agentes permite repartir análisis y
+      documentación; no sustituye firmas ni actividades humanas.
+    </p>
+    <h2>5.6 Recomendaciones priorizadas</h2>
+    <ol>
+      <li>
+        Corregir el instrumento RPO y el denominador/configuración de cobertura; conservar su
+        artefacto de CI.
+      </li>
+      <li>
+        Acreditar zoom real, sesión tardía mediante el flujo real y correspondencia exhaustiva de
+        permisos/listas.
+      </li>
+      <li>
+        Unir los recorridos completos de los dos programas y reforzar evidencia de commit
+        durable/timeout.
+      </li>
+      <li>
+        Congelar fuentes, ejecutar regresión afectada y registrar candidato, entorno y límites por
+        evidencia.
+      </li>
+      <li>
+        Cerrar el paquete documental con manifiesto íntegro y manuales contrastados por una persona
+        receptora.
+      </li>
+      <li>
+        Ejecutar piloto/capacitación, documentar metodología auténtica y registrar aceptación
+        humana.
+      </li>
+    </ol>
+    <p>
+      Como trabajo futuro separado quedan catálogo/reglamento institucional, exposición HTTPS,
+      correo y operación con datos reales. No se convierten en pendientes nuevos del alcance local
+      por aparecer en estas recomendaciones.
+    </p>
+    <h2>5.7 Dictamen de cierre</h2>
+    <p>
+      La base implementada permite completar la entrega sin reescritura. Queda trabajo acotado en
+      pruebas, configuración, medición, documentación operativa y aceptación. Este complemento
+      termina la redacción disponible de conclusiones/anexos/manuales; el proyecto no se declara
+      aceptado ni técnicamente cerrado sin reservas. El responsable académico deberá evaluar el
+      resultado después de resolver los criterios pendientes.
+    </p>
+    <h1>Anexo A. Requisitos y casos de aceptación</h1>
+    <p>
+      La matriz completa de RF/RN/RNF se conserva en
+      <a href="../TRAZABILIDAD_ENTREGA.md">TRAZABILIDAD_ENTREGA.md</a>. Sus estados históricos deben
+      leerse con las reservas de esta auditoría. Los 26 requisitos técnicos y cinco transversales
+      siguen siendo el denominador del maestro; aquí no se recalcula un porcentaje.
+    </p>
+    <p>
+      Los casos CP-01–15 provienen de las tablas 21/22 del PDF original (páginas 30/31). El maestro
+      amplía subcasos y agrega CP-16–18; esas ampliaciones complementan el significado original y no
+      sustituyen sus negativas de seguridad.
+    </p>
+    <table>
+      <thead>
+        <tr>
+          <th>Caso</th>
+          <th>Área y prueba existente</th>
+          <th>Reserva actual / siguiente comprobación</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>CP-01</td>
+          <td>
+            Acceso con credenciales válidas/inválidas y sesión vencida; ampliación de
+            revocación/CSRF.
+          </td>
+          <td>Vincular matriz por rol y candidato; check no ejecuta estas integraciones.</td>
+        </tr>
+        <tr>
+          <td>CP-02</td>
+          <td>Crear/editar catálogos y personas, duplicados y baja lógica con historial.</td>
+          <td>
+            Recorrido integral por programa y conservación de referencias; altas/provisión como
+            ampliación del maestro.
+          </td>
+        </tr>
+        <tr>
+          <td>CP-03</td>
+          <td>Prerrequisitos no aprobados/aprobados en matrícula.</td>
+          <td>Mantener matriz cero/uno/varios y flag, con evidencia final oferta/POST.</td>
+        </tr>
+        <tr>
+          <td>CP-04</td>
+          <td>Dos estudiantes compiten simultáneamente por el último cupo.</td>
+          <td>Una confirmación, otro conflicto y conteo/auditoría finales correctos.</td>
+        </tr>
+        <tr>
+          <td>CP-05</td>
+          <td>
+            Duplicidad del mismo estudiante/asignatura/periodo, incluso entre grupos y en paralelo.
+          </td>
+          <td>Una sola inscripción y sin ocupación parcial; regresión del candidato.</td>
+        </tr>
+        <tr>
+          <td>CP-06</td>
+          <td>Docente propio guarda nota y docente ajeno intenta modificarla.</td>
+          <td>
+            Inventario método/alias/propiedad/CSRF; el maestro añade corrección
+            simultánea/versionada y borradores.
+          </td>
+        </tr>
+        <tr>
+          <td>CP-07</td>
+          <td>Estudiante intenta consultar historial o PDF ajenos cambiando ID.</td>
+          <td>
+            Denegar en servidor sin exponer datos. El maestro agrupa además subcasos de corrección
+            de notas bajo CP-06/07, sin eliminar este original.
+          </td>
+        </tr>
+        <tr>
+          <td>CP-08</td>
+          <td>Matrícula fuera de fechas, con usuario inactivo o grupo cerrado.</td>
+          <td>
+            Rechazo sin modificar inscripción/cupo; fronteras D44 y referencias activas como
+            ampliaciones.
+          </td>
+        </tr>
+        <tr>
+          <td>CP-09</td>
+          <td>Límites de escala: 6 aprueba, 5.99 no, -1/11 rechazados bajo D42.</td>
+          <td>
+            Añadir cero/precisión/pendiente y conservar los límites originales; cobertura y
+            evidencia vigente.
+          </td>
+        </tr>
+        <tr>
+          <td>CP-10</td>
+          <td>Notas 8 con 6 créditos y 9 con 4 créditos, más pendiente.</td>
+          <td>
+            Promedio 8,40 sin pendiente; todos los intentos y políticas del maestro. El cálculo
+            manual no es ejecución.
+          </td>
+        </tr>
+        <tr>
+          <td>CP-11</td>
+          <td>Plan de 30 créditos, 10 aprobados, repetida e historial vacío.</td>
+          <td>
+            Avance 33,33 % sin doble conteo; vacío con promedio sin dato/avance cero, plan sin
+            créditos sin división por cero.
+          </td>
+        </tr>
+        <tr>
+          <td>CP-12</td>
+          <td>PDF con notas finales, QR, código inexistente y revocación.</td>
+          <td>
+            Agrega dos programas/Unicode/hash/recuperación; AC-09 commit durable y AC-10 timeout.
+          </td>
+        </tr>
+        <tr>
+          <td>CP-13</td>
+          <td>Lista de grupo, historial y auditoría de corrección autorizada.</td>
+          <td>Filtros/conjuntos/roles/páginas, CSV seguro, antes/después y prueba positiva.</td>
+        </tr>
+        <tr>
+          <td>CP-14</td>
+          <td>Móvil/escritorio y rendimiento de consultas/inscripción.</td>
+          <td>
+            Maestro añade teclado/zoom y demás operaciones; zoom real pendiente y carga por tandas
+            con metadatos.
+          </td>
+        </tr>
+        <tr>
+          <td>CP-15</td>
+          <td>Respaldo/restauración aislada e instalación desde instrucciones.</td>
+          <td>Incremental existe; corregir RPO y procedimiento receptor.</td>
+        </tr>
+        <tr>
+          <td>CP-16</td>
+          <td>Añadido por el maestro: aislamiento de sesión A→B.</td>
+          <td>401 tardío debe atravesar privateFetch real.</td>
+        </tr>
+        <tr>
+          <td>CP-17</td>
+          <td>Añadido por el maestro: listas grandes y opciones históricas.</td>
+          <td>Inventario completo lista→límite→caso→evidencia.</td>
+        </tr>
+        <tr>
+          <td>CP-18</td>
+          <td>Añadido por el maestro: borradores, error y cambio de sesión.</td>
+          <td>Consolidar retorno tras salida y límites de pruebas por componente/E2E.</td>
+        </tr>
+      </tbody>
+    </table>
+    <h1>Anexo B. Arquitectura e integración</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Subsistema</th>
+          <th>Entrada</th>
+          <th>Proceso</th>
+          <th>Salida y retroalimentación</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Administración</td>
+          <td>Programas, planes, materias, perfiles y oferta.</td>
+          <td>Validación, referencias, baja lógica y auditoría.</td>
+          <td>Oferta coherente para matrícula y conservación histórica.</td>
+        </tr>
+        <tr>
+          <td>Matrícula</td>
+          <td>Sesión estudiante y grupo elegido.</td>
+          <td>Estado, ventana, requisitos, cupo, bloqueo y unicidad.</td>
+          <td>Inscripción; rechazo explicado o confirmación auditable.</td>
+        </tr>
+        <tr>
+          <td>Calificaciones</td>
+          <td>Docente asignado, nota, versión y motivo.</td>
+          <td>Escala/precisión/concurrencia, escritura y auditoría atómicas.</td>
+          <td>Historial y avance actualizados.</td>
+        </tr>
+        <tr>
+          <td>Historial y avance</td>
+          <td>Intentos calificados y créditos snapshot.</td>
+          <td>Decimal, política de intentos y créditos únicos aprobados.</td>
+          <td>Promedios/avance/elegibilidad.</td>
+        </tr>
+        <tr>
+          <td>Constancias</td>
+          <td>Historial con nota final y solicitud autorizada.</td>
+          <td>Snapshot, PDF, hash, código/QR y estado.</td>
+          <td>Documento descargable y verificación mínima pública.</td>
+        </tr>
+        <tr>
+          <td>Operación</td>
+          <td>Versiones, configuración y respaldos.</td>
+          <td>Instalación, verificación, restauración y diagnóstico.</td>
+          <td>Servicio comprobado e incidencias para mejora.</td>
+        </tr>
+      </tbody>
+    </table>
+    <p>
+      Ejemplo ficticio: ALU-DEMO-001 cursa asignaturas con notas 8 y 9 y créditos 6 y 4. El promedio
+      esperado es 8,40. Si aprueba la materia requerida, la oferta posterior puede habilitar su
+      sucesora. Una constancia conserva los datos al momento de emisión; una corrección posterior
+      necesita auditoría y, si procede, revocación/reemisión. Este ejemplo explica el flujo y no es
+      un acta de ejecución del piloto.
+    </p>
+    <p>
+      Modelo de relaciones y API: anexo E, <code>schema.prisma</code> y
+      <a href="../modelo-datos.md">modelo-datos.md</a>. Arquitectura ampliada:
+      <a href="../arquitectura.md">arquitectura.md</a>.
+    </p>
+    <h1>Anexo C. Evidencias y versiones</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Fuente local</th>
+          <th>Qué aporta</th>
+          <th>Límite</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>docs/evidencias/CIERRE_LOCAL.md</td>
+          <td>Dossier de corridas y formatos humanos.</td>
+          <td>Cierre técnico excesivo frente a reservas; aceptación vacía.</td>
+        </tr>
+        <tr>
+          <td>docs/evidencias/carga-unicode-candidato.json</td>
+          <td>Salida de medición Unicode: 780/0/p95 670,84 ms.</td>
+          <td>Es stdout mezclado con JSON; no JSON puro ni carga sostenida.</td>
+        </tr>
+        <tr>
+          <td>docs/evidencias/carga-smoke-candidato.json</td>
+          <td>Comprobación corta de cinco operaciones.</td>
+          <td>No reemplaza medición larga por candidato.</td>
+        </tr>
+        <tr>
+          <td>docs/evidencias/restauracion-candidato.json</td>
+          <td>Stack recuperado, dos PDFs/hashes y RTO.</td>
+          <td>RPO 1,18 s no acreditado por fórmula válida.</td>
+        </tr>
+        <tr>
+          <td>docs/evidencias/instalacion-limpia-candidato.json</td>
+          <td>Cuatro migraciones; un usuario por rol, tres en total.</td>
+          <td>No tres por rol; semilla solo ICO-F19.</td>
+        </tr>
+        <tr>
+          <td>docs/evidencias/proxy-candidato.json</td>
+          <td>Login/logout/headers y respuestas proxy.</td>
+          <td>No acredita por sí solo timeout bajo congestión.</td>
+        </tr>
+        <tr>
+          <td>docs/evidencias/auditoria-check-20261109.log</td>
+          <td>Check ejecutado en esta auditoría.</td>
+          <td>No integra carga, E2E ni restauración.</td>
+        </tr>
+        <tr>
+          <td>docs/evidencias/entrega-revisada-20261109.sha256</td>
+          <td>Integridad de los artefactos documentales nuevos.</td>
+          <td>No convierte evidencia histórica en prueba del candidato actual.</td>
+        </tr>
+      </tbody>
+    </table>
+    <p>
+      La huella técnica histórica a91cd907… se conserva como declaración previa; falta inventario
+      canónico específico de 147 entradas para reproducirla inequívocamente. El manifiesto anterior
+      de 222 entradas sí pudo comprobarse y tenía una discrepancia documental. La nueva entrega
+      conserva el original y genera su inventario separado.
+    </p>
+    <h1>Anexo D. Manual de usuario revisado</h1>
+    <h3>Manual de usuario revisado del SIGA</h3>
+    <p>
+      Fecha: 9 de noviembre de 2026. Alcance: demostración académica local con datos sintéticos.
+      Fuente editable para complementar el manual DOCX y los anexos del informe. Describe funciones
+      y etiquetas contrastadas con el código; no acredita por sí mismo capacitación ni aceptación
+      humana.
+    </p>
+    <h4>1. Antes de comenzar</h4>
+    <p>
+      SIGA reúne catálogos, estudiantes, docentes, grupos, inscripción, notas, avance y constancias.
+      Cada persona utiliza una cuenta de un solo rol. La cuenta permite acceder a ciertas funciones;
+      cambiar una dirección del navegador no amplía los permisos.
+    </p>
+    <p>
+      Para Docker local abre <code>http://localhost:8080</code>. En desarrollo nativo el portal
+      suele estar en <code>http://localhost:5173</code>. Utiliza la dirección indicada por soporte
+      para tu entorno. No mezcles credenciales de instalaciones diferentes.
+    </p>
+    <p>
+      Las decisiones D41–D46 están autorizadas provisionalmente
+      <strong>para esta demostración</strong>: dos programas sintéticos, notas de 0 a 10, mínima
+      aprobatoria 6, dos decimales, promedio ponderado por créditos considerando todos los intentos
+      calificados, constancia con al menos una nota final y ventanas de inscripción en Ciudad de
+      México. También fijan metas demostrativas de rendimiento y recuperación. No son un reglamento
+      institucional definitivo.
+    </p>
+    <p>
+      El PDF emitido es una constancia de estudios del prototipo. Incluye materias aprobadas y
+      reprobadas con nota final; no acredita conclusión del programa, título ni validez oficial. El
+      sistema no incluye notas parciales, pago, correo automático ni cancelación de matrícula en
+      autoservicio.
+    </p>
+    <h4>2. Acceso, navegación y cierre de sesión</h4>
+    <ol>
+      <li>Abre el portal y entra en «Acceso».</li>
+      <li>Escribe «Correo electrónico» y «Contraseña» de la cuenta asignada.</li>
+      <li>
+        Envía el formulario y espera la respuesta. Si falla, revisa el mensaje; no repitas
+        contraseñas de otras personas.
+      </li>
+      <li>
+        Comprueba que tu perfil sea estudiante, docente o administración antes de guardar
+        información.
+      </li>
+      <li>
+        Usa el menú lateral para abrir las funciones. «Contraer menú» y «Expandir menú» cambian el
+        espacio disponible. Si una sección está plegada, abre su encabezado.
+      </li>
+      <li>
+        Para terminar selecciona «Cerrar sesión», especialmente en equipos compartidos. Cerrar una
+        pestaña no sustituye este paso.
+      </li>
+    </ol>
+    <p>
+      La sesión dura 30 minutos y puede ser revocada. Al cerrar sesión o cambiar de persona se
+      limpian los datos privados y borradores de la sesión del portal. No uses los borradores como
+      respaldo permanente.
+    </p>
+    <table>
+      <thead>
+        <tr>
+          <th>Perfil</th>
+          <th>Opciones del menú</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Estudiante</td>
+          <td>
+            «Mapa curricular de mi plan», «Calificaciones y avance», «Matrícula e historial»,
+            «Constancias de estudios», «Datos de acceso».
+          </td>
+        </tr>
+        <tr>
+          <td>Docente</td>
+          <td>«Grupos, calificaciones y CSV», «Datos de acceso».</td>
+        </tr>
+        <tr>
+          <td>Administración</td>
+          <td>
+            «Catálogos y planes», «Estudiantes y docentes», «Periodos y grupos», «Reportes y
+            auditoría», «Datos de acceso».
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <p>
+      «Datos de acceso» permite consultar el espacio de cuenta; no debe interpretarse como un
+      formulario de cambio autónomo de contraseña.
+    </p>
+    <h4>3. Uso con teclado, búsqueda y páginas</h4>
+    <ol>
+      <li>
+        Pulsa <code>Tab</code> para avanzar y <code>Mayús+Tab</code> para retroceder. El contorno
+        visible indica el control seleccionado.
+      </li>
+      <li>
+        Activa enlaces con <code>Enter</code> y botones con <code>Enter</code> o barra espaciadora.
+        Usa flechas para las opciones de un selector nativo.
+      </li>
+      <li>
+        En las pestañas de catálogos, personas u oferta utiliza el control enfocado y las teclas
+        admitidas por esa pestaña; comprueba qué panel quedó abierto antes de escribir.
+      </li>
+      <li>
+        En los listados usa la búsqueda disponible y después «Anterior» o «Siguiente». Una página
+        vacía no demuestra que no existan registros en otras páginas.
+      </li>
+      <li>
+        Algunos selectores incluyen búsqueda y páginas propias: busca por clave o nombre antes de
+        elegir. La selección actual puede conservarse aunque no figure en la página de opciones
+        mostrada.
+      </li>
+      <li>
+        Para ampliar la interfaz usa el zoom del navegador y vuelve al 100 % con su menú cuando
+        termines. Si algún control queda oculto, informa pantalla, navegador y nivel de zoom. Este
+        manual no declara probado un nivel de zoom real por el hecho de describirlo.
+      </li>
+    </ol>
+    <p>
+      No elimines contenido ni guardes un formulario solo para comprobar el teclado. Las operaciones
+      de escritura tienen efectos reales dentro de la base ficticia.
+    </p>
+    <h4>4. Estudiante: mapa curricular</h4>
+    <ol>
+      <li>Abre «Mapa curricular de mi plan».</li>
+      <li>Revisa el programa y la versión del plan asignado.</li>
+      <li>Consulta asignaturas, créditos y relaciones de prerrequisitos disponibles.</li>
+      <li>
+        Si aparece «Mapa curricular no disponible», pide a administración revisar el plan asociado;
+        no supongas que otra carrera usa el mismo catálogo.
+      </li>
+    </ol>
+    <p>
+      El mapa es una referencia. La posibilidad efectiva de inscripción depende también del periodo,
+      ventana, actividad, intentos anteriores y cupo.
+    </p>
+    <h4>5. Estudiante: inscripción y consulta de matrícula</h4>
+    <ol>
+      <li>Abre «Matrícula e historial». El título de la pantalla es «Mi matrícula».</li>
+      <li>
+        En «Grupos disponibles» revisa asignatura, periodo, grupo, créditos, docente y lugares.
+      </li>
+      <li>
+        Si no aparecen opciones, pulsa «Actualizar oferta» y comprueba las páginas. Solicita
+        revisión del plan o periodo si sigue sin haber oferta.
+      </li>
+      <li>
+        Lee cualquier motivo junto a un grupo cuyo botón esté deshabilitado. No todos los grupos
+        visibles son elegibles.
+      </li>
+      <li>
+        En el grupo correcto pulsa «Inscribirme» una sola vez y espera el resultado de
+        «Registrando…».
+      </li>
+      <li>
+        Revisa «Mis inscripciones»: debe aparecer el registro confirmado. Comprueba materia, grupo y
+        periodo.
+      </li>
+      <li>
+        Si se informa conflicto o falta de cupo, actualiza la oferta. Otro estudiante puede haber
+        ocupado el último lugar después de que cargaste la pantalla.
+      </li>
+    </ol>
+    <p>
+      El servidor comprueba estudiante y oferta activos, pertenencia al plan, ventana abierta,
+      prerrequisitos, duplicidad y cupo. Que el botón estuviera habilitado no reserva un lugar. No
+      hay botón de baja de inscripción por autoservicio; consulta el procedimiento autorizado con
+      administración.
+    </p>
+    <h4>6. Estudiante: notas y avance</h4>
+    <ol>
+      <li>Abre «Calificaciones y avance».</li>
+      <li>Revisa el promedio general y los créditos/avance que informa la pantalla.</li>
+      <li>En «Por periodo» identifica el periodo antes de comparar promedios.</li>
+      <li>En «Asignaturas cursadas» busca y pagina el historial de intentos.</li>
+      <li>
+        Distingue una nota pendiente de una nota cero: pendiente significa que no se capturó nota
+        final; cero es una nota y sí interviene en el cálculo.
+      </li>
+      <li>
+        Si detectas una nota incorrecta, comunica al docente materia, grupo y periodo. El estudiante
+        no puede modificarla.
+      </li>
+    </ol>
+    <p>
+      Con la regla provisional TODOS, cada intento con nota final aporta su nota y créditos al
+      promedio ponderado. Una asignatura aprobada cuenta una sola vez en los créditos de avance.
+      Ejemplo: 8 con 6 créditos y 9 con 4 producen <code>(8×6 + 9×4) / 10 = 8.40</code>; una nota
+      pendiente no añade cero ni créditos al denominador.
+    </p>
+    <h4>7. Estudiante: emitir, descargar y verificar constancia</h4>
+    <ol>
+      <li>Abre «Constancias de estudios» y lee la advertencia de alcance.</li>
+      <li>Confirma que tienes al menos una nota final registrada.</li>
+      <li>Pulsa «Emitir constancia de estudios». Espera mientras aparece «Generando PDF…».</li>
+      <li>
+        Revisa el aviso «Constancia emitida. Código: …» y localiza el documento en «Mi historial de
+        emisión».
+      </li>
+      <li>Si hay muchos documentos usa «Buscar constancia por código o estado» y la paginación.</li>
+      <li>
+        Pulsa «Descargar PDF». Comprueba que corresponda a tu programa e historial; guárdalo en una
+        ubicación privada.
+      </li>
+      <li>Abre «Verificación pública» o escanea el QR del PDF.</li>
+      <li>
+        Comprueba código y estado. La consulta muestra datos mínimos; no publica tu correo ni
+        expediente completo.
+      </li>
+    </ol>
+    <p>
+      Una constancia refleja la instantánea emitida. Corregir una nota después no cambia
+      automáticamente un PDF anterior. La comprobación pública del código no demuestra, por sí sola,
+      que un archivo externo presentado no haya sido alterado.
+    </p>
+    <h5>Recuperar una solicitud interrumpida</h5>
+    <ol>
+      <li>
+        Si el historial muestra «Pendiente» o «Fallido», primero consulta nuevamente la lista para
+        conocer su estado actual.
+      </li>
+      <li>Usa «Recuperar solicitud» sobre esa fila y espera «Recuperando…».</li>
+      <li>Comprueba que la solicitud termine emitida y entonces descarga su PDF.</li>
+      <li>
+        Si persiste el error, informa el código a soporte. No borres archivos ni generes
+        repetidamente solicitudes nuevas para esconder el problema.
+      </li>
+    </ol>
+    <h5>Reemitir una constancia revocada</h5>
+    <ol>
+      <li>Localiza una constancia «Revocado» en tu historial y lee el motivo.</li>
+      <li>Si aparece «Reemitir», pulsa el botón y espera.</li>
+      <li>Comprueba el nuevo documento y la referencia «Reemplazada por …» del anterior.</li>
+      <li>
+        Descarga y verifica el código nuevo. El anterior conserva su estado histórico; no se vuelve
+        vigente.
+      </li>
+    </ol>
+    <p>
+      El botón solo aparece para una constancia revocada sin reemplazo. Una constancia revocada
+      puede conservar descarga para consulta histórica: poder descargarla no significa que esté
+      vigente.
+    </p>
+    <h4>8. Docente: grupos y captura de nota final</h4>
+    <ol>
+      <li>Abre «Grupos, calificaciones y CSV». La pantalla se titula «Mis grupos».</li>
+      <li>Usa «Buscar grupo, asignatura o periodo» y pagina si hace falta.</li>
+      <li>Confirma clave, asignatura, periodo y ocupación del grupo.</li>
+      <li>Pulsa «Calificar» para abrir «Captura de calificaciones».</li>
+      <li>
+        Lee la política mostrada: escala, mínima y precisión. Para esta demo se usan 0–10, mínima 6
+        y hasta dos decimales.
+      </li>
+      <li>Usa «Buscar estudiante» y verifica nombre y matrícula de la fila.</li>
+      <li>Escribe la «Nota final» y pulsa «Guardar nota» en esa misma fila.</li>
+      <li>Espera «Guardando…» y comprueba el resultado antes de continuar con otro alumno.</li>
+    </ol>
+    <p>
+      La captura es de nota final directa, no de evaluaciones parciales. El docente solo trabaja con
+      grupos asignados. Administración no recibe automáticamente permiso docente por tener un rol
+      administrativo.
+    </p>
+    <h5>Corregir una nota y resolver versiones</h5>
+    <ol>
+      <li>Localiza la fila ya calificada y revisa el valor actual.</li>
+      <li>Cambia «Nota final». Aparece «Motivo de corrección».</li>
+      <li>
+        Explica el motivo con claridad, sin contraseñas ni datos ajenos al caso, y pulsa «Corregir».
+      </li>
+      <li>
+        Si otra operación actualizó la misma nota, el sistema conserva tu borrador y muestra que la
+        calificación cambió.
+      </li>
+      <li>
+        Compara el valor actual con tu intención. Para abandonar tu edición pulsa «Descartar
+        borrador».
+      </li>
+      <li>
+        Solo si corresponde aplicar tu edición, pulsa «Revisé el valor actual», revisa nuevamente
+        nota y motivo y guarda la corrección.
+      </li>
+      <li>
+        Confirma el resultado. La corrección se registra en auditoría; no sobrescribas a ciegas un
+        valor nuevo.
+      </li>
+    </ol>
+    <p>
+      Cada fila mantiene su borrador y motivo de forma independiente. Un error al guardar una fila
+      no autoriza a asumir que otras se guardaron. Si el portal advierte cambios sin guardar al
+      salir, cancela la salida para revisar o acepta conscientemente descartarlos. No cierres sesión
+      esperando recuperar esos borradores con otra cuenta.
+    </p>
+    <h5>Exportar el historial docente</h5>
+    <ol>
+      <li>Desde la captura del grupo pulsa «Exportar historial CSV».</li>
+      <li>Comprueba el grupo autorizado antes de abrir o compartir el archivo.</li>
+      <li>
+        Conserva el CSV de forma privada. Si tu hoja de cálculo pregunta por separadores o
+        codificación, utiliza la importación de texto y revisa acentos y columnas.
+      </li>
+      <li>El CSV es una consulta; editarlo no actualiza las notas del sistema.</li>
+    </ol>
+    <h4>9. Administración: orden recomendado de preparación</h4>
+    <p>
+      Prepara primero programas y asignaturas, después el plan, estudiantes/docentes, periodos y
+      grupos. Así los selectores tendrán referencias válidas. Busca antes de crear para evitar
+      duplicados y usa solo identidades ficticias.
+    </p>
+    <h5>Crear y mantener programas o asignaturas</h5>
+    <ol>
+      <li>Abre «Catálogos y planes» y selecciona la pestaña «Programas» o «Asignaturas».</li>
+      <li>Busca por clave o nombre para comprobar que no exista.</li>
+      <li>En «Nuevo programa» o «Nueva asignatura» captura «Clave» y «Nombre».</li>
+      <li>
+        Usa una clave sin espacios, comenzando por letra o número; se admiten letras, números,
+        punto, guion y guion bajo.
+      </li>
+      <li>
+        Pulsa «Guardar programa» o «Guardar asignatura» y confirma que aparezca en el listado.
+      </li>
+      <li>Para cambiar el nombre edita el campo de la fila y pulsa «Guardar nombre».</li>
+      <li>
+        Para retirar del uso activo pulsa «Dar de baja». Para consultar retirados utiliza la opción
+        de incluir registros inactivos disponible en el listado.
+      </li>
+      <li>
+        Si corresponde restituirlo, pulsa «Reactivar». La baja lógica conserva relaciones e
+        historial.
+      </li>
+    </ol>
+    <h5>Crear plan, asignaturas y prerrequisitos</h5>
+    <ol>
+      <li>En «Catálogos y planes» abre «Planes».</li>
+      <li>
+        En «Crear plan» busca el programa, elige «Programa activo» e indica «Versión» y «Nombre del
+        plan».
+      </li>
+      <li>Guarda el plan con el botón del formulario y selecciónalo en «Planes registrados».</li>
+      <li>
+        Busca una materia en «Buscar asignatura por clave o nombre», selecciónala en «Agregar
+        asignatura activa» y pulsa «Agregar».
+      </li>
+      <li>
+        Repite hasta reunir las materias. Para cada una captura «Créditos» y «Semestre sugerido».
+      </li>
+      <li>
+        En «Prerrequisitos (puedes elegir varios)» selecciona materias que deban aprobarse antes. El
+        selector es múltiple: usa las teclas modificadoras y flechas del navegador/sistema
+        operativo, comprobando qué opciones quedaron seleccionadas.
+      </li>
+      <li>
+        No establezcas una materia como requisito de sí misma ni un ciclo A→B→A. El servidor rechaza
+        relaciones inválidas.
+      </li>
+      <li>
+        «Quitar del borrador» retira una materia de la edición actual. Revisa también los
+        prerrequisitos que dependían de ella.
+      </li>
+      <li>Pulsa «Guardar contenido del plan» y comprueba el contenido persistido.</li>
+      <li>
+        Si aparece que el plan ya tiene estudiantes u oferta y está protegido, utiliza «Crear nueva
+        versión», revisa la copia y guarda ahí los cambios. No intentes transformar el historial de
+        la versión en uso.
+      </li>
+    </ol>
+    <p>
+      Crear una nueva versión no debe confundirse con transferir automáticamente estudiantes o
+      grupos existentes. Para retirar o devolver un plan al uso activo utiliza «Dar de baja» o
+      «Reactivar» según corresponda.
+    </p>
+    <h5>Alta y edición de estudiantes</h5>
+    <ol>
+      <li>Abre «Estudiantes y docentes» y la pestaña «Estudiantes».</li>
+      <li>Busca por nombre, matrícula o correo.</li>
+      <li>
+        Inicia un registro nuevo y completa «Nombre completo», «Correo», «Matrícula», «Plan de
+        estudio» y «Fecha de ingreso».
+      </li>
+      <li>Busca y selecciona el plan correcto, incluida su versión.</li>
+      <li>Pulsa «Guardar estudiante» y revisa el resultado.</li>
+      <li>
+        Para corregir datos abre la edición de la persona y guarda los cambios. El correo y la
+        matrícula deben ser únicos.
+      </li>
+      <li>
+        Para una baja lógica revisa «Estado académico», selecciona el estado que corresponda y
+        guarda. «Inactivo» no significa borrar el expediente; «Egresado» tampoco debe asignarse sin
+        justificación.
+      </li>
+      <li>
+        Comprueba por separado el estado de acceso mostrado. Reactivar el estado académico no
+        reactiva automáticamente la cuenta.
+      </li>
+    </ol>
+    <h5>Alta y edición de docentes</h5>
+    <ol>
+      <li>En «Estudiantes y docentes» abre «Docentes» y busca por nombre, empleado o correo.</li>
+      <li>
+        Inicia un registro nuevo y completa «Nombre completo», «Correo», «Número de empleado» y
+        «Departamento».
+      </li>
+      <li>Pulsa «Guardar docente» y comprueba la fila.</li>
+      <li>
+        Para actualizar datos abre su edición. En la edición revisa el estado activo y guarda cuando
+        corresponda una baja o reactivación.
+      </li>
+      <li>
+        Comprueba el estado de acceso. Las bajas revocan sesiones y conservan historial; no borres
+        grupos para dar de baja a una persona.
+      </li>
+    </ol>
+    <h5>Entrega o restablecimiento de acceso: intervención de soporte</h5>
+    <p>
+      Las altas de personas crean cuentas inactivas y esta pantalla no muestra contraseñas. El
+      operador autorizado debe provisionar el acceso por separado. El flujo CLI disponible para una
+      persona estudiante/docente activa es
+      <strong>exclusivo de entorno POSIX de desarrollo local con base <code>siga_dev</code></strong
+      >, sin <code>NODE_ENV=production</code> ni parámetros adicionales en la URL de base.
+    </p>
+    <p>
+      Desde la raíz, el operador usa, sustituyendo el correo de ejemplo por el de la persona
+      existente:
+    </p>
+    <pre><code class="language-bash">npm run auth:provision:local -w @siga/api -- estudiante.demo@siga.local
+</code></pre>
+    <p>
+      Este comando compila la API, activa/restablece el acceso y revoca sesiones anteriores.
+      Conserva la credencial en un archivo privado bajo <code>.local</code> con permisos
+      <code>0600</code>; el directorio debe ser propio y privado <code>0700</code>. El correo del
+      ejemplo es sintético y no se garantiza que exista.
+    </p>
+    <p>
+      No es un comando para crear administradores ni un procedimiento universal de
+      Docker/Windows/producción. Si el entorno no cumple estas condiciones, soporte debe revisar el
+      manual técnico; no relajes las comprobaciones. Entrega la credencial de forma privada y no la
+      adjuntes al informe, capturas ni bitácora. Si el comando falla, no distribuyas una credencial
+      que no haya quedado confirmada.
+    </p>
+    <h5>Configurar periodos</h5>
+    <ol>
+      <li>Abre «Periodos y grupos» y la pestaña «Periodos».</li>
+      <li>Inicia un periodo o usa la edición del existente.</li>
+      <li>Completa «Clave», «Nombre», «Inicio del periodo» y «Fin del periodo».</li>
+      <li>
+        Completa «Inicio de inscripción (hora de Ciudad de México)» y «Fin de inscripción (hora de
+        Ciudad de México)» con el intervalo previsto.
+      </li>
+      <li>Selecciona «Estado»: «Planificado», «Abierto» o «Cerrado».</li>
+      <li>
+        Elige «Política académica». La marca «propuesta» sigue distinguiendo una política no
+        ratificada institucionalmente; D41–D46 sí autorizan su uso provisional de demostración.
+      </li>
+      <li>Pulsa «Guardar periodo» y comprueba fechas, estado y política.</li>
+      <li>
+        Recuerda que un periodo «Abierto» fuera de su ventana de inscripción no permite
+        matricularse. No cambies fechas de la demo compartida para practicar: pide una copia
+        aislada.
+      </li>
+    </ol>
+    <h5>Crear, editar y retirar grupos</h5>
+    <ol>
+      <li>En «Periodos y grupos» abre «Grupos» e inicia uno nuevo.</li>
+      <li>Completa «Clave del grupo» y selecciona «Plan de estudio».</li>
+      <li>
+        Elige «Asignatura del plan», «Periodo» y «Docente activo». Busca y pagina sus opciones si es
+        necesario.
+      </li>
+      <li>Captura «Cupo» como entero positivo.</li>
+      <li>Usa el botón de guardado y comprueba docente, materia, periodo y ocupación del grupo.</li>
+      <li>
+        Para actualizar usa «Editar». Si ya tiene historial, respeta la identidad académica
+        protegida del grupo.
+      </li>
+      <li>
+        No reduzcas el cupo por debajo de la ocupación activa. Un rechazo protege las inscripciones
+        existentes.
+      </li>
+      <li>
+        Para retirarlo de la oferta utiliza «Desactivar»; «Reactivar» lo devuelve al estado activo
+        cuando el servidor lo permite. No elimina las inscripciones históricas.
+      </li>
+    </ol>
+    <h4>10. Administración: reportes, CSV y auditoría</h4>
+    <ol>
+      <li>Abre «Reportes y auditoría». El título es «Reportes e historial».</li>
+      <li>
+        Utiliza «Buscar en certificados, grupos y bitácora». La búsqueda actualiza las tres
+        secciones y devuelve sus páginas al inicio.
+      </li>
+      <li>
+        En «Grupos e historial académico» identifica periodo, clave, programa, asignatura, docente y
+        ocupación.
+      </li>
+      <li>
+        Pulsa «Exportar CSV» en la fila del grupo requerido. Revisa el alcance del grupo antes de
+        compartir.
+      </li>
+      <li>
+        Pagina cada sección de forma independiente: grupos, constancias y bitácora pueden tener
+        totales diferentes.
+      </li>
+      <li>
+        En «Bitácora de cambios» revisa actor, acción, recurso, fecha y datos registrados. No la
+        trates como un formulario editable ni agregues secretos a los motivos.
+      </li>
+      <li>
+        «Imprimir reportes» abre la función de impresión del navegador. Revisa las páginas y la
+        información incluida antes de imprimir o guardar PDF.
+      </li>
+    </ol>
+    <p>
+      La búsqueda de la pantalla localiza filas; no debe confundirse con una exportación global de
+      todos los grupos ni con la modificación del historial.
+    </p>
+    <h5>Revocar una constancia</h5>
+    <ol>
+      <li>En «Reportes e historial» localiza la sección «Constancias».</li>
+      <li>Busca el código y verifica titular, estado y documento antes de intervenir.</li>
+      <li>En una fila con acción disponible escribe «Motivo para revocar».</li>
+      <li>
+        Pulsa «Revocar» y espera el resultado. No lo uses para una mera prueba sobre un documento
+        que deba seguir vigente.
+      </li>
+      <li>Comprueba el estado «Revocado» y su reflejo en la verificación pública.</li>
+      <li>
+        Comunica al titular el motivo y, si procede, que solicite «Reemitir» desde su historial
+        estudiantil. La interfaz administrativa no debe describirse como si ofreciera un botón de
+        reemisión propio.
+      </li>
+    </ol>
+    <p>
+      La revocación conserva la evidencia histórica. Descargar el archivo anterior no revierte la
+      revocación. El administrador puede consultar/descargar los documentos autorizados; la emisión
+      propia y las acciones de recuperación/reemisión descritas en este manual están en la pantalla
+      del estudiante.
+    </p>
+    <h4>11. Verificación pública sin cuenta</h4>
+    <ol>
+      <li>Abre el enlace del QR o la ruta pública del código entregado.</li>
+      <li>Revisa «Consulta de constancia» y comprueba que el código sea el esperado.</li>
+      <li>Lee el estado: vigente, revocado o no encontrado según la respuesta.</li>
+      <li>
+        Si no se encuentra, comprueba la dirección y comunica la incidencia al emisor. No publiques
+        correos ni expediente para pedir ayuda.
+      </li>
+    </ol>
+    <p>
+      La consulta pública es de lectura y datos mínimos. No permite descargar expedientes ajenos ni
+      modificar el estado del documento.
+    </p>
+    <h4>12. Problemas frecuentes y respuesta segura</h4>
+    <table>
+      <thead>
+        <tr>
+          <th>Situación</th>
+          <th>Qué hacer</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Credenciales rechazadas</td>
+          <td>
+            Comprueba entorno, correo, contraseña y acceso activo. Solicita a soporte
+            restablecimiento cuando corresponda.
+          </td>
+        </tr>
+        <tr>
+          <td>Sesión vencida o revocada</td>
+          <td>
+            Vuelve a iniciar sesión y consulta el estado antes de repetir un guardado. No reutilices
+            cookies.
+          </td>
+        </tr>
+        <tr>
+          <td>Acción no autorizada</td>
+          <td>
+            Verifica el rol y la asignación. No pruebes direcciones de recursos ajenos para evitar
+            la restricción.
+          </td>
+        </tr>
+        <tr>
+          <td>Registro duplicado</td>
+          <td>
+            Busca el correo, matrícula, clave o empleado ya existente. Corrige el dato; no agregues
+            duplicados con variantes arbitrarias.
+          </td>
+        </tr>
+        <tr>
+          <td>Lista u opción no encontrada</td>
+          <td>
+            Limpia filtros, revisa páginas y estado activo/inactivo. Comprueba programa, plan y
+            versión.
+          </td>
+        </tr>
+        <tr>
+          <td>Inscripción rechazada</td>
+          <td>
+            Lee el motivo, actualiza oferta y revisa ventana, cupo, plan y prerrequisitos con
+            administración.
+          </td>
+        </tr>
+        <tr>
+          <td>Nota fuera de rango o precisión</td>
+          <td>
+            Usa la política visible. En demo: 0–10 y hasta dos decimales. No confundas vacío con
+            cero.
+          </td>
+        </tr>
+        <tr>
+          <td>Conflicto al corregir una nota</td>
+          <td>
+            Compara el valor nuevo, conserva o descarta el borrador y confirma conscientemente antes
+            de corregir.
+          </td>
+        </tr>
+        <tr>
+          <td>Guardado con conexión interrumpida</td>
+          <td>
+            Consulta el registro antes de repetir. La ausencia de aviso en pantalla no demuestra que
+            el servidor no haya guardado.
+          </td>
+        </tr>
+        <tr>
+          <td>Constancia pendiente/fallida</td>
+          <td>
+            Consulta historial y usa «Recuperar solicitud» cuando aparezca; escala a soporte si
+            persiste.
+          </td>
+        </tr>
+        <tr>
+          <td>PDF no descarga o integridad rechazada</td>
+          <td>
+            Confirma titular/rol, estado y código. Informa a soporte; no reemplaces archivos del
+            volumen manualmente.
+          </td>
+        </tr>
+        <tr>
+          <td>Portal no disponible</td>
+          <td>
+            Solicita revisión de salud y servicios. No borres volúmenes, base ni certificados para
+            intentar arreglarlo.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <p>
+      Al reportar un problema registra fecha aproximada, rol, pantalla, acción, código del mensaje y
+      resultado esperado. Incluye identificadores mínimos ficticios y una captura solo si no
+      contiene contraseña, token, cookie o expediente completo.
+    </p>
+    <h4>13. Límites y verificación de este manual</h4>
+    <p>
+      Se contrastaron etiquetas y condiciones visibles en <code>App.tsx</code>,
+      <code>CatalogManagement.tsx</code>, <code>PersonManagement.tsx</code>,
+      <code>OfertaManagement.tsx</code>, <code>StudentMatriculas.tsx</code>,
+      <code>StudentCalificaciones.tsx</code>, <code>TeacherCalificaciones.tsx</code> y
+      <code>CertificadosManagement.tsx</code>. El comando de provisión se comprobó contra
+      <code>apps/api/package.json</code> y <code>provisionar-acceso-local.ts</code>.
+    </p>
+    <p>
+      Esta revisión es documental y estática: no se atribuyen capturas, recorridos de un
+      participante ni nuevas pruebas ejecutadas. El material debe revisarse mediante un piloto real
+      por los tres roles; asistencia, calificaciones y firmas se consignarán después de realizarlo.
+      Los manuales y formatos listos no acreditan capacitación impartida.
+    </p>
+    <p>
+      La operación técnica se complementa con
+      <a href="MANUAL_TECNICO_REVISADO.docx">el manual técnico DOCX revisado</a>,
+      <a href="../OPERACION_RESPALDO_RESTAURACION.md"
+        >el procedimiento de respaldo y restauración</a
+      >
+      y <a href="../OPERACION_CONCILIACION_CONSTANCIAS.md">la conciliación de constancias</a>. El
+      <a href="../evidencias/CIERRE_LOCAL.md">dossier de cierre</a> reúne la evidencia declarada del
+      candidato y las aceptaciones humanas pendientes; sus reservas deben leerse junto con la
+      auditoría actual.
+    </p>
+    <h1>Anexo E. Manual técnico revisado</h1>
+    <h3>Manual técnico revisado de SIGA</h3>
+    <p>
+      Versión documental 3.0 · 9 de noviembre de 2026 · aplicación 0.1.0. Alcance: demostración
+      académica local con datos ficticios. Complementa y corrige el manual técnico 2.0; no acredita
+      por sí solo instalación en otra plataforma ni aceptación institucional.
+    </p>
+    <h4>1. Arquitectura y responsabilidades</h4>
+    <p>
+      SIGA es un monorepositorio npm. React/Vite presenta pantallas por rol; NestJS recibe
+      peticiones HTTP, valida contratos, autentica y autoriza; Prisma y PostgreSQL mantienen datos,
+      restricciones y transacciones. Nginx sirve la web compilada y reenvía <code>/api</code> a la
+      API en Compose. Los PDFs se guardan en un directorio privado persistente; la base conserva
+      snapshot, estado, código y hash.
+    </p>
+    <table>
+      <thead>
+        <tr>
+          <th>Directorio</th>
+          <th>Responsabilidad</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>apps/web/src/app</td>
+          <td>Pantallas, navegación, formularios y borradores docentes.</td>
+        </tr>
+        <tr>
+          <td>apps/web/src/services</td>
+          <td>Clientes HTTP, generación de sesión y rechazo de respuestas obsoletas.</td>
+        </tr>
+        <tr>
+          <td>apps/api/src/modules</td>
+          <td>
+            Autenticación, catálogos, personas, oferta, matrícula, notas, constancias y reportes.
+          </td>
+        </tr>
+        <tr>
+          <td>apps/api/prisma</td>
+          <td>Modelo y cuatro migraciones; no editar migraciones ya aplicadas.</td>
+        </tr>
+        <tr>
+          <td>packages/contracts</td>
+          <td>Tipos compartidos; la validación de seguridad permanece en servidor.</td>
+        </tr>
+        <tr>
+          <td>scripts</td>
+          <td>
+            Preparación, pruebas aisladas, provisión, respaldo, restauración y despliegue local.
+          </td>
+        </tr>
+        <tr>
+          <td>tests/e2e</td>
+          <td>Recorridos de navegador y escenarios de error.</td>
+        </tr>
+        <tr>
+          <td>docs/evidencias</td>
+          <td>Registros históricos y dossier; consultar reservas de auditoría.</td>
+        </tr>
+      </tbody>
+    </table>
+    <p>
+      Recorrido de información: navegador → API → PostgreSQL → respuesta → pantalla. Una nota
+      guardada modifica historial y avance, puede habilitar un prerrequisito y queda en auditoría.
+      Una constancia emitida conserva su snapshot aunque después se corrija la nota.
+    </p>
+    <h4>2. Modelo relacional y reglas de integridad</h4>
+    <table>
+      <thead>
+        <tr>
+          <th>Relación</th>
+          <th>Uso y restricción relevante</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Usuario → Sesion</td>
+          <td>
+            Cuenta con rol y hash; sesiones revocables. Nunca exportar hashes/tokens en reportes.
+          </td>
+        </tr>
+        <tr>
+          <td>Programa → PlanEstudio → PlanAsignatura → Asignatura</td>
+          <td>Versiones de plan y créditos; dar de baja conserva relaciones históricas.</td>
+        </tr>
+        <tr>
+          <td>PlanAsignatura → Prerrequisito</td>
+          <td>
+            Grafo de asignaturas requerido para elegibilidad; proteger ciclos y referencias
+            inválidas.
+          </td>
+        </tr>
+        <tr>
+          <td>Usuario → Estudiante → PlanEstudio</td>
+          <td>Identidad académica y plan del alumno.</td>
+        </tr>
+        <tr>
+          <td>Usuario → Docente → Grupo</td>
+          <td>Identidad docente y asignación de grupos.</td>
+        </tr>
+        <tr>
+          <td>PoliticaAcademica → Periodo → Grupo</td>
+          <td>Escala, mínima, precisión, intentos; fechas y ventana; oferta y cupo.</td>
+        </tr>
+        <tr>
+          <td>Grupo + Estudiante → Inscripcion</td>
+          <td>Nota final, versión y créditos snapshot; unicidad estudiante/asignatura/periodo.</td>
+        </tr>
+        <tr>
+          <td>Estudiante → Certificado</td>
+          <td>Snapshot, tipo, código, estado, ruta/hash y vínculo de reemisión.</td>
+        </tr>
+        <tr>
+          <td>Usuario → Auditoria</td>
+          <td>Actor, acción, recurso y antes/después; no es un log de secretos.</td>
+        </tr>
+      </tbody>
+    </table>
+    <p>
+      Fuente exacta de campos/tipos: <code>apps/api/prisma/schema.prisma</code>; relaciones
+      detalladas en <code>docs/modelo-datos.md</code>. Hay 15 modelos de dominio y una tabla interna
+      de migraciones de Prisma: 16 tablas en total.
+    </p>
+    <p>
+      Matrícula utiliza transacciones serializables, orden de bloqueos y reintentos limitados. La
+      cola local por grupo reduce contención en una instancia, pero la garantía de cupo depende de
+      PostgreSQL. Notas usan control de versión y auditoría atómica; conflictos concurrentes deben
+      traducirse a 409. Los cálculos usan Decimal, distinguen cero de pendiente y conservan todos
+      los intentos.
+    </p>
+    <h4>3. Requisitos y plataformas</h4>
+    <ul>
+      <li>Node.js 24.19.x y npm 12.2.x, según package.json y .node-version.</li>
+      <li>
+        PostgreSQL 18.6 y Docker/Compose para el recorrido empaquetado; espacio para imágenes, datos
+        y respaldos.
+      </li>
+      <li>
+        Puertos locales disponibles: web Compose 8080, PostgreSQL Compose 5432; desarrollo web 5173
+        y API 3000. Pueden cambiar mediante configuración compatible.
+      </li>
+      <li>
+        Las herramientas PowerShell de clústeres nativos y bootstrap Docker requieren
+        PowerShell/Windows o un entorno expresamente compatible. No copiar esos comandos a Bash
+        suponiendo equivalencia.
+      </li>
+      <li>
+        La provisión genérica de cuentas está limitada a POSIX, base local siga_dev y entorno no
+        productivo. Su disponibilidad no acredita el mismo flujo en Windows o dentro de Docker de
+        producción.
+      </li>
+    </ul>
+    <p>
+      La instalación limpia registrada se realizó en Linux con Node 24.19.0 y npm 12.2.0. La
+      documentación histórica incluye recorridos Windows; validar el recorrido elegido en el equipo
+      receptor antes de dar portabilidad por terminada.
+    </p>
+    <h4>4. Configuración, variable por variable</h4>
+    <p>
+      No se incluyen valores reales. <code>.env.example</code> es plantilla; <code>.env</code> es
+      privado. <code>npm run setup</code> genera valores aleatorios si falta el archivo y conserva
+      los existentes. No ejecutar configuración contra una instalación desconocida.
+    </p>
+    <table>
+      <thead>
+        <tr>
+          <th>Variable</th>
+          <th>Propósito y condición</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>NODE_ENV</td>
+          <td>
+            development, test o production. Compose usa production aunque el alcance sea demo local.
+          </td>
+        </tr>
+        <tr>
+          <td>PORT</td>
+          <td>Puerto HTTP API, entero 1–65535; predeterminado 3000.</td>
+        </tr>
+        <tr>
+          <td>API_HOST</td>
+          <td>127.0.0.1 para API nativa; 0.0.0.0 dentro de contenedor.</td>
+        </tr>
+        <tr>
+          <td>WEB_ORIGIN</td>
+          <td>
+            Un único origen con protocolo/host/puerto y sin ruta; debe coincidir con navegador para
+            CSRF.
+          </td>
+        </tr>
+        <tr>
+          <td>DATABASE_URL</td>
+          <td>
+            Conexión PostgreSQL con nombre de base; contiene secreto. API Compose utiliza rol de
+            aplicación.
+          </td>
+        </tr>
+        <tr>
+          <td>TEST_DATABASE_URL</td>
+          <td>
+            Base independiente terminada en _test; nunca usar como alternativa la base de
+            desarrollo.
+          </td>
+        </tr>
+        <tr>
+          <td>POSTGRES_USER / POSTGRES_PASSWORD / POSTGRES_DB</td>
+          <td>
+            Propietario, secreto y base de Compose; reservar propietario para operación/migraciones.
+          </td>
+        </tr>
+        <tr>
+          <td>POSTGRES_APP_USER / POSTGRES_APP_PASSWORD</td>
+          <td>Rol API limitado sin administración ni cambios de auditoría.</td>
+        </tr>
+        <tr>
+          <td>POSTGRES_PORT</td>
+          <td>Puerto de base expuesto sobre loopback; comprobar colisiones.</td>
+        </tr>
+        <tr>
+          <td>TEST_POSTGRES_PASSWORD</td>
+          <td>Contraseña de la instancia de pruebas de Compose.</td>
+        </tr>
+        <tr>
+          <td>WEB_PORT</td>
+          <td>Puerto de Nginx local; predeterminado 8080.</td>
+        </tr>
+        <tr>
+          <td>SIGA_VERSION</td>
+          <td>
+            Etiqueta de imágenes de aplicación y manifiestos de release; no sustituye hash de
+            fuentes.
+          </td>
+        </tr>
+        <tr>
+          <td>JWT_SECRET</td>
+          <td>
+            Secreto aleatorio base64url de al menos 32 bytes; validación exige 43 caracteres o más.
+          </td>
+        </tr>
+        <tr>
+          <td>JWT_TTL_SECONDS</td>
+          <td>Vida de sesión de 300 a 3600 segundos; predeterminado 1800.</td>
+        </tr>
+        <tr>
+          <td>COOKIE_SECURE</td>
+          <td>false para HTTP local; exposición HTTPS requiere configuración propia verificada.</td>
+        </tr>
+        <tr>
+          <td>EXIGIR_PRERREQUISITOS</td>
+          <td>
+            true/false; predeterminado true. Registrar cualquier cambio como política de demo.
+          </td>
+        </tr>
+        <tr>
+          <td>CERTIFICATES_DIR</td>
+          <td>
+            Directorio privado: .local/certificados en desarrollo, /data/certificados en Compose.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <p>
+      D44 fija America/Mexico_City para la ventana de demo; no existe una variable genérica que
+      cambie por sí sola esta regla. Revisar <code>mexico-city-datetime.ts</code> antes de
+      modificarla.
+    </p>
+    <h4>5. Instalación Compose paso a paso</h4>
+    <p>
+      Este procedimiento inicia una instalación propia nueva. Primero comprobar qué
+      proyecto/puertos/volúmenes ya existen y conservar los datos. No usar borrado de volúmenes como
+      método de reparación.
+    </p>
+    <ol>
+      <li>
+        Abrir una terminal en la raíz y comprobar <code>node --version</code>,
+        <code>npm --version</code>, <code>docker --version</code> y
+        <code>docker compose version</code>.
+      </li>
+      <li>
+        Ejecutar <code>npm ci</code> para instalar exactamente el lockfile en una copia nueva.
+      </li>
+      <li>
+        Ejecutar <code>npm run setup</code>. Revisar en privado las variables y permisos del archivo
+        creado; no imprimir la URL de base con contraseña.
+      </li>
+      <li>
+        Ejecutar <code>docker compose config --quiet</code> para validar configuración y
+        <code>docker compose up -d --build --wait</code> para construir/arrancar el stack propio.
+      </li>
+      <li>
+        Comprobar <code>docker compose ps</code>. El servicio migrate aplica las cuatro migraciones;
+        db-permissions prepara rol limitado; certificados-permisos prepara el volumen PDF.
+      </li>
+      <li>
+        Abrir <code>http://localhost:8080</code> y comprobar
+        <code>http://localhost:8080/api/health</code>. Salud no sustituye una prueba de
+        acceso/datos.
+      </li>
+      <li>
+        Para semilla y administrador en el recorrido Windows documentado, usar
+        <code>npm run docker:admin:bootstrap</code>. Este comando es PowerShell; revisar
+        <code>scripts/bootstrap-docker.ps1</code> y no asumir que existe un equivalente Bash
+        autorizado.
+      </li>
+      <li>
+        Entregar credenciales por canal privado y probar login con los roles preparados. Los
+        perfiles prefijados de demostración no sustituyen el alta/provisión de cualquier persona.
+      </li>
+      <li>
+        Registrar versiones, migraciones y prueba realizada. <code>db:seed</code> siembra ICO-F19;
+        el segundo programa sintético de fixtures no se instala automáticamente por esa semilla.
+      </li>
+    </ol>
+    <p>
+      Para parar solo esta instalación usar <code>docker compose stop</code>. No se incluye un
+      comando de borrado masivo en el manual de operación normal.
+    </p>
+    <h4>6. Desarrollo nativo y acceso genérico</h4>
+    <p>
+      En el recorrido Windows existente: <code>npm ci</code>,
+      <code>npm run setup -- --native</code>, <code>npm run db:local:start</code>,
+      <code>npm run db:migrate</code>, <code>npm run db:seed</code>,
+      <code>npm run db:test:migrate</code>, <code>npm run auth:bootstrap:admin</code>,
+      <code>npm run dev</code>. <code>db:local:start</code> es PowerShell y administra clústeres
+      privados en 55432/55433. En POSIX, preparar PostgreSQL propio y URLs válidas de
+      desarrollo/pruebas; no existe aquí una receta nativa universal acreditada para todos los
+      sistemas.
+    </p>
+    <p>
+      El portal nativo está en <code>http://localhost:5173</code>, salud API en
+      <code>http://127.0.0.1:3000/health</code>. WEB_ORIGIN debe coincidir con el origen del portal.
+      No iniciar simultáneamente procesos que compitan por 3000/5173.
+    </p>
+    <p>Para habilitar o restablecer una persona arbitraria ya creada y activa en POSIX local:</p>
+    <pre><code class="language-bash">npm run auth:provision:local -w @siga/api -- persona@example.invalid
+</code></pre>
+    <p>
+      El correo debe corresponder a un estudiante o docente existente, no un administrador. El CLI
+      comprueba entorno no productivo, conexión local y base siga_dev; genera un archivo privado,
+      activa la cuenta, revoca sesiones y audita. La ruta del archivo se informa; la contraseña no
+      se imprime. El directorio es privado 0700 y el archivo 0600. Conservar o entregar por canal
+      privado. Ante error, revisar su causa y comprobar el estado antes de reintentar.
+    </p>
+    <p>
+      No existen los comandos <code>npm run provision:local</code> ni
+      <code>auth:bootstrap:demo</code> en los manifiestos auditados. No utilizarlos. Para
+      administrador se usa el bootstrap separado; no reutilizar provisión docente/estudiante.
+    </p>
+    <h4>7. API, contratos y permisos</h4>
+    <p>
+      Las rutas siguientes son de API; en Compose se antepone <code>/api</code>. En desarrollo se
+      llama al puerto 3000. La tabla es mapa operativo de familias, no sustituto del inventario
+      exhaustivo de aliases/controladores.
+    </p>
+    <table>
+      <thead>
+        <tr>
+          <th>Método y ruta</th>
+          <th>Rol y datos relevantes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>POST /auth/login</td>
+          <td>Público; correo/contraseña; devuelve perfil y CSRF y establece cookie.</td>
+        </tr>
+        <tr>
+          <td>GET /auth/me; POST /auth/logout</td>
+          <td>Sesión propia; logout protegido revoca sesión.</td>
+        </tr>
+        <tr>
+          <td>GET /auth/usuarios; GET /auth/usuarios/:id</td>
+          <td>Administración o titular según ruta; no devolver hashes.</td>
+        </tr>
+        <tr>
+          <td>GET/POST /catalogos/programas, /catalogos/asignaturas, /catalogos/planes</td>
+          <td>Administración; validaciones de claves, referencias y estado.</td>
+        </tr>
+        <tr>
+          <td>PATCH /catalogos/programas/:id, /catalogos/asignaturas/:id, /catalogos/planes/:id</td>
+          <td>Administración; cambios/bajas según restricciones históricas.</td>
+        </tr>
+        <tr>
+          <td>
+            GET/POST /personas/estudiantes, /personas/docentes; PATCH /personas/estudiantes/:id,
+            /personas/docentes/:id
+          </td>
+          <td>Administración; alta académica no entrega acceso automáticamente.</td>
+        </tr>
+        <tr>
+          <td>GET/POST /periodos, /grupos; PATCH /periodos/:id, /grupos/:id</td>
+          <td>Administración; fechas/estado/cupo y referencias.</td>
+        </tr>
+        <tr>
+          <td>GET /docentes/me/grupos; GET /docentes/me/grupos/:grupoId/calificaciones</td>
+          <td>Docente asignado; propiedad derivada de sesión.</td>
+        </tr>
+        <tr>
+          <td>GET /matriculas/oferta; GET /matriculas/me; POST /matriculas</td>
+          <td>Estudiante; POST recibe grupoId y revalida elegibilidad.</td>
+        </tr>
+        <tr>
+          <td>PUT /calificaciones/:inscripcionId</td>
+          <td>
+            Docente asignado; notaFinal decimal como texto, version y motivo al corregir. Existen
+            aliases PATCH/PUT.
+          </td>
+        </tr>
+        <tr>
+          <td>GET /estudiantes/me/calificaciones, /estudiantes/me/progreso</td>
+          <td>Estudiante; historial y avance propios.</td>
+        </tr>
+        <tr>
+          <td>POST /certificados; GET /certificados/me</td>
+          <td>Estudiante; emisión y listado propios.</td>
+        </tr>
+        <tr>
+          <td>GET /certificados; POST /certificados/estudiantes/:estudianteId</td>
+          <td>Administrador; listado y emisión de estudios del estudiante seleccionado.</td>
+        </tr>
+        <tr>
+          <td>POST /certificados/:id/recuperar</td>
+          <td>
+            Titular o administrador según autorización; finalizar pendiente/fallido sin duplicar.
+          </td>
+        </tr>
+        <tr>
+          <td>GET /certificados/:id/pdf</td>
+          <td>Titular o administrador; autorización y comprobación de hash.</td>
+        </tr>
+        <tr>
+          <td>POST /certificados/:id/revocar</td>
+          <td>Administrador; motivo y auditoría.</td>
+        </tr>
+        <tr>
+          <td>POST /certificados/:id/reemitir</td>
+          <td>Titular o administrador conforme al estado del documento.</td>
+        </tr>
+        <tr>
+          <td>GET /certificados/verificar/:codigo</td>
+          <td>Público; estado y datos mínimos, sin notas/correo/matrícula.</td>
+        </tr>
+        <tr>
+          <td>GET /reportes/grupos; GET /reportes/auditoria</td>
+          <td>Administrador; filtros y paginación.</td>
+        </tr>
+        <tr>
+          <td>GET /reportes/grupos/:grupoId/historial.csv</td>
+          <td>Administrador o docente asignado; CSV seguro.</td>
+        </tr>
+      </tbody>
+    </table>
+    <p>
+      Ejemplo de intención de matrícula: <code>{"grupoId":"ID_SINTETICO"}</code>. Ejemplo de nota:
+      <code>{"notaFinal":"8.50","version":1}</code>; para corrección añadir motivo. Usar los
+      contratos actuales de <code>packages/contracts</code> para campos completos y errores por
+      endpoint; no enviar estos IDs literales a una instalación real.
+    </p>
+    <p>
+      Las escrituras protegidas requieren sesión, origen permitido y encabezado X-CSRF-Token. No
+      guardar tokens en manuales/logs. El servidor verifica rol y recurso aunque la pantalla o la
+      URL se cambien.
+    </p>
+    <table>
+      <thead>
+        <tr>
+          <th>Respuesta</th>
+          <th>Interpretación y acción</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>400</td>
+          <td>Datos o formato inválidos; corregir campos.</td>
+        </tr>
+        <tr>
+          <td>401</td>
+          <td>
+            Sesión inexistente/vencida/revocada; volver a entrar sin reutilizar caché privada.
+          </td>
+        </tr>
+        <tr>
+          <td>403</td>
+          <td>
+            Rol/recurso/origen/CSRF no permitido; revisar sesión y configuración, no evadir control.
+          </td>
+        </tr>
+        <tr>
+          <td>404</td>
+          <td>Recurso/ruta no disponible o no visible; comprobar identificador y permiso.</td>
+        </tr>
+        <tr>
+          <td>409</td>
+          <td>
+            Conflicto de negocio, cupo, versión o estado; refrescar y decidir sobre datos vigentes.
+          </td>
+        </tr>
+        <tr>
+          <td>429</td>
+          <td>Límite temporal de acceso; esperar y revisar intentos.</td>
+        </tr>
+        <tr>
+          <td>5xx</td>
+          <td>
+            Error operativo; conservar evidencia saneada, verificar estado antes de duplicar una
+            acción.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h4>8. Respaldo, restauración y límites D46</h4>
+    <p>
+      Respaldar diariamente y antes de cambios importantes. El respaldo debe contener
+      <code>database.dump</code>, manifiesto y archivos PDF; no confundir con un SQL plano. Usar
+      <code>npm run docker:backup</code> en instalación propia configurada. Comprobar salida y
+      permisos; conservar fuera del host una copia protegida según política acordada.
+    </p>
+    <p>Para verificar una copia sin reemplazar la base original:</p>
+    <pre><code class="language-bash">npm run docker:restore:verify -- --backup .local/backups/NOMBRE --require-certificate
+</code></pre>
+    <p>
+      El verificador levanta recursos temporales de su propiedad, compara datos/archivos e inicia
+      API recuperada; requiere base configurada, cuenta privada administrativa y puerto 3138
+      disponible según script. No es el mismo procedimiento que restaurar automáticamente la
+      instalación principal.
+    </p>
+    <p>
+      La prueba <code>node scripts/test-backup-restore-local.mjs --packaged</code> recrea un stack
+      aislado y comprueba dos PDFs, login y hash. El registro reportó RTO 9,47 s; el cálculo
+      publicado de RPO 1,18 s no mide el desfase recuperable al incidente y debe corregirse. La
+      auditoría no volvió a ejecutar ese simulacro.
+    </p>
+    <p>
+      Para un incidente real: identificar instalación y respaldo, preservar datos/archivos actuales,
+      detener escrituras de ese entorno, preparar instalación compatible aislada, restaurar dump y
+      PDFs siguiendo las herramientas verificadas, reponer configuración privada, validar
+      migraciones/roles/login/registros/hashes y solo después decidir la sustitución con la persona
+      responsable. No improvisar comandos destructivos. Falta acreditar una guía ejecutable completa
+      para el entorno receptor y el RPO corregido.
+    </p>
+    <p>
+      Medir RTO desde inicio del incidente hasta servicio utilizable y comprobado. Medir
+      recuperación de datos con marcas persistidas anteriores y posteriores al respaldo, comparadas
+      después de restaurar. Antigüedad del respaldo o duración de exportación no prueban por sí
+      solas datos perdidos. Objetivos provisionales: RTO máximo 4 h y RPO máximo 24 h. Una copia
+      retenida de test no demuestra una retención diaria operada; asignar custodio, destino y
+      calendario reales.
+    </p>
+    <h4>9. Constancias e incidentes</h4>
+    <p>
+      Si una emisión se interrumpe, consultar su estado antes de repetir. Recuperar mediante flujo
+      de aplicación solo cuando corresponda a PENDIENTE/FALLIDO; la recuperación debe finalizar una
+      sola emisión. Revocar requiere motivo. Reemitir enlaza reemplazo, sin alterar el PDF previo.
+    </p>
+    <p>
+      <code>node scripts/conciliar-certificados.mjs</code> es diagnóstico: revisar su configuración
+      y guía antes de usarlo. Los candidatos a huérfanos requieren investigación; un fallo de
+      respuesta no demuestra que la transacción no se confirmara. No borrar PDFs dudosos de forma
+      automática. Referencia: <code>docs/OPERACION_CONCILIACION_CONSTANCIAS.md</code>.
+    </p>
+    <p>
+      Nginx tiene timeout de lectura 5 s y la transacción de certificados admite hasta 20 s. Esto no
+      es un fallo demostrado con latencias actuales; hace falta un ensayo de saturación/timeout y
+      recuperación para documentar el comportamiento. No aumentar límites a ciegas.
+    </p>
+    <h4>10. Pruebas, cobertura y releases</h4>
+    <table>
+      <thead>
+        <tr>
+          <th>Comando</th>
+          <th>Alcance</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>npm run check</td>
+          <td>ESLint, tipos, unitarias y builds. No ejecuta integración ni E2E.</td>
+        </tr>
+        <tr>
+          <td>npm run format:check</td>
+          <td>Formato del repositorio.</td>
+        </tr>
+        <tr>
+          <td>npm run test:integration</td>
+          <td>PostgreSQL de prueba independiente y esquema temporal.</td>
+        </tr>
+        <tr>
+          <td>npm run test:coverage</td>
+          <td>Unitarias/integración, umbrales por archivo seleccionados por runner.</td>
+        </tr>
+        <tr>
+          <td>npm run test:e2e -- --workers=1</td>
+          <td>Navegador con runner aislado; inspeccionar entorno antes de ejecutar.</td>
+        </tr>
+        <tr>
+          <td>node scripts/test-load.mjs --unicode</td>
+          <td>
+            Emisión Unicode, calentamiento 60 s/medición 300 s, tandas de 20. Requiere API compilada
+            y base de prueba.
+          </td>
+        </tr>
+        <tr>
+          <td>node scripts/test-proxy-local.mjs</td>
+          <td>Proxy en recursos propios; imágenes y puertos según script.</td>
+        </tr>
+        <tr>
+          <td>node scripts/test-certificados-crash.mjs</td>
+          <td>Interrupción controlada de API temporal; no usar proceso ajeno.</td>
+        </tr>
+      </tbody>
+    </table>
+    <p>
+      La cobertura real se configura dinámicamente en <code>scripts/test-integration.mjs</code>, no
+      en un archivo jest.coverage.config.cjs. Incluye service/calculo/guard/pdf/cola/provisión;
+      falta reconciliar csrf.ts y mexico-city-datetime.ts con lo declarado por el inventario. El
+      resultado va a <code>.local/e09-coverage</code>; CI ejecuta cobertura pero no publica su
+      artefacto actualmente.
+    </p>
+    <p>
+      En esta auditoría <code>npm run check</code> pasó: 6 suites/38 pruebas API y 13 archivos/40
+      pruebas web, tipos y builds. Integración/E2E/carga/restauración conservan resultados
+      históricos; no se reejecutaron. Los 131 tests y 34 E2E del dossier no equivalen a validación
+      nueva.
+    </p>
+    <p>
+      Para desplegar un release propio: revisar <code>npm run docker:deploy</code> y su
+      respaldo/manifiesto antes de ejecutar.
+      <code>npm run docker:rollback -- --release .local/releases/release-ETIQUETA.json</code> exige
+      manifiesto válido y migraciones compatibles; no realiza una reversión arbitraria de esquema.
+    </p>
+    <h4>11. Diagnóstico y mantenimiento</h4>
+    <ol>
+      <li>Identificar versión, entorno y momento del fallo sin imprimir secretos.</li>
+      <li>Consultar <code>docker compose ps</code> y salud; revisar logs saneados.</li>
+      <li>
+        Comprobar migraciones y rol de base, origen web, espacio, permisos del directorio PDF y
+        puertos.
+      </li>
+      <li>Consultar estado de la acción antes de reintentar matrícula/nota/constancia.</li>
+      <li>
+        Reproducir solo con datos ficticios en instalación propia; registrar pasos y respuesta
+        esperada/observada.
+      </li>
+      <li>
+        Aplicar corrección mínima y repetir pruebas afectadas. Congelar archivos durante cada
+        verificación.
+      </li>
+      <li>
+        Regenerar inventario de entrega al terminar documentos y asociar pruebas al candidato
+        correcto.
+      </li>
+    </ol>
+    <h4>12. Fuentes y reservas</h4>
+    <p>
+      Fuentes: package.json, docker-compose.yml, .env.example, environment.ts, controladores,
+      schema.prisma, scripts operativos, README y registros del dossier. La auditoría y pendientes
+      detallados están en <code>docs/AUDITORIA_IMPLEMENTACION_Y_ENTREGA_20261109.md</code>. No
+      afirmar cierre F/A por la sola existencia de este manual. Datos reales, reglamento
+      institucional, HTTPS público y correo siguen fuera del cierre de demostración acordado.
+    </p>
+    <h1>Anexo F. Capacitación y evaluación pendientes de ejecución</h1>
+    <p>
+      Los materiales y rúbrica existentes están en
+      <code>docs/manuales/plan-capacitacion-e11.docx</code>. Las fechas anteriores eran propuestas;
+      el responsable debe fijar convocatoria vigente y entorno ficticio independiente. Este anexo no
+      acredita asistencia ni aprendizaje ya ocurrido.
+    </p>
+    <h2>F.1 Secuencia de una sesión</h2>
+    <ol>
+      <li>
+        Preparar cuentas por rol, escenario de inscripción, notas y constancias sin datos reales.
+      </li>
+      <li>
+        Explicar alcance local, credenciales privadas y diferencia entre demo/documento oficial.
+      </li>
+      <li>Demostrar una tarea y permitir práctica guiada.</li>
+      <li>Evaluar tareas sin ayuda; anotar errores y tiempos reales.</li>
+      <li>Revisar resultado con participante; ofrecer refuerzo y nueva evaluación si procede.</li>
+      <li>Registrar incidentes, responsable de corrección y evidencia saneada.</li>
+      <li>Completar padrón y aceptación solo cuando se cumplan las condiciones.</li>
+    </ol>
+    <h2>F.2 Rúbrica operativa de 100 puntos</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Criterio</th>
+          <th>Puntos</th>
+          <th>Evidencia esperada</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Acceso correcto, reconocimiento del rol y cierre de sesión</td>
+          <td>15</td>
+          <td>Registro de ejecución real.</td>
+        </tr>
+        <tr>
+          <td>Tarea principal del rol</td>
+          <td>35</td>
+          <td>Inscripción propia / nota autorizada / alta de oferta según rol.</td>
+        </tr>
+        <tr>
+          <td>Consulta, corrección o salida asociada</td>
+          <td>25</td>
+          <td>Historial/constancia, corrección con motivo o reporte.</td>
+        </tr>
+        <tr>
+          <td>Interpretación de rechazo y reporte de incidencia</td>
+          <td>15</td>
+          <td>Explicación y uso de canal asignado.</td>
+        </tr>
+        <tr>
+          <td>Manejo seguro y autonomía</td>
+          <td>10</td>
+          <td>Sin compartir contraseñas ni ayuda durante evaluación.</td>
+        </tr>
+      </tbody>
+    </table>
+    <p>
+      Acreditación: &gt;=80/100 y <strong>100 % de tareas críticas</strong>; una nota alta no
+      compensa una tarea crítica fallida. Críticas: permisos y captura correctos; matrícula sin
+      duplicidad; interpretación de resultados; para soporte, restauración y comprobación del
+      servicio. La asistencia sola no acredita.
+    </p>
+    <h2>F.3 Padrón para completar durante el piloto</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Participante real</th>
+          <th>Rol</th>
+          <th>Convocado</th>
+          <th>Capacitado</th>
+          <th>Evaluado</th>
+          <th>Puntaje</th>
+          <th>Críticas completas</th>
+          <th>Acreditado</th>
+          <th>Evidencia/fecha</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Por registrar</td>
+          <td>Estudiante</td>
+          <td>Pendiente</td>
+          <td>Pendiente</td>
+          <td>Pendiente</td>
+          <td>Sin evaluar</td>
+          <td>Pendiente</td>
+          <td>Pendiente</td>
+          <td>Sin ejecución</td>
+        </tr>
+        <tr>
+          <td>Por registrar</td>
+          <td>Docente</td>
+          <td>Pendiente</td>
+          <td>Pendiente</td>
+          <td>Pendiente</td>
+          <td>Sin evaluar</td>
+          <td>Pendiente</td>
+          <td>Pendiente</td>
+          <td>Sin ejecución</td>
+        </tr>
+        <tr>
+          <td>Por registrar</td>
+          <td>Administración</td>
+          <td>Pendiente</td>
+          <td>Pendiente</td>
+          <td>Pendiente</td>
+          <td>Sin evaluar</td>
+          <td>Pendiente</td>
+          <td>Pendiente</td>
+          <td>Sin ejecución</td>
+        </tr>
+      </tbody>
+    </table>
+    <p>
+      Debe quedar al menos un representante acreditado por rol y seguimiento de todos los
+      convocados. No calcular porcentajes con filas de ejemplo como si fueran personas reales.
+      Registrar también quienes no concluyan y la acción de recuperación.
+    </p>
+    <h1>Anexo G. Decisiones provisionales y exclusiones</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Decisión aprobada para demo</th>
+          <th>Alcance</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>D41</td>
+          <td>
+            Dos programas sintéticos identificados como demostración; no afirmar catálogo oficial
+            completo.
+          </td>
+        </tr>
+        <tr>
+          <td>D42</td>
+          <td>
+            Escala 0–10, mínima 6, dos decimales y promedio ponderado por créditos con todos los
+            intentos calificados.
+          </td>
+        </tr>
+        <tr>
+          <td>D43</td>
+          <td>
+            Constancia de estudios con al menos una nota final, incluyendo aprobadas y reprobadas.
+          </td>
+        </tr>
+        <tr>
+          <td>D44</td>
+          <td>Ventanas de inscripción en America/Mexico_City.</td>
+        </tr>
+        <tr>
+          <td>D45</td>
+          <td>
+            Meta provisional: 20 usuarios, p95 &lt;2 s y &lt;1 % de errores inesperados por
+            operación; documentar patrón de carga.
+          </td>
+        </tr>
+        <tr>
+          <td>D46</td>
+          <td>
+            Respaldo diario/antes de cambios; RTO &lt;=4 h/RPO &lt;=24 h. Falta
+            custodio/destino/retención nominal y medición corregida.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <p>
+      No se añaden parciales, cancelación de matrícula por autoservicio, carga máxima ni
+      optimización de horarios. Publicación remota, operación institucional, expedientes reales,
+      correo opcional, pagos, LMS, app nativa e integraciones no condicionan este cierre local.
+    </p>
+    <h1>Anexo H. Trabajo restante y criterios de terminación</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Frente</th>
+          <th>Qué falta</th>
+          <th>Cómo se acredita</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Instrumento RPO</td>
+          <td>Corregir fórmula y verificar marcas recuperadas/perdidas.</td>
+          <td>Simulacro nuevo aislado, cálculo reproducible y datos antes/después.</td>
+        </tr>
+        <tr>
+          <td>Cobertura y CI</td>
+          <td>Denominador real de reglas, umbrales y reporte conservado.</td>
+          <td>Reporte nuevo con &gt;=70 % por archivo exigible y artefacto real.</td>
+        </tr>
+        <tr>
+          <td>Accesibilidad</td>
+          <td>Zoom de navegador real y tareas completas por rol.</td>
+          <td>Registro de pasos/entorno/resultados; CSS no sustituye.</td>
+        </tr>
+        <tr>
+          <td>Sesiones</td>
+          <td>401 tardío por privateFetch/flujo real.</td>
+          <td>B continúa autenticado sin datos de A y solicitud realmente interceptada.</td>
+        </tr>
+        <tr>
+          <td>Contratos y recorridos</td>
+          <td>Métodos/aliases/positivos, dos programas y todas las listas.</td>
+          <td>Inventario por criterio y evidencia trazable.</td>
+        </tr>
+        <tr>
+          <td>Constancias</td>
+          <td>Commit durable independiente y timeout.</td>
+          <td>Emisión única, auditoría y hash tras fallo/recuperación.</td>
+        </tr>
+        <tr>
+          <td>Evidencias</td>
+          <td>Fuentes/paquete identificados, logs estructurados y manifiesto íntegro.</td>
+          <td>Comprobación de hashes y vinculación por candidato.</td>
+        </tr>
+        <tr>
+          <td>Personas</td>
+          <td>Piloto/capacitación/metodología/custodia/aceptación.</td>
+          <td>Registros y firma reales, sin simulación retrospectiva.</td>
+        </tr>
+      </tbody>
+    </table>
+    <p>
+      Los detalles AC-01–17 y encargos de subagentes están en la auditoría. Máximo cuatro agentes
+      incluido coordinador, tres especialistas activos y una prueba pesada a la vez; archivo con
+      escritor único. La documentación se entrega ahora y no se usa para ocultar pendientes del
+      sistema.
+    </p>
+    <h1>Anexo I. Registro de aceptación: pendiente</h1>
+    <p><strong>Este formato no está firmado y no representa aceptación.</strong></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Campo</th>
+          <th>Estado</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Fecha y lugar de evaluación real</td>
+          <td>Por registrar.</td>
+        </tr>
+        <tr>
+          <td>Versión/candidato y manifiesto aceptados</td>
+          <td>Por registrar tras correcciones.</td>
+        </tr>
+        <tr>
+          <td>Responsable académico, técnico y verificador</td>
+          <td>Nombres/cargos reales pendientes.</td>
+        </tr>
+        <tr>
+          <td>Puerta F</td>
+          <td>No ratificada sin reservas por esta auditoría.</td>
+        </tr>
+        <tr>
+          <td>Puerta A</td>
+          <td>Pendiente de piloto, metodología, capacitación y aceptación humana.</td>
+        </tr>
+        <tr>
+          <td>Resultados técnicos y límites aceptados</td>
+          <td>Adjuntar evidencia real y reservas resueltas/decisión competente.</td>
+        </tr>
+        <tr>
+          <td>Padrón/evaluación de participantes</td>
+          <td>Pendiente de ejecución.</td>
+        </tr>
+        <tr>
+          <td>Firma o registro auténtico de aceptación</td>
+          <td>Pendiente; no sustituible por agentes.</td>
+        </tr>
+      </tbody>
+    </table>
+    <p>
+      La redacción de conclusiones, anexos y manuales puede entregarse antes de esta firma. Su
+      estado no transforma automáticamente el proyecto en finalizado.
+    </p>
+  </body>
+</html>

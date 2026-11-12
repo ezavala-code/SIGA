@@ -1,0 +1,26 @@
+{
+  "procedencia": "carga-unicode-candidato.json",
+  "metodo": "Objetos JSON completos, uno por línea; se conserva el archivo original mezclado como registro histórico.",
+  "resultados": [
+    {
+      "dataset": {
+        "estudiantes": 1000,
+        "grupos": 50
+      },
+      "operacion": "pdf_unicode",
+      "usuarios": 20,
+      "patron": "tandas de 20 usuarios con pausas",
+      "intervaloSegundos": 7.6923076923076925,
+      "modo": "medicion",
+      "solicitudes": 780,
+      "duracionSegundos": 300,
+      "solicitudesPorSegundo": 2.6,
+      "erroresInesperados": 0,
+      "detalleErrores": {},
+      "erroresPorcentaje": 0,
+      "p95Ms": 670.84,
+      "maximoMs": 856.41,
+      "aprobado": true
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+# Publicación detrás de un proxy HTTPS administrado en el host (por ejemplo, Caddy).
+# La web y PostgreSQL siguen enlazados solo a loopback; la API no publica puertos.
+services:
+  api:
+    environment:
+      WEB_ORIGIN: ${SIGA_PUBLIC_ORIGIN:?Define SIGA_PUBLIC_ORIGIN en el servidor}
+      COOKIE_SECURE: 'true'

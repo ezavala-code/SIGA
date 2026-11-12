@@ -1,0 +1,23 @@
+{
+  "fecha": "2026-10-10T03:02:53.400Z",
+  "bases": [
+    {
+      "target": "dev",
+      "tablas": 15,
+      "usuarios": 7,
+      "estudiantes": 4,
+      "inscripciones": 4,
+      "certificados": 0,
+      "migraciones": 3
+    },
+    {
+      "target": "test",
+      "tablas": 15,
+      "usuarios": 0,
+      "estudiantes": 0,
+      "inscripciones": 0,
+      "certificados": 0,
+      "migraciones": 3
+    }
+  ]
+}

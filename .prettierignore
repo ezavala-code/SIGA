@@ -1,0 +1,15 @@
+node_modules
+.local
+dist
+coverage
+package-lock.json
+GUIA_CONSTRUCCION_SIGA_CODEX.txt
+docs/evidencias
+test-results
+playwright-report
+apps/api/src/generated
+apps/api/prisma/migrations
+
+# Licencias de terceros y archivos temporales de pruebas.
+apps/api/assets/fonts/*.md
+scripts/.tmp-*.mjs

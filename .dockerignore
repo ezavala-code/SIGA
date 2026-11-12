@@ -1,0 +1,12 @@
+.git
+**/node_modules
+**/dist
+.env
+.env.*
+*.pdf
+*.txt
+.local
+test-results
+playwright-report
+docs/evidencias
+apps/api/src/generated

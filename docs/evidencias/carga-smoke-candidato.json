@@ -1,0 +1,37 @@
+Datasource "db": PostgreSQL database "siga_test", schema "siga_load_74388343809547f797f48160b2292d78" at "127.0.0.1:15433"
+
+4 migrations found in prisma/migrations
+
+Applying migration `20261010030000_inicial`
+Applying migration `20261010030100_integridad`
+Applying migration `20261010030200_identidad_historial`
+Applying migration `20261106010000_periodo_hora_mexico`
+
+The following migration(s) have been applied:
+
+migrations/
+  └─ 20261010030000_inicial/
+    └─ migration.sql
+  └─ 20261010030100_integridad/
+    └─ migration.sql
+  └─ 20261010030200_identidad_historial/
+    └─ migration.sql
+  └─ 20261106010000_periodo_hora_mexico/
+    └─ migration.sql
+
+All migrations have been successfully applied.
+reporte: calentamiento de 1 segundos con 20 usuarios.
+reporte: medición de 2 segundos.
+{"dataset":{"estudiantes":1000,"grupos":50},"operacion":"reporte","usuarios":20,"patron":"tandas de 20 usuarios con pausas","intervaloSegundos":1,"modo":"comprobacion corta sin validez de aceptacion","solicitudes":40,"duracionSegundos":2,"solicitudesPorSegundo":20,"erroresInesperados":0,"detalleErrores":{},"erroresPorcentaje":0,"p95Ms":155.84,"maximoMs":158.3,"aprobado":null}
+oferta: calentamiento de 1 segundos con 20 usuarios.
+oferta: medición de 2 segundos.
+{"dataset":{"estudiantes":1000,"grupos":50},"operacion":"oferta","usuarios":20,"patron":"tandas de 20 usuarios con pausas","intervaloSegundos":1,"modo":"comprobacion corta sin validez de aceptacion","solicitudes":40,"duracionSegundos":2,"solicitudesPorSegundo":19.99,"erroresInesperados":0,"detalleErrores":{},"erroresPorcentaje":0,"p95Ms":302.96,"maximoMs":303.58,"aprobado":null}
+matricula: calentamiento de 1 segundos con 20 usuarios.
+matricula: medición de 2 segundos.
+{"dataset":{"estudiantes":1000,"grupos":50},"operacion":"matricula","usuarios":20,"patron":"tandas de 20 usuarios con pausas","intervaloSegundos":1,"modo":"comprobacion corta sin validez de aceptacion","solicitudes":40,"duracionSegundos":2,"solicitudesPorSegundo":20,"erroresInesperados":0,"detalleErrores":{},"erroresPorcentaje":0,"p95Ms":552.39,"maximoMs":585,"aprobado":null}
+pdf: calentamiento de 1 segundos con 20 usuarios.
+pdf: medición de 2 segundos.
+{"dataset":{"estudiantes":1000,"grupos":50},"operacion":"pdf","usuarios":20,"patron":"tandas de 20 usuarios con pausas","intervaloSegundos":1,"modo":"comprobacion corta sin validez de aceptacion","solicitudes":40,"duracionSegundos":2,"solicitudesPorSegundo":20.02,"erroresInesperados":0,"detalleErrores":{},"erroresPorcentaje":0,"p95Ms":687.83,"maximoMs":693.04,"aprobado":null}
+pdf_unicode: calentamiento de 1 segundos con 20 usuarios.
+pdf_unicode: medición de 2 segundos.
+{"dataset":{"estudiantes":1000,"grupos":50},"operacion":"pdf_unicode","usuarios":20,"patron":"tandas de 20 usuarios con pausas","intervaloSegundos":1,"modo":"comprobacion corta sin validez de aceptacion","solicitudes":40,"duracionSegundos":2,"solicitudesPorSegundo":20,"erroresInesperados":0,"detalleErrores":{},"erroresPorcentaje":0,"p95Ms":656.7,"maximoMs":658.38,"aprobado":null}

@@ -1,0 +1,50 @@
+{
+  "prueba": "respaldo y restauración aislados",
+  "resultado": {
+    "respaldo": ".local/backups/e10-2026-11-11T005530-092Z-cf6d9c3c",
+    "baseRestaurada": "siga_restore_e10_2a7fede9848a435cb0cc45f3797732cf",
+    "conteosIguales": true,
+    "tablas": 16,
+    "archivosIguales": true,
+    "archivos": 2,
+    "apiHealth": "ok",
+    "inicioSesion": 200,
+    "cierreSesion": 204,
+    "certificado": {
+      "consulta": 200,
+      "estado": "VIGENTE",
+      "sha256Igual": true,
+      "bytes": 9813
+    },
+    "migracionesAplicadas": "4",
+    "rolAplicacion": "siga_app",
+    "rolSinPrivilegiosDDL": true,
+    "apiImagen": "sha256:f76daa3abd3c9d46ddfb22fe5f46a268c61c4065e149179aa4eb390e997c90f2",
+    "baseTemporal": "se eliminará al terminar la verificación"
+  },
+  "respaldoCreado": true,
+  "alteracionDetectada": true,
+  "recuperacionOperativa": {
+    "resultado": "PASO",
+    "respaldoRetenido": false,
+    "ultimaEscrituraAt": "2026-11-11T00:55:30.008Z",
+    "escrituraPosteriorAt": "2026-11-11T00:55:37.612Z",
+    "marcaAnteriorRecuperada": true,
+    "marcaPosteriorAusente": true,
+    "respaldoCreatedAt": "2026-11-11T00:55:31.302Z",
+    "incidenteInicioAt": "2026-11-11T00:55:37.615Z",
+    "restauracionInicioAt": "2026-11-11T00:55:38.877Z",
+    "servicioUtilizableAt": "2026-11-11T00:55:47.000Z",
+    "verificacionFinalAt": "2026-11-11T00:55:47.448Z",
+    "respaldoDuracionMs": 3455.22,
+    "verificacionDuracionMs": 4002.36,
+    "rtoSegundos": 9.83,
+    "rpoSegundos": 7.61,
+    "constanciaLatinaSha256": "b3d6b83f2a07458068b52ca16e89c38b0cf7eac19664dd75bb790a98f49b3c7d",
+    "constanciaUnicodeSha256": "ae217257b8293d4c6d932e7310404164186c411a4d682f7af0928238f8006217"
+  },
+  "apiImageId": "sha256:f76daa3abd3c9d46ddfb22fe5f46a268c61c4065e149179aa4eb390e997c90f2",
+  "webImageId": "sha256:1833bbefadd85a35ced6d4183f7f6080ea0e89a710d444fa4c56ca5face8cc7e",
+  "migrateImageId": "sha256:8e05743050a9c55d5298b5fa903f25324f872473b675957e9654518ad66987c8",
+  "webEmpaquetada": "ok"
+}

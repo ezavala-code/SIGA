@@ -1,0 +1,790 @@
+GUÍA DE CONSTRUCCIÓN DEL SIGA CON CODEX EN VARIAS SESIONES
+Versión 1.0 | Fecha: 9 de octubre de 2026 | Idioma: español
+
+INSTRUCCIÓN INICIAL PARA CODEX
+Construye el Sistema Integral de Gestión Académica (SIGA) descrito aquí, por
+incrementos funcionales y verificables. Este archivo es la especificación inicial,
+no una afirmación de que exista código. Inspecciona primero el repositorio real.
+No reinicies, sobrescribas ni sustituyas trabajo previo que cumpla lo solicitado.
+Trabaja en una etapa a la vez y conserva el estado en archivos del repositorio.
+No marques una etapa terminada sin comprobar sus criterios de salida.
+
+La solicitud de esta guía no autoriza publicar datos, contratar servicios ni
+enviar mensajes. Para el desarrollo futuro, prioriza instalación y demostración
+locales. Las decisiones rutinarias y reversibles pueden resolverse documentando
+supuestos. Las reglas académicas pendientes deben quedar visibles y configurables.
+
+1. FUENTES, CONTEXTO Y ANÁLISIS DEL MATERIAL
+
+Fuentes locales de este encargo:
+- EntregablesPI-Ing-Software.pdf: documento original de 26 páginas.
+- IMG_20261005_153854.jpg: hoja de la actividad.
+- EntregablesPI-Ing-Software-completado.pdf: copia con implementación, pruebas y
+  capacitación en las páginas 26 a 34; bibliografía en la 35.
+
+La hoja pide una plataforma universitaria con varios programas para gestionar
+estudiantes desde la matrícula hasta la emisión de certificados. Incluye portal
+del estudiante, administración de estudiantes/docentes/asignaturas, matrícula en
+línea, promedios automáticos, prerrequisitos, certificados y enfoque sistémico.
+Sugiere Scrum en Sprints de 2 a 4 semanas y prácticas de XP, parejas y TDD.
+
+El PDF adapta el contexto a CodeShift Empresarial S.A. de C.V., un caso de
+capacitación corporativa en Toluca. Usar ese contexto en la presentación del
+prototipo y mantener los conceptos académicos en el dominio. No afirmar que la
+empresa, su antigüedad o sus operaciones hayan sido verificados externamente.
+Equivalencias: estudiante = participante/cliente; docente = instructor;
+asignatura = curso/módulo; programa = diplomado/programa de capacitación.
+
+Estado observado al preparar esta guía: solo existen PDF y fotografía en la
+carpeta original. No se proporcionó código de aplicación, despliegue ni resultados
+de pruebas. Volver a comprobar este estado al iniciar una sesión futura.
+
+Aspectos bien definidos por el PDF:
+- Arquitectura cliente-servidor en tres capas, monolito modular y monorepositorio.
+- TypeScript, React, NestJS, PostgreSQL y Prisma; pruebas y contenedores.
+- Roles, requisitos RF/RNF, reglas RN, estructura inicial y calendario del curso.
+- Exclusiones de alcance y uso de datos ficticios.
+
+Vacíos o inconsistencias que hay que resolver antes de cerrar el producto:
+A. Persisten referencias a universidad dentro de la adaptación a CodeShift.
+   Aplicar el glosario anterior; no construir dos sistemas o un SaaS multiempresa.
+B. La sección RN-06 remite a una sección 7.2 inexistente. La fórmula correcta
+   documentada está en 2.2: promedio ponderado por créditos.
+C. El cuerpo repite 3.8.1 y difiere de los números del índice en páginas 22-23.
+   Es un problema editorial, no módulos distintos.
+D. La revisión por una persona ajena a la pareja no es posible con solo dos
+   integrantes si ambos programaron. Solicitar revisor académico o registrar la
+   limitación de una revisión cruzada posterior. No inventar aprobaciones.
+E. El plazo del 15 de octubre cae dentro del Sprint 4; certificados y reportes
+   están en el Sprint 5. Ese corte es parcial, no una entrega integral aprobada.
+F. Faltan política de recursamientos, pesos de evaluaciones, escala, fechas de
+   inscripción, elegibilidad precisa del certificado y política de correcciones.
+G. El modelo no desarrolla versiones del plan, auditoría, sesión, instantáneas
+   del certificado ni restricción de matrícula entre grupos de la misma materia.
+H. No hay evidencia de pruebas realizadas. El ejemplo de Jest es ilustrativo.
+I. Conclusiones y recomendaciones siguen pendientes; no derivar resultados de
+   una implementación o capacitación que todavía no se ha demostrado.
+
+Prioridad de decisiones: instrucciones nuevas del usuario > decisiones aprobadas
+registradas > requisitos explícitos de las fuentes > propuestas de esta guía.
+Si una contradicción cambia la validez académica, pedir aclaración concreta;
+mientras tanto avanzar en tareas independientes y usar solo datos ficticios.
+
+2. OBJETIVO, ALCANCE Y PRODUCTO TERMINADO
+
+Construir un portal web adaptable a móviles, en español, con tres perfiles y una
+página pública de verificación. Debe permitir administrar la oferta, matricularse,
+capturar calificaciones, calcular promedios y avance, y emitir PDFs verificables.
+
+Incluye:
+- Autenticación, cierre de sesión, roles y acceso por propiedad/asignación.
+- Estudiantes, docentes, programas, asignaturas, planes, periodos y grupos.
+- Prerrequisitos, cupos, inscripciones y bajas lógicas de catálogos.
+- Calificaciones finales, historial, promedios y progreso.
+- Certificados PDF con QR y consulta pública de estado.
+- Listas de grupo, historial y bitácora de cambios.
+- Pruebas, documentación, ambiente Docker y materiales de capacitación.
+- Correo como mejora opcional posterior, nunca bloqueo de los flujos críticos.
+
+No incluye: cobros, facturación, LMS, tareas, contenidos de cursos, app móvil
+nativa, horarios optimizados, integraciones oficiales, firma electrónica avanzada,
+migración histórica real ni datos personales reales. El PDF emitido es un
+prototipo académico; no atribuirle validez oficial.
+
+Flujo de demostración final:
+1) Administrador crea programa/plan, asignaturas y prerrequisito; abre periodo,
+   asigna docente y define cupo.
+2) Estudiante elegible se inscribe; otro recibe una explicación si no cumple.
+3) Docente asignado publica una calificación; docente ajeno no puede modificarla.
+4) Estudiante consulta historial, promedio y avance coherentes.
+5) Se emite un certificado, se descarga y el QR muestra su estado.
+6) Administrador consulta reportes; cambios relevantes aparecen en auditoría.
+7) Una instalación limpia y un ensayo de restauración reproducen el sistema.
+
+3. REQUISITOS Y CRITERIOS DE ACEPTACIÓN
+
+RF-01 [Must] Inicio/cierre de sesión y acceso según rol.
+  Aceptar credenciales válidas; rechazar inválidas; revocar la sesión al cerrar;
+  impedir operaciones protegidas sin sesión o con usuario inactivo.
+RF-02 [Must] Alta, consulta paginada, edición y baja lógica de estudiantes.
+  Matrícula y correo únicos; la baja conserva historial y bloquea nuevo acceso.
+RF-03 [Must] Gestión de docentes.
+  Número de empleado único; conservar grupos históricos; validar asignaciones.
+RF-04 [Must] Programas, asignaturas, planes y prerrequisitos.
+  Impedir claves duplicadas, prerrequisitos a sí mismos y ciclos; créditos > 0.
+RF-05 [Must] Periodos, grupos, cupos y docentes.
+  Fechas válidas; docente activo; no reducir cupo por debajo de ocupación activa.
+RF-06 [Must] Matrícula en línea.
+  Validar en servidor RN-01 a RN-03 y periodo abierto, incluso con concurrencia.
+RF-07 [Must] Captura y modificación de notas del grupo asignado.
+  Rango válido; autorización por grupo; correcciones auditadas.
+RF-08 [Must] Promedios por periodo y general.
+  Ponderación por créditos, pendientes excluidas, política de recursamiento clara.
+RF-09 [Must] Consulta de notas, historial y avance del propio estudiante.
+  No acceder a otro estudiante cambiando un ID; no duplicar créditos aprobados.
+RF-10 [Must] Emisión PDF/QR y verificación pública.
+  Datos de emisión inmutables, código único, estados vigente/revocado/inexistente.
+RF-11 [Should] Listas de grupo e historial.
+  Datos coherentes con BD; permisos para administrador y docente según grupo.
+RF-12 [Should] Bitácora de cambios.
+  Actor, acción, recurso, fecha y valores pertinentes; nunca contraseñas o tokens.
+RF-13 [Could] Comprobantes por correo.
+  Una falla de correo no deshace una matrícula; probar mediante transporte local.
+
+RNF-01 Seguridad: hash de contraseñas, HTTPS para exposición remota, roles y
+  autorización por recurso. Datos y secretos fuera de registros públicos.
+RNF-02 Usabilidad: interfaz adaptable; teclado, etiquetas, foco visible y mensajes
+  claros. Verificar al menos móvil de 360 px y escritorio de 1366 px.
+RNF-03 Rendimiento: meta original < 2 s en operaciones comunes. Propuesta de
+  medición: p95 < 2 s por operación, errores inesperados < 1 %, 20 usuarios
+  concurrentes, 5 min de carga después de 1 min de calentamiento; base con
+  1 000 estudiantes ficticios y 50 grupos. Registrar hardware, red y versiones.
+  Es un umbral propuesto, sujeto a aceptación, no una garantía de capacidad.
+RNF-04 Confiabilidad: transacciones, restricciones de BD y recuperación probada.
+RNF-05 Mantenibilidad: módulos documentados; mínimo 70 % de líneas y ramas en
+  reglas de negocio, más casos críticos aprobados. No inflar cobertura con tests
+  que únicamente copian la implementación.
+RNF-06 Portabilidad: instalación documentada en equipo compatible con Docker;
+  no prometer que funciona literalmente en cualquier equipo sin requisitos.
+RNF-07 Datos: utilizar únicamente identidades ficticias en semillas y pruebas.
+  Antes de un uso real hará falta una revisión específica de privacidad y alcance.
+
+4. REGLAS DE NEGOCIO Y SUPUESTOS EXPLÍCITOS
+
+Reglas del original:
+RN-01 Todos los prerrequisitos deben estar aprobados.
+RN-02 La ocupación del grupo no debe superar su cupo.
+RN-03 No hay dos inscripciones del mismo estudiante a la misma asignatura en un
+      mismo periodo, aunque intente inscribirse en dos grupos diferentes.
+RN-04 Solo el docente asignado captura las calificaciones del grupo.
+RN-05 La mínima aprobatoria es configurable.
+RN-06 Promedio general ponderado por créditos.
+RN-07 Certificado solo con notas finales y código único por emisión.
+
+Propuestas para el prototipo (registrar como decisiones, no hechos del PDF):
+- Escala 0 a 10, mínima 6, dos decimales. Hacerlas configurables y versionadas.
+- La nota final se captura directamente. Las evaluaciones parciales pueden
+  guardarse como detalle; no inventar ponderaciones sin aprobación del cliente.
+- Una nota pendiente es NULL, no cero. Cero es una nota válida si la escala lo
+  permite. Rechazar NaN, valores fuera de rango y decimales no admitidos.
+- Calcular con Decimal o aritmética precisa; redondear solo al presentar. Evaluar
+  aprobación con la nota almacenada, no con una nota redondeada hacia arriba.
+- Promedio por periodo: sum(notaFinal * creditos) / sum(creditos) de inscripciones
+  calificadas y no canceladas en ese periodo. Incluir reprobadas.
+- Promedio general propuesto: incluir todos los intentos con nota final válida;
+  el historial conserva cada intento. Si el cliente prefiere último o mejor
+  intento, cambiar política y pruebas de forma explícita antes de aceptación.
+- Sin notas: promedio NULL con texto "Sin calificaciones", no 0 ni división / 0.
+- Avance: créditos únicos aprobados del plan / total de créditos del plan * 100.
+  Una materia repetida suma créditos una sola vez; no usar un plan vacío.
+- Un prerrequisito se satisface con al menos un intento final aprobado según
+  la política académica registrada. Evitar que un cambio de escala reinterprete
+  sin control todo el historial: conservar versión/política o estado acreditado.
+- La matrícula exige cuenta, estudiante, plan, periodo y grupo activos; fechas
+  de inscripción abiertas; pertenencia de la asignatura al plan aplicable.
+- Por defecto no hay reinscripción a una materia ya acreditada ni cancelación
+  por autoservicio en el MVP. No inventar límite de créditos o choques de horario.
+- Un estudiante pertenece a un plan vigente específico. Si cambia un plan con
+  historial, crear nueva versión; no recalcular el pasado con créditos nuevos.
+- El MVP emite un certificado de estudios con las asignaturas calificadas,
+  incluidas las reprobadas, de acuerdo con RN-07. No denominarlo acreditación
+  completa del diplomado. Un certificado de conclusión exigiría 100 % de avance
+  y una política adicional aprobada. No emitir documentos vacíos.
+- Si cambia una nota después de emitir, no modificar el PDF anterior. Revocar
+  y emitir otro con motivo y vínculo de sustitución cuando corresponda.
+- La verificación pública muestra código, tipo, fecha, programa, estado y nombre
+  ficticio abreviado; no correo, matrícula completa ni expediente detallado.
+
+Ejemplo de referencia: notas 8 (6 créditos) y 9 (4 créditos) dan 8.40. Si el
+plan tiene 30 créditos, esos 10 aprobados dan 33.33 % de avance. Añadir una nota
+pendiente no cambia promedio ni créditos aprobados. Probar aparte reprobaciones.
+
+5. TECNOLOGÍAS, CONOCIMIENTOS Y ENTORNO
+
+Conservar la pila seleccionada en el documento; no migrar a otro lenguaje por
+preferencia de una sesión nueva:
+- TypeScript en todo el código; React + Vite, React Router, TanStack Query y
+  Tailwind CSS para web.
+- Node.js + NestJS para API; class-validator, Helmet, JWT y bcrypt.
+- PostgreSQL + Prisma para persistencia y migraciones.
+- pdf-lib y qrcode para certificados (elección propuesta entre alternativas).
+- Jest/Supertest, Vitest/Testing Library y Playwright para pruebas.
+- ESLint, Prettier, Git, Docker Compose y GitHub Actions.
+- npm workspaces y un único package-lock.json como propuesta de gestión.
+
+En etapa 0 comprobar versiones estables soportadas y compatibilidad consultando
+documentación oficial. Elegir una versión LTS de Node compatible con Vite,
+NestJS y Prisma; fijarla en .node-version o equivalente, engines y contenedores.
+Fijar PostgreSQL, gestor de paquetes y dependencias; evitar etiquetas "latest".
+No asumir vigentes los planes gratuitos citados en el PDF. El camino local no
+depende de contratar alojamiento ni de una API de IA.
+
+Conocimientos necesarios:
+- JavaScript/TypeScript: async/await, módulos, tipos, errores y validación.
+- HTTP/REST: estados, cookies, CORS, CSRF, autorización y contratos de API.
+- React: formularios, rutas, estados de carga/error, caché e invalidación.
+- NestJS: módulos, controladores, servicios, guards, pipes y DI.
+- SQL: claves, índices, normalización, transacciones, aislamiento y bloqueos.
+- Git: ramas, diffs, commits, conflictos; jamás descartar cambios del usuario.
+- Docker: imágenes, servicios, redes, healthchecks y volúmenes persistentes.
+- TDD y pruebas de integración reales; depuración basada en reproducciones.
+- Dominio: plan, crédito, prerrequisito, periodo, grupo, intento e historial.
+
+Equipo de desarrollo orientativo: Windows con Docker Desktop/WSL2 o Linux/macOS
+compatible; Git y editor; navegador; conexión para descargar dependencias.
+Propuesta de capacidad inicial: 8 GB RAM mínimo, 16 GB preferible, 10 GB libres.
+Son estimaciones de preparación, no mediciones del sistema. Registrar lo probado.
+
+Separar configuración de desarrollo, test y demo. Variables propuestas:
+NODE_ENV, PORT, DATABASE_URL, TEST_DATABASE_URL, JWT_SECRET, JWT_TTL,
+WEB_ORIGIN, PUBLIC_WEB_URL, STORAGE_PATH, COOKIE_SECURE y, solo si se implementa
+correo, SMTP_HOST/PORT/USER/PASSWORD. Documentar cada una en .env.example sin
+secretos. Los parámetros académicos versionados van en BD, no solo en .env.
+Un comando de prueba nunca debe aceptar la base de demostración o producción.
+
+6. ARQUITECTURA Y ESTRUCTURA PROPUESTA DEL CÓDIGO
+
+siga/
+|-- AGENTS.md                    Reglas persistentes para futuras sesiones
+|-- README.md                    Instalación, comandos, flujos y estado real
+|-- GUIA_CONSTRUCCION_SIGA_CODEX.txt
+|-- package.json                 Workspaces y comandos comunes
+|-- package-lock.json            Dependencias reproducibles
+|-- .node-version
+|-- .env.example
+|-- .gitignore
+|-- docker-compose.yml           Desarrollo/demo local
+|-- docker-compose.test.yml      Base aislada para integración
+|-- apps/
+|   |-- api/
+|   |   |-- Dockerfile
+|   |   |-- package.json
+|   |   |-- prisma/
+|   |   |   |-- schema.prisma
+|   |   |   |-- migrations/
+|   |   |   `-- seed.ts          Solo datos ficticios, ejecución controlada
+|   |   |-- src/
+|   |   |   |-- main.ts
+|   |   |   |-- app.module.ts
+|   |   |   |-- config/          Validación de variables
+|   |   |   |-- database/        Prisma y transacciones
+|   |   |   |-- common/          Guards, filtros, decoradores y paginación
+|   |   |   `-- modules/
+|   |   |       |-- auth/        Sesiones, JWT y permisos
+|   |   |       |-- usuarios/    Cuentas y bajas
+|   |   |       |-- estudiantes/
+|   |   |       |-- docentes/
+|   |   |       |-- programas/
+|   |   |       |-- planes/
+|   |   |       |-- asignaturas/ Prerrequisitos y detección de ciclos
+|   |   |       |-- periodos/
+|   |   |       |-- grupos/
+|   |   |       |-- matriculas/  Operación transaccional
+|   |   |       |-- calificaciones/
+|   |   |       |-- progreso/    Promedios y créditos
+|   |   |       |-- certificados/
+|   |   |       |-- reportes/
+|   |   |       |-- auditoria/
+|   |   |       `-- health/
+|   |   `-- test/                Integración API con PostgreSQL
+|   `-- web/
+|       |-- Dockerfile
+|       |-- package.json
+|       `-- src/
+|           |-- app/            Proveedores y configuración
+|           |-- routes/         Públicas y por rol
+|           |-- layouts/        Navegación de cada perfil
+|           |-- features/       Funciones del dominio y pantallas
+|           |-- components/     Formularios, tablas, diálogos y estados
+|           |-- services/       Cliente HTTP central, manejo de errores
+|           |-- hooks/
+|           `-- test/
+|-- packages/
+|   `-- contracts/              DTO/tipos públicos; sin Prisma en navegador
+|-- tests/
+|   |-- e2e/                    Playwright
+|   `-- performance/            Carga documentada y verificable
+|-- scripts/
+|   |-- backup.ps1
+|   |-- restore.ps1
+|   `-- smoke.ps1
+|-- docs/
+|   |-- ESTADO.md               Punto de control obligatorio
+|   |-- BACKLOG.md              Historias/etapas y criterios
+|   |-- DECISIONES.md           Supuestos y acuerdos
+|   |-- arquitectura.md
+|   |-- modelo-datos.md
+|   |-- reglas-negocio.md
+|   |-- api/                   Contrato OpenAPI
+|   |-- pruebas/               Plan y trazabilidad
+|   |-- evidencias/            Reportes reales por versión
+|   |-- sesiones/              Bitácoras breves por sesión
+|   `-- manuales/              Usuario, técnico y capacitación
+`-- .github/workflows/ci.yml
+
+Crear carpetas al necesitarlas; no llenar el repositorio con archivos vacíos.
+En cada módulo separar controller (HTTP), dto (entradas), service (casos de uso)
+y reglas puras de dominio cuando ayude a probarlas. La BD se accede desde la API.
+No introducir microservicios, colas o un sistema de plugins para este alcance.
+Nombres del dominio en español sin tildes en rutas/archivos; variables camelCase,
+clases/componentes PascalCase. Interfaz y mensajes en español correcto.
+
+7. DATOS, RESTRICCIONES Y CONCURRENCIA
+
+Modelo mínimo a desarrollar y documentar:
+- Usuario: UUID, correo normalizado único, passwordHash, rol, activo, timestamps.
+- Sesion: ID, usuario, expiración y revocación. El JWT identifica esta sesión.
+- Estudiante: usuario único, matrícula única, nombre, plan, fecha ingreso, estado.
+- Docente: usuario único, empleado único, nombre, departamento, estado.
+- Programa: clave única, nombre y estado.
+- PlanEstudio: programa, versión y estado. Unicidad programa+versión.
+- Asignatura: clave única, nombre y estado.
+- PlanAsignatura: plan, asignatura, créditos positivos y semestre sugerido;
+  unicidad plan+asignatura. De aquí se deriva el total de créditos.
+- Prerrequisito: plan, asignatura destino y requerida; ambas deben estar en el
+  plan. Par único, sin autorrelación ni ciclos transitivos.
+- PoliticaAcademica: versión, escala, mínima, decimales y recursamientos.
+- Periodo: clave única, fechas lectivas y de inscripción, estado y política.
+- Grupo: asignatura del plan, periodo, docente, clave, cupo positivo y estado.
+- Inscripcion: estudiante, grupo, asignatura, periodo, estado, notaFinal nullable,
+  créditos y política aplicables al intento, fecha y versión para concurrencia.
+- Calificacion: inscripción, tipo de evaluación, valor, autor y fecha, solo si
+  se implementa detalle de evaluaciones. Una única fuente para la nota final.
+- Certificado: estudiante, tipo, código aleatorio único, estado, fecha, instantánea
+  de datos, ubicación del PDF, sha256 del archivo, revocación y sustitución.
+- Auditoria: actor, acción, recurso, instante, motivo y cambios relevantes.
+
+Decisión simplificadora propuesta: mantener un registro de inscripción por
+estudiante+asignatura+periodo. Si en el futuro se autoriza cancelación y vuelta
+a inscribir, modificar el mismo registro con auditoría dentro de una transacción,
+o diseñar explícitamente un índice parcial para activas. No perder la unicidad.
+
+No basta UNIQUE(estudianteId, grupoId), pues deja matricularse en dos grupos de
+la misma asignatura y periodo. Si se redundan asignaturaId y periodoId en
+Inscripcion, garantizar que coincidan con Grupo mediante clave foránea compuesta
+o un diseño equivalente comprobable. Agregar restricciones CHECK mediante
+migraciones SQL si Prisma no expresa una restricción necesaria.
+
+Estrategia propuesta para matrícula:
+1. Obtener el estudiante desde la sesión, nunca confiar en un estudianteId libre.
+2. Abrir transacción; serializar solicitudes del mismo estudiante con bloqueo de
+   su fila y bloquear el grupo objetivo. Mantener el mismo orden de bloqueos.
+3. Dentro de la transacción comprobar vigencia, periodo, plan, prerrequisitos,
+   unicidad y contar ocupación activa bajo el bloqueo del grupo.
+4. Crear inscripción y auditoría pertinente; confirmar una sola vez.
+5. Traducir violación de unicidad y cupo agotado a un conflicto entendible.
+6. Si se usa aislamiento serializable, implementar reintentos acotados para
+   conflictos transitorios; no repetir indefinidamente ni ocultar errores.
+
+Toda operación que cambie ocupación o cupo debe respetar este protocolo.
+Proteger también cambios concurrentes de estado del periodo y elegibilidad,
+mediante aislamiento/bloqueos o política de edición definida. Documentar el
+orden de bloqueo y probarlo. Una prueba de concurrencia debe usar PostgreSQL
+real, no un mock en memoria ni SQLite.
+
+Semillas: al menos 2 docentes, 4 estudiantes, 2 programas, planes coherentes,
+asignaturas con créditos distintos, una cadena de prerrequisitos, periodo
+abierto/cerrado, grupo lleno, último cupo, aprobaciones y notas pendientes.
+No guardar una contraseña de demostración reutilizable para despliegue remoto;
+proveer credenciales solo en el entorno local de prueba y explicar su creación.
+
+8. API, SEGURIDAD, INTERFAZ Y CERTIFICADOS
+
+Mantener nombres de rutas base del original; documentar todas en OpenAPI:
+POST /auth/login; POST /auth/logout; GET /auth/me.
+GET/POST /estudiantes; GET/PATCH/DELETE /estudiantes/:id (baja lógica).
+Rutas equivalentes para docentes, programas, planes, asignaturas, periodos y grupos.
+POST /matriculas {grupoId}; GET /matriculas/me.
+GET /docentes/me/grupos; GET /grupos/:id/inscripciones.
+PUT /calificaciones/:id para la nota de una inscripción, con contrato inequívoco
+  sobre qué representa :id; registrar la decisión en OpenAPI antes de implementarlo.
+GET /estudiantes/me/calificaciones; GET /estudiantes/me/historial.
+GET /estudiantes/me/progreso.
+POST /certificados; GET /certificados/me; GET /certificados/:id/pdf.
+POST /certificados/:id/revocar (administrador, motivo obligatorio).
+GET /certificados/verificar/:codigo (público, respuesta mínima).
+GET /reportes/grupos/:id; GET /reportes/estudiantes/:id/historial.
+GET /auditoria (administrador, paginado); GET /health (sin secretos).
+
+Respuestas: 201 creación; 200 consulta/actualización; 204 cierre o baja sin cuerpo;
+400 entrada inválida; 401 no autenticado; 403 sin permiso; 404 recurso ausente;
+409 conflicto de cupo/duplicidad/versión. Definir formato uniforme de error con
+code, message, detalles de validación seguros y requestId. No enviar stack traces.
+Para un recurso ajeno se puede usar 404 si el contrato evita revelar su existencia.
+
+Matriz resumida:
+- Administrador: catálogos, oferta, cuentas, reportes y emisión autorizada.
+- Docente: sus grupos/listas y sus notas; ningún permiso global por ser docente.
+- Estudiante: su matrícula, historial, progreso y certificados.
+- Público: únicamente verificación mínima por código.
+No otorgar automáticamente captura de notas al administrador: RN-04 la limita
+al docente. Una excepción exige decisión explícita y auditoría.
+
+Sesiones propuestas: JWT de vida corta en cookie HttpOnly; Secure en HTTPS;
+SameSite y CORS con orígenes explícitos. Asociar JWT con Sesion revocable y
+comprobar estado de usuario/sesión para cierre efectivo. Usar protección CSRF
+en operaciones mutables cuando se autentica con cookie; no asumir que CORS
+resuelve CSRF. Evitar tokens persistentes en localStorage. Usar proxy de mismo
+origen cuando simplifique despliegue, documentando desarrollo y HTTPS remoto.
+Agregar validación estricta de DTO, límites de solicitud e intentos de login,
+bcrypt, consultas parametrizadas, cabeceras seguras y gestión de secretos.
+
+Interfaz:
+- Login; navegación y panel por rol.
+- Estudiante: oferta, detalle/requisitos/cupo, confirmación, historial, progreso,
+  certificados y mensajes de rechazo útiles.
+- Docente: grupos, lista y formulario de notas con confirmación/errores por fila.
+- Administrador: formularios y tablas con búsqueda, filtros y paginación.
+- Verificación: estado y datos mínimos, también accesible sin sesión.
+Cada pantalla incluye carga, vacío, error recuperable y éxito; no usar datos
+simulados permanentes cuando la API ya existe. Invalidar la caché tras cambios.
+No mostrar controles de un rol como sustituto de autorización del servidor.
+
+Certificados:
+1. Comprobar propiedad/permisos y notas finales; tomar instantánea coherente.
+2. Asignar código no predecible, generar PDF con folio, fecha, tipo, datos y QR.
+3. Guardar archivo fuera del directorio público y calcular SHA-256 de sus bytes.
+4. Registrar metadatos y marcar listo solo cuando archivo y registro sean válidos;
+   limpiar archivos huérfanos si falla la persistencia.
+5. Descarga autenticada salvo endpoint explícitamente autorizado. Volumen
+   persistente para que reiniciar contenedores no borre certificados.
+6. El QR consulta el registro; no demuestra integridad de cualquier PDF escaneado.
+   Para comprobar un archivo particular hay que comparar su hash con el emitido.
+   El MVP puede ofrecer esa comprobación solo en pruebas/técnicamente documentada.
+7. Revocación visible; no cambiar datos históricos del PDF ya emitido.
+
+9. PLAN DE PRUEBAS Y EVIDENCIA
+
+Unidades: funciones de elegibilidad, promedio, avance, límites y ciclos.
+Integración: API + PostgreSQL real, permisos y restricciones/transacciones.
+Componentes: formularios, mensajes, estados y accesibilidad básica.
+E2E: escenario integral de los tres roles y verificación pública.
+Seguridad: IDOR/datos ajenos, cambio de rol manipulado, sesión revocada/vencida,
+usuario dado de baja, acceso directo al PDF, CSRF y entradas inválidas.
+Operación: instalación limpia, persistencia al reiniciar y restauración.
+Rendimiento: usar carga y umbrales RNF-03 con herramienta documentada.
+
+Casos mínimos alineados al capítulo agregado:
+CP-01 Autenticación válida/inválida, token vencido y cierre efectivo.
+CP-02 Catálogos, duplicados y baja conservando historial.
+CP-03 Prerrequisitos faltantes y luego cumplidos.
+CP-04 Dos estudiantes compiten por un lugar: uno entra, el otro no.
+CP-05 Mismo estudiante, misma materia/periodo, grupos distintos en paralelo:
+      una inscripción persistida y una sola ocupación.
+CP-06 Docente propio puede calificar; docente ajeno no altera datos.
+CP-07 Estudiante no accede a historial/certificado de otro cambiando ID.
+CP-08 Periodo cerrado, fechas fuera de ventana y estudiante inactivo.
+CP-09 Límites de escala y mínima; 6 aprueba y 5.99 no con política propuesta.
+CP-10 Promedio 8.40 del ejemplo; NULL excluido; cero válido; denominador vacío.
+CP-11 Avance 33.33 %, recursamientos sin doble crédito y plan versionado.
+CP-12 PDF/QR, código inexistente/revocado, instantánea tras corrección, hash.
+CP-13 Listas/historial correctos y bitácora de modificación de nota.
+CP-14 Móvil/escritorio y carga RNF-03.
+CP-15 Instalación y respaldo/restauración con comparación de datos/archivos.
+Añadir pruebas de ciclos de prerrequisitos, reducción de cupo, corrección
+concurrente de notas y no exposición de secretos; no limitarse a casos felices.
+
+Estados posibles: NO EJECUTADA, APROBADA, FALLIDA, BLOQUEADA. Un test que no se
+pudo correr por falta de Docker no es aprobado. Conservar comando, fecha, commit,
+entorno, salida, código de retorno, resultados y enlace al archivo de evidencia.
+En CI ejecutar lint, typecheck, unitarias, integración y build; E2E con servicios
+disponibles. Configurar umbral de cobertura solo para módulos de reglas, sin
+excluir sus ramas difíciles. Auditoría de dependencias con análisis de hallazgos.
+
+Trazabilidad por fila:
+Requisito | Caso | Tipo | Archivo del test | Commit | Estado | Evidencia | Incidencia.
+No inventar capturas, porcentajes, tiempos, asistencia ni aprobaciones del profesor.
+Una captura bonita no sustituye una comprobación de datos o permisos.
+
+10. ETAPAS DE CONSTRUCCIÓN Y MODELO PARA CADA ETAPA
+
+Las elecciones siguientes son recomendaciones de trabajo para este proyecto,
+no requisitos del software. Codex construye el sistema; el SIGA no necesita
+integrar una API de IA para operar. Consultar disponibilidad en el selector.
+
+Clave de modelos (documentación oficial consultada el 09/10/2026):
+S = GPT-6.1 Sol (gpt-6.1-sol), para construcción habitual.
+A = GPT-6 Astra (gpt-6-astra), para decisiones críticas y revisiones complejas.
+L = GPT-6 Luna (gpt-6-luna), para tareas acotadas y repetibles.
+La asignación por etapa es una propuesta propia. Usar razonamiento medio en S,
+bajo inicialmente en A y alto en L; elevarlo ante problemas difíciles. Si un
+modelo no está disponible, usar el S disponible o el modelo competente de la
+cuenta y dividir más las tareas. Evitar Max/Ultra por defecto para cuidar consumo.
+No hay una cantidad de tokens o sesiones garantizada.
+
+E00. INVENTARIO Y DECISIONES
+Modelo: S; recurrir a A si las reglas contradictorias no se pueden resolver.
+Dependencias: ninguna.
+Trabajo: leer fuentes y estado real; identificar instrucciones AGENTS.md;
+documentar glosario, alcance, supuestos, política académica, modelo y backlog.
+Crear ESTADO.md, DECISIONES.md y AGENTS.md; fijar versiones compatibles.
+Salida: decisiones propuestas/aprobadas diferenciadas, diagrama y etapas claras.
+Verificación: cada RF/RN/RNF tiene destino y no hay reglas críticas ocultas.
+
+E01. BASE EJECUTABLE
+Modelo: S.
+Dependencia: E00.
+Trabajo: npm workspaces, web/API mínimas, Docker, PostgreSQL, healthcheck,
+validación de entorno, lint/typecheck/build y CI inicial.
+Salida: README y .env.example; web se conecta a API y esta a una BD aislada.
+Verificación: instalación limpia desde el procedimiento; comandos funcionan.
+
+E02. DATOS Y MIGRACIONES
+Modelo: S; A para revisar restricciones y política de plan/historial.
+Dependencia: E01.
+Trabajo: esquema, claves/índices/checks, migraciones, semillas y aislamiento test.
+Salida: diagrama actualizado y datos ficticios reproducibles.
+Verificación: migrar BD vacía, rechazar duplicados/relaciones inválidas y
+demostrar que una prueba no puede apuntar a la BD de demo.
+
+E03. AUTENTICACIÓN Y PERMISOS
+Modelo: S; revisión de seguridad con A si queda una duda relevante.
+Dependencia: E02.
+Trabajo: login/logout, JWT/sesión revocable, hashes, roles, cookies/CSRF,
+guards por recurso, límites de login y pantallas básicas.
+Salida: navegación real por rol, sin credenciales expuestas.
+Verificación: CP-01, cuentas inactivas, cierre y accesos directos no autorizados.
+
+E04. CATÁLOGOS Y PLANES
+Modelo: S; L para formularios repetidos una vez fijado y probado el patrón.
+Dependencia: E03.
+Trabajo: estudiantes, docentes, programas, asignaturas, planes/prerrequisitos;
+bajas lógicas, filtros, paginación y detección de ciclos.
+Salida: administrador prepara un plan y participantes desde interfaz.
+Verificación: CP-02, claves únicas, ciclos y conservación de historial.
+
+E05. PERIODOS Y GRUPOS
+Modelo: S.
+Dependencia: E04.
+Trabajo: fechas de inscripción, cupos, asignación y vistas de oferta/grupos.
+Salida: oferta lista para matrícula; docente ve solo grupos asignados.
+Verificación: CP-08 parcial, capacidad válida y cambios de cupo controlados.
+
+E06. MATRÍCULA TRANSACCIONAL
+Modelo: A por la interacción de reglas y solicitudes concurrentes.
+Dependencia: E05.
+Trabajo: RN-01/02/03, bloqueos o aislamiento, conflictos, transacciones, UI.
+Salida: inscripción completa sin sobrecupo ni duplicados entre grupos.
+Verificación: CP-03/04/05/08 contra PostgreSQL; consulta final de filas y cupos;
+reintentos acotados y ausencia de registros parciales tras error.
+
+E07. CALIFICACIONES Y AVANCE
+Modelo: S; A si aparecen conflictos en recursamientos o concurrencia de notas.
+Dependencia: E06 y política académica explícita.
+Trabajo: captura/publicación, cambios auditados, cálculos precisos, historial,
+progreso y permisos de docente/estudiante.
+Salida: consulta completa desde una inscripción calificada.
+Verificación: CP-06/07/09/10/11; valores de referencia calculados a mano,
+NULL, cero, reprobación, repetición y denominador vacío.
+
+E08. CERTIFICADOS Y REPORTES
+Modelo: S; A para revisar integridad de emisión/permisos si es necesario.
+Dependencia: E07.
+Trabajo: PDF, QR, instantánea, almacenamiento persistente, hash, revocación,
+verificación pública mínima, listas e historial imprimible/exportable.
+Salida: RF-10/11/12; RF-13 solo cuando los Must ya están verificados.
+Verificación: CP-12/13, descarga ajena bloqueada, QR real y recuperación de PDFs.
+
+E09. VALIDACIÓN INTEGRAL
+Modelo: A para revisar riesgos y brechas; S para correcciones concretas.
+Dependencia: E03-E08.
+Trabajo: E2E, regresión, seguridad, carga, accesibilidad y móvil/escritorio;
+matriz de trazabilidad y corrección de defectos críticos.
+Salida: reporte real, cobertura de reglas >= 70 % y sin defectos críticos.
+Verificación: todos los casos definidos ejecutados o pendientes claramente
+justificados; no concluir éxito si faltan dependencias para probar.
+
+E10. DESPLIEGUE REPRODUCIBLE Y RECUPERACIÓN
+Modelo: S.
+Dependencia: E09.
+Trabajo: imagen/versión, instrucciones, configuración segura, healthchecks,
+volúmenes, respaldos, restauración y reversión compatible con migraciones.
+Salida: demo local reproducible; hosting remoto solo con alcance autorizado.
+Verificación: CP-15 en instalación/copia limpia, conteos y archivos iguales,
+pruebas de humo; no borrar volúmenes para "arreglar" un despliegue existente.
+
+E11. CAPACITACIÓN Y ENTREGA
+Modelo: L para manuales desde funciones verificadas; S para validación final.
+Dependencia: E10; la capacitación inicial puede usar el incremento ya liberado.
+Trabajo: manuales por rol, técnico, ejercicios, evaluación, material de video,
+registro de pendientes, versión de entrega y demostración.
+Salida: paquete de instalación, códig o, documentación y evidencia trazable.
+Verificación: otra persona sigue el manual; evaluación práctica >= 80 % y
+100 % en tareas críticas. Registrar asistencia y resultados solo si ocurrieron.
+
+Cada etapa puede necesitar varias sesiones. Dividirla por casos de uso pequeños,
+por ejemplo E06-A reglas puras, E06-B transacción/API, E06-C UI y E06-D pruebas
+concurrentes. Cada subetapa debe dejar un estado consistente y verificable.
+
+Correspondencia orientativa con el calendario académico original:
+Sprint 1 (24 ago-4 sep): E00-E03; revisión 7 sep.
+Sprint 2 (7-18 sep): E04; revisión 21 sep.
+Sprint 3 (21 sep-2 oct): E05-E06; metodología 5 oct.
+Sprint 4 (5-16 oct): E07, pruebas continuas y formación inicial; corte 15 oct,
+revisión 19 oct. No presentar E08 como terminado si aún está pendiente.
+Sprint 5 (19 oct-6 nov): completar progreso/E08-E11; conclusiones preliminares
+26 oct; cierre integral 9 nov. Esta correspondencia NO acredita avance pasado.
+Si se comienza después de esas fechas, reestimar desde el estado real.
+
+11. CONTINUIDAD ENTRE SESIONES Y CONTROL DEL CONSUMO
+
+Un archivo de instrucciones conserva contexto del proyecto, pero no aumenta la
+cuota ni garantiza continuidad automática cuando se agota el uso. Al recuperar
+acceso, abrir la misma carpeta con sus archivos y dar el prompt de reanudación.
+Si se trabaja en otro equipo, copiar/clonar también código, lockfile, migraciones
+y docs; volver a pasar solo este TXT no contiene el código construido después.
+
+Protocolo al INICIAR una sesión:
+1. Leer AGENTS.md, esta guía, docs/ESTADO.md y decisiones pertinentes.
+2. Inspeccionar git status, último commit y cambios sin confirmar; si no existe
+   repositorio, no inventar historial. Preservar todos los cambios ajenos.
+3. Confirmar etapa actual, dependencias, comando de arranque y pruebas disponibles.
+4. Elegir una sola unidad pequeña y sus criterios de salida; evitar reanalizar
+   todo el PDF cuando las decisiones ya están documentadas y siguen vigentes.
+5. Ejecutar lo necesario para comprobar el estado; retomar lo pendiente.
+
+Durante la sesión:
+- Actualizar ESTADO.md tras cada subetapa o cambio de decisión importante, no
+  esperar al último token. Una interrupción abrupta puede impedir escribir cierre.
+- Leer archivos relevantes con búsquedas acotadas; no volcar node_modules, bases,
+  binarios, todos los logs ni informes enormes al chat.
+- Implementar y verificar antes de expandir alcance; no cambiar arquitectura
+  porque una sesión nueva prefiera otro framework.
+- Si el usuario pide commits, hacerlos pequeños y coherentes; si no, dejar los
+  cambios guardados y el diff descrito. No requerir un commit para poder retomar.
+- No hacer reset --hard, clean, force push, borrados de volúmenes ni migraciones
+  destructivas para ocultar problemas. Detener la acción destructiva y explicarla.
+- Guardar secretos fuera de Git y fuera de ESTADO.md. No incluir bases reales.
+- Solicitar el cambio de modelo al usuario/selector cuando proceda; escribir el
+  nombre en el prompt no garantiza que el cliente cambie de modelo.
+
+Protocolo al CERRAR o antes de llegar al límite:
+1. Guardar todos los cambios concretos y registrar archivos incompletos.
+2. Ejecutar las verificaciones pertinentes; distinguir aprobadas de no ejecutadas.
+3. Actualizar ESTADO.md, BACKLOG.md y DECISIONES.md si cambió un acuerdo.
+4. Guardar evidencia o rutas de reportes, sin inventar resultados.
+5. Escribir siguiente tarea concreta, archivos, dependencias y comando inicial.
+6. Informar de cambios sin commit, procesos/puertos activos y migraciones pendientes.
+
+PLANTILLA OBLIGATORIA PARA docs/ESTADO.md
+Fecha y hora:
+Etapa/subetapa actual:
+Estado: NO INICIADA / EN CURSO / VERIFICADA / BLOQUEADA
+Objetivo de esta subetapa:
+Último commit (si existe):
+Cambios locales sin commit y autoría conocida:
+Funciones que existen y funcionan (con evidencia):
+Archivos creados o modificados:
+Decisiones y supuestos relevantes:
+Comandos ejecutados y resultado/código de salida:
+Pruebas aprobadas, fallidas y no ejecutadas:
+Evidencia y ubicación:
+Migraciones aplicadas y base de destino (sin secretos):
+Errores o riesgos concretos:
+Próxima tarea pequeña y criterio de salida:
+Primeros archivos que leer en la próxima sesión:
+Comando para arrancar/reproducir:
+Procesos activos y puertos, si aplica:
+Modelo recomendado para continuar:
+
+PLANTILLA PARA docs/DECISIONES.md
+ID | Fecha | Tema | Propuesta/aceptada | Decisión | Motivo | Impacto | Pruebas
+No convertir una propuesta en aceptada sin respaldo. Registrar qué instrucción
+o validación la confirmó. Si solo es una elección técnica reversible, indicarlo.
+
+CONTENIDO MÍNIMO QUE CODEX DEBE CREAR EN AGENTS.md
+- Leer ESTADO.md antes de modificar y actualizarlo al terminar una subetapa.
+- Conservar stack, glosario, IDs RF/RN/RNF y decisiones aprobadas.
+- Usar datos ficticios; no publicar secretos ni inventar evidencia.
+- Servidor autoriza por rol y recurso; matrícula transaccional; notas precisas.
+- Ejecutar pruebas proporcionales y documentar lo no ejecutado.
+- Preservar cambios del usuario y no reiniciar el proyecto al abrir otra sesión.
+- Comandos reales y verificados del repositorio, cuando ya existan.
+
+12. PROMPTS LISTOS PARA COPIAR
+
+PRIMERA SESIÓN
+"Lee GUIA_CONSTRUCCION_SIGA_CODEX.txt completa y las instrucciones AGENTS.md que
+apliquen. Inspecciona la carpeta antes de crear nada. Realiza E00 y deja archivos
+persistentes de estado, decisiones y backlog. Distingue requisitos del documento
+y supuestos propuestos. No construyas todas las etapas de una sola vez. Si ya hay
+código, evalúa su estado y conserva lo útil. Termina con una tarea concreta para
+la próxima sesión y un ESTADO.md actualizado."
+
+SIGUIENTE ETAPA O SESIÓN
+"Retoma el SIGA. Lee AGENTS.md, GUIA_CONSTRUCCION_SIGA_CODEX.txt, docs/ESTADO.md y
+las decisiones pertinentes. Inspecciona cambios sin commit. Continúa la próxima
+subetapa pendiente y completa sus criterios de salida. Implementa código real,
+ejecuta las pruebas necesarias y guarda evidencia. No rehagas lo terminado ni
+amplíes el alcance. Antes de cerrar actualiza ESTADO.md y el backlog con el
+resultado real y la siguiente tarea."
+
+DESPUÉS DE UN CORTE POR LÍMITE DE USO O CONTEXTO
+"La sesión anterior se interrumpió. Reconstruye el estado desde los archivos,
+git status/diff y docs/ESTADO.md. No asumas que el último checkpoint refleja
+todos los cambios: revisa archivos incompletos, migraciones y procesos. Verifica
+el último incremento antes de continuar. Conserva trabajo existente y documenta
+las diferencias encontradas. Retoma solo la próxima tarea pendiente."
+
+CIERRE PREVENTIVO
+"Guarda un punto de control ahora. Registra lo implementado, lo incompleto,
+archivos modificados, pruebas y resultados, decisiones, errores reproducibles
+y el siguiente paso exacto en docs/ESTADO.md. No declares terminada una etapa
+sin sus verificaciones. No borres cambios ni intentes terminar todo el proyecto."
+
+REVISIÓN DE UNA ETAPA
+"Revisa E__ contra los RF, RN y RNF de la guía. Busca errores de datos, permisos,
+concurrencia y supuestos no documentados. Reproduce hallazgos cuando sea posible.
+Corrige lo que pertenece a esta etapa, ejecuta regresión pertinente y actualiza
+trazabilidad y ESTADO.md. Distingue revisión de código y ejecución real."
+
+13. COMANDOS Y CONTRATO DE ENTREGA
+
+La etapa E01 debe crear y verificar estos comandos, o documentar equivalentes.
+Todavía son un contrato propuesto, no comandos ya disponibles en esta carpeta:
+npm ci                 Instalar exactamente el lockfile.
+npm run dev            Iniciar web y API de desarrollo.
+npm run lint           Verificar estilo y reglas de código.
+npm run typecheck      Comprobar TypeScript sin emitir archivos.
+npm run test:unit      Pruebas unitarias y componentes.
+npm run test:integration  API contra PostgreSQL aislado.
+npm run test:e2e       Flujos completos con servicios disponibles.
+npm run test:coverage  Cobertura de reglas de negocio.
+npm run build         Compilar aplicaciones.
+npm run db:migrate:dev Crear/aplicar migraciones en desarrollo.
+npm run db:migrate:deploy Aplicar migraciones existentes en demo.
+npm run db:seed        Cargar datos ficticios con resguardos de entorno.
+docker compose up --build  Levantar demo local según README.
+
+No ejecutar semillas, resets ni restauraciones sobre una BD no identificada.
+Los scripts de respaldo/restauración deben validar destino, informar qué harán
+y proteger datos existentes. La evidencia de instalación debe probar también
+persistencia después de reiniciar servicios sin eliminar volúmenes.
+
+Definición de entrega final:
+[ ] RF-01 a RF-10 implementados y aceptados; RF-11/12 cerrados o pendientes
+    menores explícitamente acordados, con justificación; RF-13 opcional.
+[ ] RN-01 a RN-07 comprobadas con límites y concurrencia.
+[ ] Trazabilidad, cobertura y pruebas críticas aprobadas; sin defectos críticos.
+[ ] Instalación, migraciones, semillas y recuperación reproducibles.
+[ ] Manual por rol, manual técnico, materiales y evaluación de capacitación.
+[ ] PDF/QR funciona, indica carácter académico y no expone datos indebidos.
+[ ] README y ESTADO.md describen la realidad, incluyendo limitaciones.
+[ ] Código y documentación guardados; secretos y datos reales excluidos.
+[ ] Demostración integral revisada; acta/aceptación solo si ocurrió realmente.
+
+14. FUENTES OFICIALES PARA LAS RECOMENDACIONES DE CODEX
+
+Consultadas el 9 de octubre de 2026; revisar de nuevo si cambia disponibilidad:
+https://learn.chatgpt.com/docs/models
+https://developers.openai.com/api/docs/guides/model-selection
+
+La documentación recomienda Sol para trabajo complejo de programación, Luna
+para tareas delimitadas y Astra para los casos más exigentes. La disponibilidad
+depende de cuenta, cliente y configuración. En CLI se puede usar /model; en la
+aplicación, el selector de modelo. Ejemplo, si está disponible:
+codex --model gpt-6.1-sol
+
+La distribución por etapas, los checkpoints y los supuestos de dominio de este
+archivo son recomendaciones específicas del proyecto, no promesas del producto.
+FIN DE LA GUÍA

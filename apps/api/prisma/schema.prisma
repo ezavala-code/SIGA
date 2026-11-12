@@ -1,0 +1,382 @@
+generator client {
+  provider            = "prisma-client"
+  output              = "../src/generated/prisma"
+  moduleFormat        = "esm"
+  importFileExtension = "js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Rol {
+  ADMINISTRADOR
+  DOCENTE
+  ESTUDIANTE
+}
+
+enum EstadoEstudiante {
+  ACTIVO
+  INACTIVO
+  EGRESADO
+}
+
+enum EstadoPeriodo {
+  PLANIFICADO
+  ABIERTO
+  CERRADO
+}
+
+enum EstadoInscripcion {
+  PENDIENTE
+  CALIFICADA
+  CANCELADA
+}
+
+enum EstadoCertificado {
+  PENDIENTE
+  EMITIDO
+  REVOCADO
+  FALLIDO
+}
+
+enum TipoCertificado {
+  ESTUDIOS
+  CONCLUSION
+}
+
+enum PoliticaIntentos {
+  TODOS
+  ULTIMO
+  MEJOR
+}
+
+model Usuario {
+  id            String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  correo        String      @unique @db.VarChar(254)
+  passwordHash  String      @db.Text
+  rol           Rol
+  activo        Boolean     @default(true)
+  creadoEn      DateTime    @default(now()) @db.Timestamptz(3)
+  actualizadoEn DateTime    @updatedAt @db.Timestamptz(3)
+  sesiones      Sesion[]
+  estudiante    Estudiante?
+  docente       Docente?
+  auditorias    Auditoria[]
+  notificaciones Notificacion[]
+  recuperaciones RecuperacionAcceso[]
+}
+
+model Sesion {
+  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  usuarioId  String    @db.Uuid
+  usuario    Usuario   @relation(fields: [usuarioId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  creadoEn   DateTime  @default(now()) @db.Timestamptz(3)
+  expiraEn   DateTime  @db.Timestamptz(3)
+  revocadaEn DateTime? @db.Timestamptz(3)
+
+  @@index([usuarioId, expiraEn])
+}
+
+model Programa {
+  id     String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  clave  String        @unique @db.VarChar(40)
+  nombre String        @db.VarChar(160)
+  activo Boolean       @default(true)
+  planes PlanEstudio[]
+}
+
+model PlanEstudio {
+  id          String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  programaId  String           @db.Uuid
+  programa    Programa         @relation(fields: [programaId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  version     Int
+  nombre      String           @db.VarChar(160)
+  activo      Boolean          @default(true)
+  revision    Int              @default(1)
+  asignaturas PlanAsignatura[]
+  estudiantes Estudiante[]
+
+  @@unique([programaId, version])
+}
+
+model Estudiante {
+  id            String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  usuarioId     String           @unique @db.Uuid
+  usuario       Usuario          @relation(fields: [usuarioId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  matricula     String           @unique @db.VarChar(40)
+  nombre        String           @db.VarChar(160)
+  planId        String           @db.Uuid
+  plan          PlanEstudio      @relation(fields: [planId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  fechaIngreso  DateTime         @db.Date
+  estado        EstadoEstudiante @default(ACTIVO)
+  inscripciones Inscripcion[]
+  certificados  Certificado[]
+  listasEspera   ListaEspera[]
+
+  @@unique([id, planId])
+  @@index([planId])
+}
+
+model Docente {
+  id             String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  usuarioId      String  @unique @db.Uuid
+  usuario        Usuario @relation(fields: [usuarioId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  numeroEmpleado String  @unique @db.VarChar(40)
+  nombre         String  @db.VarChar(160)
+  departamento   String  @db.VarChar(160)
+  activo         Boolean @default(true)
+  grupos         Grupo[]
+}
+
+model Asignatura {
+  id     String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  clave  String           @unique @db.VarChar(40)
+  nombre String           @db.VarChar(160)
+  activo Boolean          @default(true)
+  planes PlanAsignatura[]
+}
+
+model PlanAsignatura {
+  planId           String          @db.Uuid
+  asignaturaId     String          @db.Uuid
+  plan             PlanEstudio     @relation(fields: [planId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  asignatura       Asignatura      @relation(fields: [asignaturaId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  creditos         Decimal         @db.Decimal(8, 2)
+  semestreSugerido Int
+  requisitos       Prerrequisito[] @relation("Destino")
+  requeridaPor     Prerrequisito[] @relation("Requerida")
+  grupos           Grupo[]
+
+  @@id([planId, asignaturaId])
+  @@index([asignaturaId])
+}
+
+model Prerrequisito {
+  planId       String         @db.Uuid
+  asignaturaId String         @db.Uuid
+  requeridaId  String         @db.Uuid
+  destino      PlanAsignatura @relation("Destino", fields: [planId, asignaturaId], references: [planId, asignaturaId], onDelete: Restrict, onUpdate: Restrict)
+  requerida    PlanAsignatura @relation("Requerida", fields: [planId, requeridaId], references: [planId, asignaturaId], onDelete: Restrict, onUpdate: Restrict)
+
+  @@id([planId, asignaturaId, requeridaId])
+  @@index([planId, requeridaId])
+}
+
+model PoliticaAcademica {
+  id                           String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  version                      String           @unique @db.VarChar(60)
+  descripcion                  String           @db.Text
+  escalaMinima                 Decimal          @db.Decimal(7, 3)
+  escalaMaxima                 Decimal          @db.Decimal(7, 3)
+  minimaAprobatoria            Decimal          @db.Decimal(7, 3)
+  decimales                    Int
+  intentosPromedio             PoliticaIntentos
+  permiteReinscripcionAprobada Boolean          @default(false)
+  permiteCancelacionEstudiante Boolean          @default(false)
+  esPropuesta                  Boolean          @default(true)
+  creadoEn                     DateTime         @default(now()) @db.Timestamptz(3)
+  periodos                     Periodo[]
+}
+
+model Periodo {
+  id                String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  clave             String            @unique @db.VarChar(40)
+  nombre            String            @db.VarChar(160)
+  inicio            DateTime          @db.Date
+  fin               DateTime          @db.Date
+  inscripcionInicio DateTime          @db.Timestamptz(3)
+  inscripcionFin    DateTime          @db.Timestamptz(3)
+  estado            EstadoPeriodo     @default(PLANIFICADO)
+  permiteCancelacionEstudiante Boolean?
+  politicaId        String            @db.Uuid
+  politica          PoliticaAcademica @relation(fields: [politicaId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  grupos            Grupo[]
+
+  @@unique([id, politicaId])
+}
+
+model Grupo {
+  id             String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  clave          String         @db.VarChar(40)
+  planId         String         @db.Uuid
+  asignaturaId   String         @db.Uuid
+  planAsignatura PlanAsignatura @relation(fields: [planId, asignaturaId], references: [planId, asignaturaId], onDelete: Restrict, onUpdate: Restrict)
+  periodoId      String         @db.Uuid
+  politicaId     String         @db.Uuid
+  periodo        Periodo        @relation(fields: [periodoId, politicaId], references: [id, politicaId], onDelete: Restrict, onUpdate: Restrict)
+  docenteId      String         @db.Uuid
+  docente        Docente        @relation(fields: [docenteId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  cupo           Int
+  activo         Boolean        @default(true)
+  inscripciones  Inscripcion[]
+  horarios        HorarioGrupo[]
+  listasEspera    ListaEspera[]
+  evaluaciones    Evaluacion[]
+  sesionesClase   SesionClase[]
+
+  @@unique([periodoId, clave])
+  @@unique([id, planId, asignaturaId, periodoId, politicaId])
+  @@index([planId, asignaturaId])
+  @@index([periodoId, politicaId])
+  @@index([docenteId, periodoId])
+}
+
+model Inscripcion {
+  id               String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  estudianteId     String            @db.Uuid
+  planId           String            @db.Uuid
+  estudiante       Estudiante        @relation(fields: [estudianteId, planId], references: [id, planId], onDelete: Restrict, onUpdate: Restrict)
+  grupoId          String            @db.Uuid
+  asignaturaId     String            @db.Uuid
+  periodoId        String            @db.Uuid
+  politicaId       String            @db.Uuid
+  grupo            Grupo             @relation(fields: [grupoId, planId, asignaturaId, periodoId, politicaId], references: [id, planId, asignaturaId, periodoId, politicaId], onDelete: Restrict, onUpdate: Restrict)
+  estado           EstadoInscripcion @default(PENDIENTE)
+  notaFinal        Decimal?          @db.Decimal(7, 3)
+  creditosSnapshot Decimal           @db.Decimal(8, 2)
+  creadoEn         DateTime          @default(now()) @db.Timestamptz(3)
+  actualizadoEn    DateTime          @updatedAt @db.Timestamptz(3)
+  version          Int               @default(1)
+  notasEvaluacion NotaEvaluacion[]
+  asistencias     RegistroAsistencia[]
+
+  @@unique([estudianteId, asignaturaId, periodoId])
+  @@index([grupoId, planId, asignaturaId, periodoId, politicaId])
+  @@index([estudianteId, planId])
+  @@index([periodoId, estado])
+}
+
+model Certificado {
+  id               String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  estudianteId     String            @db.Uuid
+  estudiante       Estudiante        @relation(fields: [estudianteId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  tipo             TipoCertificado   @default(ESTUDIOS)
+  codigo           String            @unique @default(dbgenerated("replace((gen_random_uuid())::text, '-'::text, ''::text)")) @db.VarChar(32)
+  estado           EstadoCertificado @default(PENDIENTE)
+  solicitadoEn     DateTime          @default(now()) @db.Timestamptz(3)
+  emitidoEn        DateTime?         @db.Timestamptz(3)
+  instantanea      Json
+  archivoRuta      String?           @db.Text
+  archivoSha256    String?           @db.VarChar(64)
+  revocadoEn       DateTime?         @db.Timestamptz(3)
+  motivoRevocacion String?           @db.Text
+  reemplazaId      String?           @unique @db.Uuid
+  reemplaza        Certificado?      @relation("Reemision", fields: [reemplazaId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  reemplazo        Certificado?      @relation("Reemision")
+
+  @@index([estudianteId, solicitadoEn])
+}
+
+model Auditoria {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  actorId   String?  @db.Uuid
+  actor     Usuario? @relation(fields: [actorId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  accion    String   @db.VarChar(80)
+  recurso   String   @db.VarChar(80)
+  recursoId String   @db.VarChar(100)
+  motivo    String?  @db.Text
+  anterior  Json?
+  posterior Json?
+  creadoEn  DateTime @default(now()) @db.Timestamptz(3)
+
+  @@index([recurso, recursoId, creadoEn])
+  @@index([actorId, creadoEn])
+}
+
+// Extensiones académicas. Ninguna altera las notas históricas ni la matrícula preexistente.
+model HorarioGrupo {
+  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  grupoId      String   @db.Uuid
+  grupo        Grupo    @relation(fields: [grupoId], references: [id], onDelete: Restrict)
+  diaSemana    Int
+  inicioMinuto Int
+  finMinuto    Int
+  aula         String   @db.VarChar(80)
+
+  @@unique([grupoId, diaSemana, inicioMinuto])
+  @@index([diaSemana, inicioMinuto, finMinuto])
+}
+
+model ListaEspera {
+  id           String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  grupoId      String    @db.Uuid
+  estudianteId String    @db.Uuid
+  grupo        Grupo     @relation(fields: [grupoId], references: [id], onDelete: Restrict)
+  estudiante   Estudiante @relation(fields: [estudianteId], references: [id], onDelete: Restrict)
+  estado       String    @default("ESPERANDO") @db.VarChar(20)
+  creadoEn     DateTime  @default(now()) @db.Timestamptz(3)
+  actualizadoEn DateTime @updatedAt @db.Timestamptz(3)
+
+  @@unique([grupoId, estudianteId])
+  @@index([grupoId, estado, creadoEn])
+}
+
+model Evaluacion {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  grupoId     String   @db.Uuid
+  grupo       Grupo    @relation(fields: [grupoId], references: [id], onDelete: Restrict)
+  nombre      String   @db.VarChar(120)
+  ponderacion Decimal  @db.Decimal(5, 2)
+  creadoEn    DateTime @default(now()) @db.Timestamptz(3)
+  notas       NotaEvaluacion[]
+
+  @@unique([grupoId, nombre])
+}
+
+model NotaEvaluacion {
+  evaluacionId String     @db.Uuid
+  inscripcionId String    @db.Uuid
+  evaluacion   Evaluacion @relation(fields: [evaluacionId], references: [id], onDelete: Restrict)
+  inscripcion  Inscripcion @relation(fields: [inscripcionId], references: [id], onDelete: Restrict)
+  nota         Decimal    @db.Decimal(7, 3)
+  actualizadoEn DateTime  @updatedAt @db.Timestamptz(3)
+
+  @@id([evaluacionId, inscripcionId])
+}
+
+model Notificacion {
+  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  usuarioId String    @db.Uuid
+  usuario   Usuario   @relation(fields: [usuarioId], references: [id], onDelete: Restrict)
+  titulo    String    @db.VarChar(160)
+  mensaje   String    @db.VarChar(500)
+  leidaEn   DateTime? @db.Timestamptz(3)
+  creadoEn  DateTime  @default(now()) @db.Timestamptz(3)
+
+  @@index([usuarioId, creadoEn])
+}
+
+model SesionClase {
+  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  grupoId    String    @db.Uuid
+  grupo      Grupo     @relation(fields: [grupoId], references: [id], onDelete: Restrict)
+  fecha      DateTime  @db.Date
+  tema       String    @db.VarChar(160)
+  registros  RegistroAsistencia[]
+
+  @@unique([grupoId, fecha])
+}
+
+model RegistroAsistencia {
+  sesionId      String      @db.Uuid
+  inscripcionId String      @db.Uuid
+  sesion        SesionClase @relation(fields: [sesionId], references: [id], onDelete: Restrict)
+  inscripcion   Inscripcion @relation(fields: [inscripcionId], references: [id], onDelete: Restrict)
+  presente      Boolean
+  actualizadoEn DateTime @updatedAt @db.Timestamptz(3)
+
+  @@id([sesionId, inscripcionId])
+}
+
+model RecuperacionAcceso {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  usuarioId  String   @db.Uuid
+  usuario    Usuario  @relation(fields: [usuarioId], references: [id], onDelete: Restrict)
+  tokenHash  String   @unique @db.VarChar(64)
+  expiraEn   DateTime @db.Timestamptz(3)
+  usadoEn    DateTime? @db.Timestamptz(3)
+  creadoEn   DateTime @default(now()) @db.Timestamptz(3)
+
+  @@index([usuarioId, expiraEn])
+}

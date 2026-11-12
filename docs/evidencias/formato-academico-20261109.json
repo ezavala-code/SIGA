@@ -1,0 +1,13 @@
+{
+  "fecha": "2026-11-09",
+  "indices": 3,
+  "tablas": 44,
+  "graficos": 3,
+  "fuente_declarada": "Arial",
+  "texto_pt": 12,
+  "titulo_pt": 14,
+  "interlineado": 1.5,
+  "margenes_cm": 2.54,
+  "paginas": 83,
+  "fuente_pdf_disponible": "Liberation Sans (sustitución de Arial en este entorno)"
+}

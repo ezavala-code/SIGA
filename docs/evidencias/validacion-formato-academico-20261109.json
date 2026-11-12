@@ -1,0 +1,76 @@
+{
+  "fecha": "2026-11-09",
+  "resultado": "PASO",
+  "paginas_pdf": 83,
+  "tablas_documento_e_indice": 44,
+  "graficos_documento_e_indice": 3,
+  "indices_nativos_docx": 3,
+  "docx_zip_xml": "PASO",
+  "margenes_word_cm": 2.54,
+  "formato_texto_y_titulos_xml": "PASO",
+  "folios": [
+    "romanos preliminares",
+    "arabigos desde capitulo I"
+  ],
+  "sin_marcadores_ni_hoja_instrucciones": true,
+  "sin_texto_fuera_de_pagina": true,
+  "ubicaciones": {
+    "CAPÍTULO I.": {
+      "pagina_pdf": 12,
+      "folio": "1"
+    },
+    "CAPÍTULO II.": {
+      "pagina_pdf": 18,
+      "folio": "7"
+    },
+    "CAPÍTULO III.": {
+      "pagina_pdf": 24,
+      "folio": "13"
+    },
+    "CAPÍTULO IV.": {
+      "pagina_pdf": 42,
+      "folio": "31"
+    },
+    "CAPÍTULO V.": {
+      "pagina_pdf": 47,
+      "folio": "36"
+    },
+    "BIBLIOGRAFÍA": {
+      "pagina_pdf": 49,
+      "folio": "38"
+    },
+    "ANEXOS": {
+      "pagina_pdf": 50,
+      "folio": "39"
+    },
+    "ANEXO 1.": {
+      "pagina_pdf": 51,
+      "folio": "40"
+    },
+    "ANEXO 2.": {
+      "pagina_pdf": 53,
+      "folio": "42"
+    },
+    "ANEXO 3.": {
+      "pagina_pdf": 65,
+      "folio": "54"
+    },
+    "ANEXO 4.": {
+      "pagina_pdf": 76,
+      "folio": "65"
+    },
+    "ANEXO 5.": {
+      "pagina_pdf": 80,
+      "folio": "69"
+    },
+    "ANEXO 6.": {
+      "pagina_pdf": 83,
+      "folio": "72"
+    }
+  },
+  "fuente_docx": "Arial",
+  "fuente_pdf": "Liberation Sans; Arial no instalada",
+  "pdf_sha256": "46c0df6ee794ab2ae1c048e756833c576e6d57216ecfefe1c86ef76658dfb003",
+  "docx_sha256": "e1011bad4f0878847269c22e8bf628064fa961f9cac9d4c981c68b608eca19ad",
+  "entradas_principales_indice_coinciden_con_folios": true
+}

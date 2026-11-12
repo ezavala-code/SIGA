@@ -1,0 +1,39 @@
+{
+  "fecha": "2026-11-09",
+  "zona": "America/Mexico_City",
+  "alcance": "auditoria y documentacion; sin correcciones funcionales",
+  "check": {
+    "resultado": "PASO",
+    "api_suites": 6,
+    "api_pruebas": 38,
+    "web_archivos": 13,
+    "web_pruebas": 40,
+    "lint_tipos_build": "PASO",
+    "log": "docs/evidencias/auditoria-check-20261109.log"
+  },
+  "format_check": "PASO",
+  "enlaces_locales_verificados": 30,
+  "cobertura_documental": "PB01-30/R01-18/AC01-17/CP01-18/AnexosA-I",
+  "docx_zip_xml_a4": "PASO; 3 archivos",
+  "pdf_paginas": {
+    "EntregablesPI-Ing-Software-revisado.pdf": 65,
+    "COMPLEMENTO_INFORME_SIGA.pdf": 30,
+    "MANUAL_TECNICO_REVISADO.pdf": 13,
+    "MANUAL_USUARIO_REVISADO.pdf": 10
+  },
+  "pdf_extraccion_sin_errores": true,
+  "texto_original_35_paginas_preservado": true,
+  "texto_complemento_dentro_de_paginas": true,
+  "original_pdf_sha256": "53b3d11ccaabe216a65c7697094917e335ea8888ead51d5448dc9aa0e6306b89",
+  "manifiesto_tecnico_sha256": "6ca749d2f216b07c0907fa1dba7979208df834b3cf3699b7e13a197b33f50d4f",
+  "fuentes_tecnicas_sin_cambios_desde_inventario": true,
+  "no_reejecutado": [
+    "integracion",
+    "cobertura",
+    "E2E",
+    "carga",
+    "proxy",
+    "restauracion"
+  ],
+  "aceptacion_humana": "PENDIENTE"
+}

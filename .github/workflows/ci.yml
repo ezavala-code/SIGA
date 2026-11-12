@@ -1,0 +1,58 @@
+name: Calidad SIGA
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:18.6-alpine
+        env:
+          POSTGRES_USER: siga_test
+          POSTGRES_PASSWORD: ci_only_ephemeral
+          POSTGRES_DB: siga_test
+        ports: [5432:5432]
+        options: >-
+          --health-cmd "pg_isready -U siga_test -d siga_test"
+          --health-interval 5s --health-timeout 3s --health-retries 10
+    env:
+      NODE_ENV: test
+      DATABASE_URL: postgresql://unused@127.0.0.1:5439/siga_dev
+      TEST_DATABASE_URL: postgresql://siga_test:ci_only_ephemeral@127.0.0.1:5432/siga_test
+      WEB_ORIGIN: http://localhost:5173
+      JWT_SECRET: testonlyabcdefghijklmnopqrstuvwxyz0123456789ABCDEFGH
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+      - run: npm install -g npm@12.2.0
+      - run: npm ci
+      - run: npm run format:check
+      - run: npm run check
+      - name: Migrar la base efímera
+        run: npm run db:test:migrate
+        env:
+          DATABASE_URL: postgresql://unused@127.0.0.1:5439/siga_dev
+      - name: Integración y cobertura con umbral por archivo contra la base efímera
+        run: npm run test:coverage
+        env:
+          DATABASE_URL: postgresql://unused@127.0.0.1:5439/siga_dev
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e -- --workers=1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coverage-report
+          path: .local/e09-coverage/
+          retention-days: 7
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7

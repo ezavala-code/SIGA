@@ -1,0 +1,37 @@
+{
+  "date": "2026-10-10T02:34:15.788Z",
+  "scenarios": [
+    {
+      "name": "escritorio",
+      "viewport": {
+        "width": 1366,
+        "height": 1000
+      },
+      "errors": [],
+      "health": {
+        "status": "ok",
+        "checks": {
+          "database": "up"
+        },
+        "timestamp": "2026-10-10T02:34:16.907Z"
+      },
+      "horizontalOverflow": false
+    },
+    {
+      "name": "movil",
+      "viewport": {
+        "width": 360,
+        "height": 800
+      },
+      "errors": [],
+      "health": {
+        "status": "ok",
+        "checks": {
+          "database": "up"
+        },
+        "timestamp": "2026-10-10T02:34:17.417Z"
+      },
+      "horizontalOverflow": false
+    }
+  ]
+}

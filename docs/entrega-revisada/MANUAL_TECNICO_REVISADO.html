@@ -1,0 +1,748 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <title>MANUAL_TECNICO_REVISADO</title>
+    <style>
+      @page {
+        size: A4;
+        margin: 1.8cm;
+      }
+      body {
+        font-family: 'Liberation Sans', sans-serif;
+        font-size: 10pt;
+        line-height: 1.25;
+        color: #17263a;
+      }
+      h1 {
+        font-size: 19pt;
+        color: #173858;
+        page-break-before: always;
+      }
+      h1:first-child {
+        page-break-before: avoid;
+      }
+      h2 {
+        font-size: 14pt;
+        color: #173858;
+      }
+      h3 {
+        font-size: 11pt;
+        color: #24516c;
+      }
+      h1,
+      h2,
+      h3,
+      h4 {
+        page-break-after: avoid;
+      }
+      p,
+      li {
+        orphans: 2;
+        widows: 2;
+      }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+        font-size: 8.5pt;
+        margin: 8pt 0;
+      }
+      th,
+      td {
+        border: 1px solid #b9c5cf;
+        padding: 5pt;
+        vertical-align: top;
+        word-wrap: break-word;
+      }
+      th {
+        background: #e9eff4;
+        color: #173858;
+      }
+      tr {
+        page-break-inside: avoid;
+      }
+      pre {
+        border: 1px solid #cbd4dc;
+        background: #f3f6f8;
+        padding: 7pt;
+        white-space: pre-wrap;
+        font-size: 8pt;
+      }
+      code {
+        font-family: 'Liberation Mono', monospace;
+        font-size: 8pt;
+      }
+      a {
+        color: #145477;
+      }
+      blockquote {
+        border-left: 3px solid #49718a;
+        margin-left: 0;
+        padding-left: 12pt;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Manual técnico revisado de SIGA</h1>
+    <p>
+      Versión documental 3.0 · 9 de noviembre de 2026 · aplicación 0.1.0. Alcance: demostración
+      académica local con datos ficticios. Complementa y corrige el manual técnico 2.0; no acredita
+      por sí solo instalación en otra plataforma ni aceptación institucional.
+    </p>
+    <h2>1. Arquitectura y responsabilidades</h2>
+    <p>
+      SIGA es un monorepositorio npm. React/Vite presenta pantallas por rol; NestJS recibe
+      peticiones HTTP, valida contratos, autentica y autoriza; Prisma y PostgreSQL mantienen datos,
+      restricciones y transacciones. Nginx sirve la web compilada y reenvía <code>/api</code> a la
+      API en Compose. Los PDFs se guardan en un directorio privado persistente; la base conserva
+      snapshot, estado, código y hash.
+    </p>
+    <table>
+      <thead>
+        <tr>
+          <th>Directorio</th>
+          <th>Responsabilidad</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>apps/web/src/app</td>
+          <td>Pantallas, navegación, formularios y borradores docentes.</td>
+        </tr>
+        <tr>
+          <td>apps/web/src/services</td>
+          <td>Clientes HTTP, generación de sesión y rechazo de respuestas obsoletas.</td>
+        </tr>
+        <tr>
+          <td>apps/api/src/modules</td>
+          <td>
+            Autenticación, catálogos, personas, oferta, matrícula, notas, constancias y reportes.
+          </td>
+        </tr>
+        <tr>
+          <td>apps/api/prisma</td>
+          <td>Modelo y cuatro migraciones; no editar migraciones ya aplicadas.</td>
+        </tr>
+        <tr>
+          <td>packages/contracts</td>
+          <td>Tipos compartidos; la validación de seguridad permanece en servidor.</td>
+        </tr>
+        <tr>
+          <td>scripts</td>
+          <td>
+            Preparación, pruebas aisladas, provisión, respaldo, restauración y despliegue local.
+          </td>
+        </tr>
+        <tr>
+          <td>tests/e2e</td>
+          <td>Recorridos de navegador y escenarios de error.</td>
+        </tr>
+        <tr>
+          <td>docs/evidencias</td>
+          <td>Registros históricos y dossier; consultar reservas de auditoría.</td>
+        </tr>
+      </tbody>
+    </table>
+    <p>
+      Recorrido de información: navegador → API → PostgreSQL → respuesta → pantalla. Una nota
+      guardada modifica historial y avance, puede habilitar un prerrequisito y queda en auditoría.
+      Una constancia emitida conserva su snapshot aunque después se corrija la nota.
+    </p>
+    <h2>2. Modelo relacional y reglas de integridad</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Relación</th>
+          <th>Uso y restricción relevante</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Usuario → Sesion</td>
+          <td>
+            Cuenta con rol y hash; sesiones revocables. Nunca exportar hashes/tokens en reportes.
+          </td>
+        </tr>
+        <tr>
+          <td>Programa → PlanEstudio → PlanAsignatura → Asignatura</td>
+          <td>Versiones de plan y créditos; dar de baja conserva relaciones históricas.</td>
+        </tr>
+        <tr>
+          <td>PlanAsignatura → Prerrequisito</td>
+          <td>
+            Grafo de asignaturas requerido para elegibilidad; proteger ciclos y referencias
+            inválidas.
+          </td>
+        </tr>
+        <tr>
+          <td>Usuario → Estudiante → PlanEstudio</td>
+          <td>Identidad académica y plan del alumno.</td>
+        </tr>
+        <tr>
+          <td>Usuario → Docente → Grupo</td>
+          <td>Identidad docente y asignación de grupos.</td>
+        </tr>
+        <tr>
+          <td>PoliticaAcademica → Periodo → Grupo</td>
+          <td>Escala, mínima, precisión, intentos; fechas y ventana; oferta y cupo.</td>
+        </tr>
+        <tr>
+          <td>Grupo + Estudiante → Inscripcion</td>
+          <td>Nota final, versión y créditos snapshot; unicidad estudiante/asignatura/periodo.</td>
+        </tr>
+        <tr>
+          <td>Estudiante → Certificado</td>
+          <td>Snapshot, tipo, código, estado, ruta/hash y vínculo de reemisión.</td>
+        </tr>
+        <tr>
+          <td>Usuario → Auditoria</td>
+          <td>Actor, acción, recurso y antes/después; no es un log de secretos.</td>
+        </tr>
+      </tbody>
+    </table>
+    <p>
+      Fuente exacta de campos/tipos: <code>apps/api/prisma/schema.prisma</code>; relaciones
+      detalladas en <code>docs/modelo-datos.md</code>. Hay 15 modelos de dominio y una tabla interna
+      de migraciones de Prisma: 16 tablas en total.
+    </p>
+    <p>
+      Matrícula utiliza transacciones serializables, orden de bloqueos y reintentos limitados. La
+      cola local por grupo reduce contención en una instancia, pero la garantía de cupo depende de
+      PostgreSQL. Notas usan control de versión y auditoría atómica; conflictos concurrentes deben
+      traducirse a 409. Los cálculos usan Decimal, distinguen cero de pendiente y conservan todos
+      los intentos.
+    </p>
+    <h2>3. Requisitos y plataformas</h2>
+    <ul>
+      <li>Node.js 24.19.x y npm 12.2.x, según package.json y .node-version.</li>
+      <li>
+        PostgreSQL 18.6 y Docker/Compose para el recorrido empaquetado; espacio para imágenes, datos
+        y respaldos.
+      </li>
+      <li>
+        Puertos locales disponibles: web Compose 8080, PostgreSQL Compose 5432; desarrollo web 5173
+        y API 3000. Pueden cambiar mediante configuración compatible.
+      </li>
+      <li>
+        Las herramientas PowerShell de clústeres nativos y bootstrap Docker requieren
+        PowerShell/Windows o un entorno expresamente compatible. No copiar esos comandos a Bash
+        suponiendo equivalencia.
+      </li>
+      <li>
+        La provisión genérica de cuentas está limitada a POSIX, base local siga_dev y entorno no
+        productivo. Su disponibilidad no acredita el mismo flujo en Windows o dentro de Docker de
+        producción.
+      </li>
+    </ul>
+    <p>
+      La instalación limpia registrada se realizó en Linux con Node 24.19.0 y npm 12.2.0. La
+      documentación histórica incluye recorridos Windows; validar el recorrido elegido en el equipo
+      receptor antes de dar portabilidad por terminada.
+    </p>
+    <h2>4. Configuración, variable por variable</h2>
+    <p>
+      No se incluyen valores reales. <code>.env.example</code> es plantilla; <code>.env</code> es
+      privado. <code>npm run setup</code> genera valores aleatorios si falta el archivo y conserva
+      los existentes. No ejecutar configuración contra una instalación desconocida.
+    </p>
+    <table>
+      <thead>
+        <tr>
+          <th>Variable</th>
+          <th>Propósito y condición</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>NODE_ENV</td>
+          <td>
+            development, test o production. Compose usa production aunque el alcance sea demo local.
+          </td>
+        </tr>
+        <tr>
+          <td>PORT</td>
+          <td>Puerto HTTP API, entero 1–65535; predeterminado 3000.</td>
+        </tr>
+        <tr>
+          <td>API_HOST</td>
+          <td>127.0.0.1 para API nativa; 0.0.0.0 dentro de contenedor.</td>
+        </tr>
+        <tr>
+          <td>WEB_ORIGIN</td>
+          <td>
+            Un único origen con protocolo/host/puerto y sin ruta; debe coincidir con navegador para
+            CSRF.
+          </td>
+        </tr>
+        <tr>
+          <td>DATABASE_URL</td>
+          <td>
+            Conexión PostgreSQL con nombre de base; contiene secreto. API Compose utiliza rol de
+            aplicación.
+          </td>
+        </tr>
+        <tr>
+          <td>TEST_DATABASE_URL</td>
+          <td>
+            Base independiente terminada en _test; nunca usar como alternativa la base de
+            desarrollo.
+          </td>
+        </tr>
+        <tr>
+          <td>POSTGRES_USER / POSTGRES_PASSWORD / POSTGRES_DB</td>
+          <td>
+            Propietario, secreto y base de Compose; reservar propietario para operación/migraciones.
+          </td>
+        </tr>
+        <tr>
+          <td>POSTGRES_APP_USER / POSTGRES_APP_PASSWORD</td>
+          <td>Rol API limitado sin administración ni cambios de auditoría.</td>
+        </tr>
+        <tr>
+          <td>POSTGRES_PORT</td>
+          <td>Puerto de base expuesto sobre loopback; comprobar colisiones.</td>
+        </tr>
+        <tr>
+          <td>TEST_POSTGRES_PASSWORD</td>
+          <td>Contraseña de la instancia de pruebas de Compose.</td>
+        </tr>
+        <tr>
+          <td>WEB_PORT</td>
+          <td>Puerto de Nginx local; predeterminado 8080.</td>
+        </tr>
+        <tr>
+          <td>SIGA_VERSION</td>
+          <td>
+            Etiqueta de imágenes de aplicación y manifiestos de release; no sustituye hash de
+            fuentes.
+          </td>
+        </tr>
+        <tr>
+          <td>JWT_SECRET</td>
+          <td>
+            Secreto aleatorio base64url de al menos 32 bytes; validación exige 43 caracteres o más.
+          </td>
+        </tr>
+        <tr>
+          <td>JWT_TTL_SECONDS</td>
+          <td>Vida de sesión de 300 a 3600 segundos; predeterminado 1800.</td>
+        </tr>
+        <tr>
+          <td>COOKIE_SECURE</td>
+          <td>false para HTTP local; exposición HTTPS requiere configuración propia verificada.</td>
+        </tr>
+        <tr>
+          <td>EXIGIR_PRERREQUISITOS</td>
+          <td>
+            true/false; predeterminado true. Registrar cualquier cambio como política de demo.
+          </td>
+        </tr>
+        <tr>
+          <td>CERTIFICATES_DIR</td>
+          <td>
+            Directorio privado: .local/certificados en desarrollo, /data/certificados en Compose.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <p>
+      D44 fija America/Mexico_City para la ventana de demo; no existe una variable genérica que
+      cambie por sí sola esta regla. Revisar <code>mexico-city-datetime.ts</code> antes de
+      modificarla.
+    </p>
+    <h2>5. Instalación Compose paso a paso</h2>
+    <p>
+      Este procedimiento inicia una instalación propia nueva. Primero comprobar qué
+      proyecto/puertos/volúmenes ya existen y conservar los datos. No usar borrado de volúmenes como
+      método de reparación.
+    </p>
+    <ol>
+      <li>
+        Abrir una terminal en la raíz y comprobar <code>node --version</code>,
+        <code>npm --version</code>, <code>docker --version</code> y
+        <code>docker compose version</code>.
+      </li>
+      <li>
+        Ejecutar <code>npm ci</code> para instalar exactamente el lockfile en una copia nueva.
+      </li>
+      <li>
+        Ejecutar <code>npm run setup</code>. Revisar en privado las variables y permisos del archivo
+        creado; no imprimir la URL de base con contraseña.
+      </li>
+      <li>
+        Ejecutar <code>docker compose config --quiet</code> para validar configuración y
+        <code>docker compose up -d --build --wait</code> para construir/arrancar el stack propio.
+      </li>
+      <li>
+        Comprobar <code>docker compose ps</code>. El servicio migrate aplica las cuatro migraciones;
+        db-permissions prepara rol limitado; certificados-permisos prepara el volumen PDF.
+      </li>
+      <li>
+        Abrir <code>http://localhost:8080</code> y comprobar
+        <code>http://localhost:8080/api/health</code>. Salud no sustituye una prueba de
+        acceso/datos.
+      </li>
+      <li>
+        Para semilla y administrador en el recorrido Windows documentado, usar
+        <code>npm run docker:admin:bootstrap</code>. Este comando es PowerShell; revisar
+        <code>scripts/bootstrap-docker.ps1</code> y no asumir que existe un equivalente Bash
+        autorizado.
+      </li>
+      <li>
+        Entregar credenciales por canal privado y probar login con los roles preparados. Los
+        perfiles prefijados de demostración no sustituyen el alta/provisión de cualquier persona.
+      </li>
+      <li>
+        Registrar versiones, migraciones y prueba realizada. <code>db:seed</code> siembra ICO-F19;
+        el segundo programa sintético de fixtures no se instala automáticamente por esa semilla.
+      </li>
+    </ol>
+    <p>
+      Para parar solo esta instalación usar <code>docker compose stop</code>. No se incluye un
+      comando de borrado masivo en el manual de operación normal.
+    </p>
+    <h2>6. Desarrollo nativo y acceso genérico</h2>
+    <p>
+      En el recorrido Windows existente: <code>npm ci</code>,
+      <code>npm run setup -- --native</code>, <code>npm run db:local:start</code>,
+      <code>npm run db:migrate</code>, <code>npm run db:seed</code>,
+      <code>npm run db:test:migrate</code>, <code>npm run auth:bootstrap:admin</code>,
+      <code>npm run dev</code>. <code>db:local:start</code> es PowerShell y administra clústeres
+      privados en 55432/55433. En POSIX, preparar PostgreSQL propio y URLs válidas de
+      desarrollo/pruebas; no existe aquí una receta nativa universal acreditada para todos los
+      sistemas.
+    </p>
+    <p>
+      El portal nativo está en <code>http://localhost:5173</code>, salud API en
+      <code>http://127.0.0.1:3000/health</code>. WEB_ORIGIN debe coincidir con el origen del portal.
+      No iniciar simultáneamente procesos que compitan por 3000/5173.
+    </p>
+    <p>Para habilitar o restablecer una persona arbitraria ya creada y activa en POSIX local:</p>
+    <pre><code class="language-bash">npm run auth:provision:local -w @siga/api -- persona@example.invalid
+</code></pre>
+    <p>
+      El correo debe corresponder a un estudiante o docente existente, no un administrador. El CLI
+      comprueba entorno no productivo, conexión local y base siga_dev; genera un archivo privado,
+      activa la cuenta, revoca sesiones y audita. La ruta del archivo se informa; la contraseña no
+      se imprime. El directorio es privado 0700 y el archivo 0600. Conservar o entregar por canal
+      privado. Ante error, revisar su causa y comprobar el estado antes de reintentar.
+    </p>
+    <p>
+      No existen los comandos <code>npm run provision:local</code> ni
+      <code>auth:bootstrap:demo</code> en los manifiestos auditados. No utilizarlos. Para
+      administrador se usa el bootstrap separado; no reutilizar provisión docente/estudiante.
+    </p>
+    <h2>7. API, contratos y permisos</h2>
+    <p>
+      Las rutas siguientes son de API; en Compose se antepone <code>/api</code>. En desarrollo se
+      llama al puerto 3000. La tabla es mapa operativo de familias, no sustituto del inventario
+      exhaustivo de aliases/controladores.
+    </p>
+    <table>
+      <thead>
+        <tr>
+          <th>Método y ruta</th>
+          <th>Rol y datos relevantes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>POST /auth/login</td>
+          <td>Público; correo/contraseña; devuelve perfil y CSRF y establece cookie.</td>
+        </tr>
+        <tr>
+          <td>GET /auth/me; POST /auth/logout</td>
+          <td>Sesión propia; logout protegido revoca sesión.</td>
+        </tr>
+        <tr>
+          <td>GET /auth/usuarios; GET /auth/usuarios/:id</td>
+          <td>Administración o titular según ruta; no devolver hashes.</td>
+        </tr>
+        <tr>
+          <td>GET/POST /catalogos/programas, /catalogos/asignaturas, /catalogos/planes</td>
+          <td>Administración; validaciones de claves, referencias y estado.</td>
+        </tr>
+        <tr>
+          <td>PATCH /catalogos/programas/:id, /catalogos/asignaturas/:id, /catalogos/planes/:id</td>
+          <td>Administración; cambios/bajas según restricciones históricas.</td>
+        </tr>
+        <tr>
+          <td>
+            GET/POST /personas/estudiantes, /personas/docentes; PATCH /personas/estudiantes/:id,
+            /personas/docentes/:id
+          </td>
+          <td>Administración; alta académica no entrega acceso automáticamente.</td>
+        </tr>
+        <tr>
+          <td>GET/POST /periodos, /grupos; PATCH /periodos/:id, /grupos/:id</td>
+          <td>Administración; fechas/estado/cupo y referencias.</td>
+        </tr>
+        <tr>
+          <td>GET /docentes/me/grupos; GET /docentes/me/grupos/:grupoId/calificaciones</td>
+          <td>Docente asignado; propiedad derivada de sesión.</td>
+        </tr>
+        <tr>
+          <td>GET /matriculas/oferta; GET /matriculas/me; POST /matriculas</td>
+          <td>Estudiante; POST recibe grupoId y revalida elegibilidad.</td>
+        </tr>
+        <tr>
+          <td>PUT /calificaciones/:inscripcionId</td>
+          <td>
+            Docente asignado; notaFinal decimal como texto, version y motivo al corregir. Existen
+            aliases PATCH/PUT.
+          </td>
+        </tr>
+        <tr>
+          <td>GET /estudiantes/me/calificaciones, /estudiantes/me/progreso</td>
+          <td>Estudiante; historial y avance propios.</td>
+        </tr>
+        <tr>
+          <td>POST /certificados; GET /certificados/me</td>
+          <td>Estudiante; emisión y listado propios.</td>
+        </tr>
+        <tr>
+          <td>GET /certificados; POST /certificados/estudiantes/:estudianteId</td>
+          <td>Administrador; listado y emisión de estudios del estudiante seleccionado.</td>
+        </tr>
+        <tr>
+          <td>POST /certificados/:id/recuperar</td>
+          <td>
+            Titular o administrador según autorización; finalizar pendiente/fallido sin duplicar.
+          </td>
+        </tr>
+        <tr>
+          <td>GET /certificados/:id/pdf</td>
+          <td>Titular o administrador; autorización y comprobación de hash.</td>
+        </tr>
+        <tr>
+          <td>POST /certificados/:id/revocar</td>
+          <td>Administrador; motivo y auditoría.</td>
+        </tr>
+        <tr>
+          <td>POST /certificados/:id/reemitir</td>
+          <td>Titular o administrador conforme al estado del documento.</td>
+        </tr>
+        <tr>
+          <td>GET /certificados/verificar/:codigo</td>
+          <td>Público; estado y datos mínimos, sin notas/correo/matrícula.</td>
+        </tr>
+        <tr>
+          <td>GET /reportes/grupos; GET /reportes/auditoria</td>
+          <td>Administrador; filtros y paginación.</td>
+        </tr>
+        <tr>
+          <td>GET /reportes/grupos/:grupoId/historial.csv</td>
+          <td>Administrador o docente asignado; CSV seguro.</td>
+        </tr>
+      </tbody>
+    </table>
+    <p>
+      Ejemplo de intención de matrícula: <code>{"grupoId":"ID_SINTETICO"}</code>. Ejemplo de nota:
+      <code>{"notaFinal":"8.50","version":1}</code>; para corrección añadir motivo. Usar los
+      contratos actuales de <code>packages/contracts</code> para campos completos y errores por
+      endpoint; no enviar estos IDs literales a una instalación real.
+    </p>
+    <p>
+      Las escrituras protegidas requieren sesión, origen permitido y encabezado X-CSRF-Token. No
+      guardar tokens en manuales/logs. El servidor verifica rol y recurso aunque la pantalla o la
+      URL se cambien.
+    </p>
+    <table>
+      <thead>
+        <tr>
+          <th>Respuesta</th>
+          <th>Interpretación y acción</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>400</td>
+          <td>Datos o formato inválidos; corregir campos.</td>
+        </tr>
+        <tr>
+          <td>401</td>
+          <td>
+            Sesión inexistente/vencida/revocada; volver a entrar sin reutilizar caché privada.
+          </td>
+        </tr>
+        <tr>
+          <td>403</td>
+          <td>
+            Rol/recurso/origen/CSRF no permitido; revisar sesión y configuración, no evadir control.
+          </td>
+        </tr>
+        <tr>
+          <td>404</td>
+          <td>Recurso/ruta no disponible o no visible; comprobar identificador y permiso.</td>
+        </tr>
+        <tr>
+          <td>409</td>
+          <td>
+            Conflicto de negocio, cupo, versión o estado; refrescar y decidir sobre datos vigentes.
+          </td>
+        </tr>
+        <tr>
+          <td>429</td>
+          <td>Límite temporal de acceso; esperar y revisar intentos.</td>
+        </tr>
+        <tr>
+          <td>5xx</td>
+          <td>
+            Error operativo; conservar evidencia saneada, verificar estado antes de duplicar una
+            acción.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h2>8. Respaldo, restauración y límites D46</h2>
+    <p>
+      Respaldar diariamente y antes de cambios importantes. El respaldo debe contener
+      <code>database.dump</code>, manifiesto y archivos PDF; no confundir con un SQL plano. Usar
+      <code>npm run docker:backup</code> en instalación propia configurada. Comprobar salida y
+      permisos; conservar fuera del host una copia protegida según política acordada.
+    </p>
+    <p>Para verificar una copia sin reemplazar la base original:</p>
+    <pre><code class="language-bash">npm run docker:restore:verify -- --backup .local/backups/NOMBRE --require-certificate
+</code></pre>
+    <p>
+      El verificador levanta recursos temporales de su propiedad, compara datos/archivos e inicia
+      API recuperada; requiere base configurada, cuenta privada administrativa y puerto 3138
+      disponible según script. No es el mismo procedimiento que restaurar automáticamente la
+      instalación principal.
+    </p>
+    <p>
+      La prueba <code>node scripts/test-backup-restore-local.mjs --packaged</code> recrea un stack
+      aislado y comprueba dos PDFs, login y hash. El registro reportó RTO 9,47 s; el cálculo
+      publicado de RPO 1,18 s no mide el desfase recuperable al incidente y debe corregirse. La
+      auditoría no volvió a ejecutar ese simulacro.
+    </p>
+    <p>
+      Para un incidente real: identificar instalación y respaldo, preservar datos/archivos actuales,
+      detener escrituras de ese entorno, preparar instalación compatible aislada, restaurar dump y
+      PDFs siguiendo las herramientas verificadas, reponer configuración privada, validar
+      migraciones/roles/login/registros/hashes y solo después decidir la sustitución con la persona
+      responsable. No improvisar comandos destructivos. Falta acreditar una guía ejecutable completa
+      para el entorno receptor y el RPO corregido.
+    </p>
+    <p>
+      Medir RTO desde inicio del incidente hasta servicio utilizable y comprobado. Medir
+      recuperación de datos con marcas persistidas anteriores y posteriores al respaldo, comparadas
+      después de restaurar. Antigüedad del respaldo o duración de exportación no prueban por sí
+      solas datos perdidos. Objetivos provisionales: RTO máximo 4 h y RPO máximo 24 h. Una copia
+      retenida de test no demuestra una retención diaria operada; asignar custodio, destino y
+      calendario reales.
+    </p>
+    <h2>9. Constancias e incidentes</h2>
+    <p>
+      Si una emisión se interrumpe, consultar su estado antes de repetir. Recuperar mediante flujo
+      de aplicación solo cuando corresponda a PENDIENTE/FALLIDO; la recuperación debe finalizar una
+      sola emisión. Revocar requiere motivo. Reemitir enlaza reemplazo, sin alterar el PDF previo.
+    </p>
+    <p>
+      <code>node scripts/conciliar-certificados.mjs</code> es diagnóstico: revisar su configuración
+      y guía antes de usarlo. Los candidatos a huérfanos requieren investigación; un fallo de
+      respuesta no demuestra que la transacción no se confirmara. No borrar PDFs dudosos de forma
+      automática. Referencia: <code>docs/OPERACION_CONCILIACION_CONSTANCIAS.md</code>.
+    </p>
+    <p>
+      Nginx tiene timeout de lectura 5 s y la transacción de certificados admite hasta 20 s. Esto no
+      es un fallo demostrado con latencias actuales; hace falta un ensayo de saturación/timeout y
+      recuperación para documentar el comportamiento. No aumentar límites a ciegas.
+    </p>
+    <h2>10. Pruebas, cobertura y releases</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Comando</th>
+          <th>Alcance</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>npm run check</td>
+          <td>ESLint, tipos, unitarias y builds. No ejecuta integración ni E2E.</td>
+        </tr>
+        <tr>
+          <td>npm run format:check</td>
+          <td>Formato del repositorio.</td>
+        </tr>
+        <tr>
+          <td>npm run test:integration</td>
+          <td>PostgreSQL de prueba independiente y esquema temporal.</td>
+        </tr>
+        <tr>
+          <td>npm run test:coverage</td>
+          <td>Unitarias/integración, umbrales por archivo seleccionados por runner.</td>
+        </tr>
+        <tr>
+          <td>npm run test:e2e -- --workers=1</td>
+          <td>Navegador con runner aislado; inspeccionar entorno antes de ejecutar.</td>
+        </tr>
+        <tr>
+          <td>node scripts/test-load.mjs --unicode</td>
+          <td>
+            Emisión Unicode, calentamiento 60 s/medición 300 s, tandas de 20. Requiere API compilada
+            y base de prueba.
+          </td>
+        </tr>
+        <tr>
+          <td>node scripts/test-proxy-local.mjs</td>
+          <td>Proxy en recursos propios; imágenes y puertos según script.</td>
+        </tr>
+        <tr>
+          <td>node scripts/test-certificados-crash.mjs</td>
+          <td>Interrupción controlada de API temporal; no usar proceso ajeno.</td>
+        </tr>
+      </tbody>
+    </table>
+    <p>
+      La cobertura real se configura dinámicamente en <code>scripts/test-integration.mjs</code>, no
+      en un archivo jest.coverage.config.cjs. Incluye service/calculo/guard/pdf/cola/provisión;
+      falta reconciliar csrf.ts y mexico-city-datetime.ts con lo declarado por el inventario. El
+      resultado va a <code>.local/e09-coverage</code>; CI ejecuta cobertura pero no publica su
+      artefacto actualmente.
+    </p>
+    <p>
+      En esta auditoría <code>npm run check</code> pasó: 6 suites/38 pruebas API y 13 archivos/40
+      pruebas web, tipos y builds. Integración/E2E/carga/restauración conservan resultados
+      históricos; no se reejecutaron. Los 131 tests y 34 E2E del dossier no equivalen a validación
+      nueva.
+    </p>
+    <p>
+      Para desplegar un release propio: revisar <code>npm run docker:deploy</code> y su
+      respaldo/manifiesto antes de ejecutar.
+      <code>npm run docker:rollback -- --release .local/releases/release-ETIQUETA.json</code> exige
+      manifiesto válido y migraciones compatibles; no realiza una reversión arbitraria de esquema.
+    </p>
+    <h2>11. Diagnóstico y mantenimiento</h2>
+    <ol>
+      <li>Identificar versión, entorno y momento del fallo sin imprimir secretos.</li>
+      <li>Consultar <code>docker compose ps</code> y salud; revisar logs saneados.</li>
+      <li>
+        Comprobar migraciones y rol de base, origen web, espacio, permisos del directorio PDF y
+        puertos.
+      </li>
+      <li>Consultar estado de la acción antes de reintentar matrícula/nota/constancia.</li>
+      <li>
+        Reproducir solo con datos ficticios en instalación propia; registrar pasos y respuesta
+        esperada/observada.
+      </li>
+      <li>
+        Aplicar corrección mínima y repetir pruebas afectadas. Congelar archivos durante cada
+        verificación.
+      </li>
+      <li>
+        Regenerar inventario de entrega al terminar documentos y asociar pruebas al candidato
+        correcto.
+      </li>
+    </ol>
+    <h2>12. Fuentes y reservas</h2>
+    <p>
+      Fuentes: package.json, docker-compose.yml, .env.example, environment.ts, controladores,
+      schema.prisma, scripts operativos, README y registros del dossier. La auditoría y pendientes
+      detallados están en <code>docs/AUDITORIA_IMPLEMENTACION_Y_ENTREGA_20261109.md</code>. No
+      afirmar cierre F/A por la sola existencia de este manual. Datos reales, reglamento
+      institucional, HTTPS público y correo siguen fuera del cierre de demostración acordado.
+    </p>
+  </body>
+</html>
